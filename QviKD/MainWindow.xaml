@@ -4,10 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="QviKD" Height="480" Width="800">
+        Title="QviKD" Height="480" Width="800" MinWidth="448">
     <DockPanel LastChildFill="True">
-        <Grid x:Name="MainWindowNavigation" DockPanel.Dock="Top" Height="72" Background="#FF303030" VerticalAlignment="Stretch"></Grid>
-        <StackPanel DockPanel.Dock="Left" Width="64" Background="#FF303030" HorizontalAlignment="Center"></StackPanel>
-        <Grid></Grid>
+        <Grid DockPanel.Dock="Top" Background="#FF202020" Height="48"></Grid>
+        <StatusBar DockPanel.Dock="Bottom" Height="24" Background="#FF202020"></StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" MaxWidth="100" MinWidth="64"/>
+                <ColumnDefinition Width="18*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox x:Name="MainNavigation" Grid.Column="0" Background="#FF303030"/>
+            <ContentControl Grid.Column="1"/>
+        </Grid>
     </DockPanel>
 </Window>
