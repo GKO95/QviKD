@@ -29,7 +29,7 @@ namespace QviKDLib.WinAPI
         public DWORD cbSize;
         public Guid ClassGuid;
         public DWORD DevInst;
-        public IntPtr Reserved;
+        public HWND Reserved;
     }
 
     [Flags]

@@ -7,7 +7,7 @@ using HMONITOR = System.IntPtr;
 
 namespace QviKDLib.WinAPI
 {
-    internal static class Dxva2
+    public static class Dxva2
     {
         [DllImport("Dxva2.dll", CharSet = CharSet.Ansi, EntryPoint = "GetNumberOfPhysicalMonitorsFromHMONITOR")]
         internal static extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(HMONITOR hMonitor, ref DWORD pdwNumberOfPhysicalMonitors);
@@ -23,14 +23,14 @@ namespace QviKDLib.WinAPI
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct PHYSICAL_MONITOR
+    public struct PHYSICAL_MONITOR
     {
         public HANDLE hPhysicalMonitor;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)] public string szPhysicalMonitorDescription;
     }
 
     [Flags]
-    internal enum _MC_VCP_CODE_TYPE
+    public enum _MC_VCP_CODE_TYPE
     {
         MC_MOMENTARY,
         MC_SET_PARAMETER
