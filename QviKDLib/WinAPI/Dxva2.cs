@@ -9,10 +9,10 @@ namespace QviKDLib.WinAPI
 {
     public static class Dxva2
     {
-        [DllImport("Dxva2.dll", CharSet = CharSet.Ansi, EntryPoint = "GetNumberOfPhysicalMonitorsFromHMONITOR")]
-        internal static extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(HMONITOR hMonitor, ref DWORD pdwNumberOfPhysicalMonitors);
+        [DllImport("Dxva2.dll", CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = "GetNumberOfPhysicalMonitorsFromHMONITOR")]
+        internal static extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(HMONITOR hMonitor, out DWORD pdwNumberOfPhysicalMonitors);
 
-        [DllImport("Dxva2.dll", CharSet = CharSet.Ansi, EntryPoint = "GetPhysicalMonitorsFromHMONITOR")]
+        [DllImport("Dxva2.dll", CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = "GetPhysicalMonitorsFromHMONITOR")]
         internal static extern bool GetPhysicalMonitorsFromHMONITOR(HMONITOR hMonitor, DWORD dwPhysicalMonitorArraySize, ref PHYSICAL_MONITOR pPhysicalMonitorArray);
 
         [DllImport("Dxva2.dll", CharSet = CharSet.Ansi, EntryPoint = "GetVCPFeatureAndVCPFeatureReply")]
