@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using QviKDLib;
+
 namespace QviKD
 {
     /// <summary>
@@ -23,6 +25,11 @@ namespace QviKD
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            EnumMonitors _ = new();
         }
     }
 }

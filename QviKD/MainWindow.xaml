@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="QviKD" Height="480" Width="800" MinWidth="448">
+        Title="QviKD" Height="480" Width="800" MinWidth="448" Initialized="Window_Initialized">
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Top" Background="#FF202020" Height="48"></Grid>
         <StatusBar DockPanel.Dock="Bottom" Height="24" Background="#FF202020"></StatusBar>
