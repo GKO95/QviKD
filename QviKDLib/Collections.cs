@@ -8,6 +8,6 @@ namespace QviKDLib
 {
     public static class Collections
     {
-        public static readonly List<Monitor> Monitors = new();
+        public static readonly List<Display> Displays = new();
     }
 }

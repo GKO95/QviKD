@@ -15,6 +15,9 @@ namespace QviKDLib.WinAPI
         [DllImport("User32.dll", CharSet = CharSet.Unicode, EntryPoint = "EnumDisplayDevicesW")]
         internal static extern bool EnumDisplayDevicesW(string lpDevice, uint iDevNum, ref DISPLAY_DEVICEW lpDisplayDevice, uint dwFlags);
 
+        [DllImport("User32.dll", CharSet = CharSet.Ansi, EntryPoint = "EnumDisplayDevicesA")]
+        internal static extern bool EnumDisplayDevicesA(string lpDevice, uint iDevNum, ref DISPLAY_DEVICEA lpDisplayDevice, uint dwFlags);
+
         [DllImport("User32.dll", CharSet = CharSet.Unicode, EntryPoint = "GetMonitorInfoW")]
         internal static extern bool GetMonitorInfoW(HMONITOR hMonitor, ref MONITORINFO lpmi);
 

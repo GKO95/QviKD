@@ -32,12 +32,20 @@ namespace QviKDLib.WinAPI
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
+    public struct RECT : IEquatable<RECT>
     {
         public int left;
         public int top;
         public int right;
         public int bottom;
+
+        public override bool Equals(object obj) => obj is RECT other && Equals(other);
+        public bool Equals(RECT other) => left == other.left && top == other.top && right == other.right && bottom == other.bottom;
+
+        public override int GetHashCode() => (left, top, right, bottom).GetHashCode();
+
+        public static bool operator ==(RECT lhs, RECT rhs) => lhs.Equals(rhs);
+        public static bool operator !=(RECT lhs, RECT rhs) => !(lhs == rhs);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -57,12 +65,14 @@ namespace QviKDLib.WinAPI
         public RECT rcWork;
         public DWORD dwFlags;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]  public string szDevice;
+
+        public MONITORINFOEXW Clone() => (MONITORINFOEXW)MemberwiseClone();
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct DISPLAY_DEVICEW
+    public struct DISPLAY_DEVICEW
     {
-        public uint cb;
+        public uint cb; //=424
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string DeviceName;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
@@ -72,6 +82,25 @@ namespace QviKDLib.WinAPI
         public string DeviceID;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string DeviceKey;
+
+        public DISPLAY_DEVICEW Clone() => (DISPLAY_DEVICEW)MemberwiseClone();
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    public struct DISPLAY_DEVICEA
+    {
+        public uint cb; //=840
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string DeviceName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string DeviceString;
+        public uint StateFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string DeviceID;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string DeviceKey;
+
+        public DISPLAY_DEVICEA Clone() => (DISPLAY_DEVICEA)MemberwiseClone();
     }
 
     [Flags]
