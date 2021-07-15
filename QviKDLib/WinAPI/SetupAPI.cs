@@ -16,10 +16,10 @@ namespace QviKDLib.WinAPI
         [DllImport("setupapi.dll", CharSet = CharSet.Unicode, EntryPoint = "SetupDiGetClassDevsW")]
         internal static extern HDEVINFO SetupDiGetClassDevsW(ref Guid ClassGuid, string Enumerator, HWND hwndParent, DWORD Flags);
 
-        [DllImport("setupapi.dll", CharSet = CharSet.Unicode, EntryPoint = "SetupDiEnumDeviceInfo")]
+        [DllImport("setupapi.dll", EntryPoint = "SetupDiEnumDeviceInfo")]
         internal static extern bool SetupDiEnumDeviceInfo(HDEVINFO DeviceInfoSet, DWORD MemberIndex, ref SP_DEVINFO_DATA DeviceInfoData);
 
-        [DllImport("setupapi.dll", CharSet = CharSet.Unicode, EntryPoint = "SetupDiOpenDevRegKey")]
+        [DllImport("setupapi.dll", EntryPoint = "SetupDiOpenDevRegKey")]
         internal static extern HKEY SetupDiOpenDevRegKey(HDEVINFO DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData, DWORD Scope, DWORD HwProfile, DWORD KeyType, DWORD samDesired);
     }
 }

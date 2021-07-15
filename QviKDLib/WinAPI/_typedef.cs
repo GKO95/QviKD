@@ -31,7 +31,7 @@ namespace QviKDLib.WinAPI
         public HWND Reserved;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
         public int left;
@@ -40,13 +40,38 @@ namespace QviKDLib.WinAPI
         public int bottom;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct MONITORINFO
     {
         public DWORD cbSize;
         public RECT rcMonitor;
         public RECT rcWork;
         public DWORD dwFlags;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct MONITORINFOEXW
+    {
+        public DWORD cbSize;
+        public RECT rcMonitor;
+        public RECT rcWork;
+        public DWORD dwFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]  public string szDevice;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    internal struct DISPLAY_DEVICEW
+    {
+        public uint cb;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+        public string DeviceName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string DeviceString;
+        public uint StateFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string DeviceID;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string DeviceKey;
     }
 
     [Flags]
