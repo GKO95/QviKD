@@ -29,8 +29,7 @@ namespace QviKD
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            new EnumMonitors();
-            new EnumMonitors();
+            _ = new EnumMonitors();
         }
     }
 }
