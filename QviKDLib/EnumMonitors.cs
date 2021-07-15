@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-
 using QviKDLib.WinAPI;
 
 using HMONITOR = System.IntPtr;
@@ -20,7 +20,7 @@ namespace QviKDLib
         private readonly List<RECT> rcArrayOfMonitorRects = new();
         private readonly List<DWORD> rcNumberOfPhysicalMonitors = new();
         private readonly List<PHYSICAL_MONITOR[]> rcArrayOfPhysicalMonitors = new();
-        private readonly MONITORINFO MonitorInfo = new MONITORINFO()
+        private readonly MONITORINFO rcMonitorInfo = new()
         {
             cbSize = 40,
             rcMonitor = new RECT(),
@@ -28,11 +28,14 @@ namespace QviKDLib
             dwFlags = 0
         };
 
+        /// <summary>
+        /// Callback function of MONITORENUMPROC parameter in "User32.EnumDisplayMonitors".
+        /// </summary>
         private bool MonitorEnum(HMONITOR hMon, HDC hdc, ref RECT lprcMonitor, LPARAM dwData)
         {
             if (hMon == (HMONITOR)(-1))
             {
-                Console.Error.WriteLine("INVALID_HANDLE_VALUE");
+                Console.Error.WriteLine("Unable to retreive the HMONITOR of the display monitor.");
                 return false;
             }
             rcHMONITOR.Add(hMon);
@@ -40,6 +43,9 @@ namespace QviKDLib
             return true;
         }
 
+        /// <summary>
+        /// A monitor enumeration class used whenever enumeration needs to be refreshed; instance is to be discard.
+        /// </summary>
         public EnumMonitors()
         {
             Collections.Monitors.Clear();
@@ -95,35 +101,78 @@ namespace QviKDLib
             */
             foreach (HMONITOR hMon in rcHMONITOR)
             {
-                if (!User32.GetMonitorInfoW(hMon, ref MonitorInfo))
+                if (!User32.GetMonitorInfoW(hMon, ref rcMonitorInfo))
                     Console.Error.WriteLine("Failed to retrieve monitor information: unable to identify whether it is the primary or secondary.");
 
                 int index = rcHMONITOR.IndexOf(hMon);
                 for (int nMonitor = 0; nMonitor < rcNumberOfPhysicalMonitors[index]; nMonitor++)
                 {
-                    Collections.Monitors.Add(new Monitor()
+                    Collections.Monitors.Add(new Monitor(hMon, 
+                        rcArrayOfPhysicalMonitors[index][nMonitor].hPhysicalMonitor, 
+                        rcArrayOfPhysicalMonitors[index][nMonitor].szPhysicalMonitorDescription)
                     {
-                        hMonitor = hMon,
                         Rect = rcArrayOfMonitorRects[index],
-                        hPhysical = rcArrayOfPhysicalMonitors[index][nMonitor].hPhysicalMonitor,
-                        Description = rcArrayOfPhysicalMonitors[index][nMonitor].szPhysicalMonitorDescription,
-                        IsPrimary = (int)MonitorInfo.dwFlags == (int)MONITORINFOF.PRIMARY
+                        IsPrimary = (int)rcMonitorInfo.dwFlags == (int)MONITORINFOF.PRIMARY
                     });
                 }
             }
         }
 
+        ~EnumMonitors()
+        {
+            Debug.WriteLine("EnumMonitor instance destroyed.");
+        }
     }
 
     public class Monitor
     {
-        public HMONITOR hMonitor { get; set; }
-        public HANDLE hPhysical { get; set; }
+        /// <summary>
+        /// A handle to the display monitor.
+        /// </summary>
+        public HMONITOR hMonitor { get; }
+
+        /// <summary>
+        /// A handle to the physical display device.
+        /// </summary>
+        public HANDLE hPhysical { get; }
+
+        /// <summary>
+        /// A handle to the physical display device.
+        /// </summary>
+        public byte EDID { get; set; }
+
+        /// <summary>
+        /// A structure that defines a rectangle by the coordinates of its upper-left and lower-right corners.
+        /// </summary>
         public RECT Rect { get; set; }
 
-        public string Description { get; set; }
+        /// <summary>
+        /// Text description of the physical monitor.
+        /// </summary>
+        public string Description { get; }
+
+        /// <summary>
+        /// An information that identifies primary monitor.
+        /// </summary>
         public bool IsPrimary { get; set; }
 
+        public Monitor(HMONITOR hMonitor, HANDLE hPhysical, string Description)
+        { 
+            this.hMonitor = hMonitor;
+            this.hPhysical = hPhysical;
+            this.Description = Description;
+        }
+
+        ~Monitor()
+        {
+            if(!Dxva2.DestroyPhysicalMonitor(hPhysical))
+                Console.Error.WriteLine($"Failed to destroy a handle to the physical monitor: {Marshal.GetLastWin32Error()}");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Monitor Clone()
         {
             return (Monitor)MemberwiseClone();
