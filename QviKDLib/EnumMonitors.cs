@@ -17,29 +17,23 @@ namespace QviKDLib
     public class EnumMonitors
     {
         private readonly List<HMONITOR> rcHMONITOR = new();
-        private readonly List<RECT> rcArrayOfMonitorRects = new();
+        private readonly List<RECT> rcArrayOfMonitorsRect = new();
         private readonly List<DWORD> rcNumberOfPhysicalMonitors = new();
         private readonly List<PHYSICAL_MONITOR[]> rcArrayOfPhysicalMonitors = new();
-        private readonly MONITORINFO rcMonitorInfo = new()
-        {
-            cbSize = 40,
-            rcMonitor = new RECT(),
-            rcWork = new RECT(),
-            dwFlags = 0
-        };
+        private readonly List<string> rcArrayOfDeviceNames = new();
 
         /// <summary>
         /// Callback function of MONITORENUMPROC parameter in "User32.EnumDisplayMonitors".
         /// </summary>
-        private bool MonitorEnum(HMONITOR hMon, HDC hdc, ref RECT lprcMonitor, LPARAM dwData)
+        private bool EnumMonitorDelegate(HMONITOR hMon, HDC hdc, ref RECT lprcMonitor, LPARAM dwData)
         {
             if (hMon == (HMONITOR)(-1))
             {
                 Console.Error.WriteLine("Unable to retreive the HMONITOR of the display monitor.");
                 return false;
             }
+            rcArrayOfMonitorsRect.Add(lprcMonitor);
             rcHMONITOR.Add(hMon);
-            rcArrayOfMonitorRects.Add(lprcMonitor);
             return true;
         }
 
@@ -50,33 +44,62 @@ namespace QviKDLib
         {
             Collections.Monitors.Clear();
 
-            if (!User32.EnumDisplayMonitors(HDC.Zero, LPRECT.Zero, MonitorEnum, HANDLE.Zero))
+            EnumHANDLEs();
+            EnumEDIDs();
+
+            foreach (HMONITOR hMon in rcHMONITOR)
+            {
+                int index = rcHMONITOR.IndexOf(hMon);
+
+                for (int nMonitor = 0; nMonitor < rcNumberOfPhysicalMonitors[index]; nMonitor++)
+                {
+                    Collections.Monitors.Add(new Monitor(hMon,
+                        rcArrayOfPhysicalMonitors[index][nMonitor].hPhysicalMonitor,
+                        rcArrayOfPhysicalMonitors[index][nMonitor].szPhysicalMonitorDescription)
+                    {
+                        Rect = rcArrayOfMonitorsRect[index]
+                    }); ;
+                }
+            }
+        }
+
+        ~EnumMonitors()
+        {
+            DebugMessage("EnumMonitor instance destroyed.");
+        }
+
+        /// <summary>
+        /// Enumerates HMONITORs and HANDLEs to physical display device necessary for DDC/CI.
+        /// </summary>
+        private void EnumHANDLEs()
+        {
+            DebugMessage("Begin HANDLE enumeration...");
+
+            MONITORINFOEXW rcMonitorInfoExW = new()
+            {
+                cbSize = 104,
+                rcMonitor = new RECT(),
+                rcWork = new RECT(),
+                dwFlags = 0,
+                szDevice = null
+            };
+
+            if (!User32.EnumDisplayMonitors(HDC.Zero, LPRECT.Zero, EnumMonitorDelegate, HANDLE.Zero))
                 Console.Error.WriteLine("Unable to retreive a display monitor from the enumeration.");
 
-            /*
-                FIRST, GET the number of physical monitors associated to the HMONITOR. The number of the associated physical monitor
-                is passed to the "rcNumberOfPhysicalMonitors" list corresponding to the HMONITOR order.
-            */
             foreach (HMONITOR hMon in rcHMONITOR.ToArray())
             {
+                int index = rcHMONITOR.IndexOf(hMon);
+
                 if (!Dxva2.GetNumberOfPhysicalMonitorsFromHMONITOR(hMon, out DWORD NumberOfPhysicalMonitors))
                 {
                     Console.Error.WriteLine($"System Error Code: {Marshal.GetLastWin32Error()}");
-                    rcArrayOfMonitorRects.RemoveAt(rcHMONITOR.IndexOf(hMon));
+                    rcArrayOfMonitorsRect.RemoveAt(index);
                     rcHMONITOR.Remove(hMon);
                 }
-                else
-                {
-                    rcNumberOfPhysicalMonitors.Add(NumberOfPhysicalMonitors);
-                }
+                else rcNumberOfPhysicalMonitors.Add(NumberOfPhysicalMonitors);
             }
 
-            /*
-                SECOND, ACQUIRE the array of physical monitor information associated to the HMONITOR.
-                Each element of the "rcNumberOfPhysicalMonitors" list acts as an array of the
-                corresponding HMONITOR containing the "rcNumberOfPhysicalMonitors" number of physical
-                monitor information.
-            */
             foreach (HMONITOR hMon in rcHMONITOR.ToArray())
             {
                 int index = rcHMONITOR.IndexOf(hMon);
@@ -86,45 +109,51 @@ namespace QviKDLib
                 {
                     Console.Error.WriteLine($"System Error Code: {Marshal.GetLastWin32Error()}");
                     rcNumberOfPhysicalMonitors.RemoveAt(index);
-                    rcArrayOfMonitorRects.RemoveAt(index);
+                    rcArrayOfMonitorsRect.RemoveAt(index);
                     rcHMONITOR.Remove(hMon);
                 }
                 else
                 {
+                    if (!User32.GetMonitorInfoW(hMon, ref rcMonitorInfoExW))
+                        Console.Error.WriteLine("Failed to retrieve monitor information.");
+                       
                     rcArrayOfPhysicalMonitors.Add(ArrayOfPhysicalMonitors);
-                }
-            }
-
-            /*
-                FINALLY, MERGE THE GATHER information on hMonitor, hPhysicalMonitorHandle,
-                resolution & position, and more to a single collection "Collections.Monitors".
-            */
-            foreach (HMONITOR hMon in rcHMONITOR)
-            {
-                if (!User32.GetMonitorInfoW(hMon, ref rcMonitorInfo))
-                    Console.Error.WriteLine("Failed to retrieve monitor information: unable to identify whether it is the primary or secondary.");
-
-                int index = rcHMONITOR.IndexOf(hMon);
-                for (int nMonitor = 0; nMonitor < rcNumberOfPhysicalMonitors[index]; nMonitor++)
-                {
-                    Collections.Monitors.Add(new Monitor(hMon, 
-                        rcArrayOfPhysicalMonitors[index][nMonitor].hPhysicalMonitor, 
-                        rcArrayOfPhysicalMonitors[index][nMonitor].szPhysicalMonitorDescription)
-                    {
-                        Rect = rcArrayOfMonitorRects[index],
-                        IsPrimary = (int)rcMonitorInfo.dwFlags == (int)MONITORINFOF.PRIMARY
-                    });
+                    rcArrayOfDeviceNames.Add(rcMonitorInfoExW.szDevice);
                 }
             }
         }
 
-        ~EnumMonitors()
+        /// <summary>
+        /// Enumerates EDID that identifies a display device information and capabilities.
+        /// </summary>
+        private void EnumEDIDs()
         {
-            Debug.WriteLine("EnumMonitor instance destroyed.");
+            DebugMessage("Begin EDID enumeration...");
+
+            DISPLAY_DEVICEW devDISPLAY = new() { cb = 840, DeviceName = null, DeviceString = null, StateFlags = 0, DeviceID = null, DeviceKey = null };
+
+            for (DWORD index = 0; ;)
+            {
+                if (User32.EnumDisplayDevicesW(null, index, ref devDISPLAY, 1))
+                {
+                    for (DWORD idx = 0; User32.EnumDisplayDevicesW(devDISPLAY.DeviceName, idx, ref devDISPLAY, 1); idx++)
+                    {
+                        
+                    }
+                    index++;
+                    continue;
+                }
+                break;
+            }
+        }
+
+        private void DebugMessage(string msg)
+        {
+            Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
     }
 
-    public class Monitor
+    public record Monitor
     {
         /// <summary>
         /// A handle to the display monitor.
@@ -136,10 +165,12 @@ namespace QviKDLib
         /// </summary>
         public HANDLE hPhysical { get; }
 
+        public string DeviceName { get; }
+
         /// <summary>
         /// A handle to the physical display device.
         /// </summary>
-        public byte EDID { get; set; }
+        public EDID EDID { get; set; }
 
         /// <summary>
         /// A structure that defines a rectangle by the coordinates of its upper-left and lower-right corners.
@@ -157,7 +188,7 @@ namespace QviKDLib
         public bool IsPrimary { get; set; }
 
         public Monitor(HMONITOR hMonitor, HANDLE hPhysical, string Description)
-        { 
+        {
             this.hMonitor = hMonitor;
             this.hPhysical = hPhysical;
             this.Description = Description;
@@ -165,17 +196,36 @@ namespace QviKDLib
 
         ~Monitor()
         {
-            if(!Dxva2.DestroyPhysicalMonitor(hPhysical))
+            if (!Dxva2.DestroyPhysicalMonitor(hPhysical))
                 Console.Error.WriteLine($"Failed to destroy a handle to the physical monitor: {Marshal.GetLastWin32Error()}");
         }
+    }
+
+    public record EDID {
 
         /// <summary>
-        /// 
+        /// Hidden readonly field containing aquired EDID.
         /// </summary>
-        /// <returns></returns>
-        public Monitor Clone()
+        private readonly byte[] _edid = new byte[256];
+
+        /// <summary>
+        /// EDID version specified in the aquired EDID information.
+        /// </summary>
+        public double Version { get; }
+
+        /// <summary>
+        /// EDID length based on the EDID version.
+        /// </summary>
+        public int Length { get => Version >= 2.0 ? 256 : 128; }
+
+        /// <summary>
+        /// Array of EDID information sliced to appropriate length based on the EDID version.
+        /// </summary>
+        public byte[] Raw { get => _edid[0..Length]; }
+
+        public EDID(byte[] edid)
         {
-            return (Monitor)MemberwiseClone();
+            _edid = edid;
         }
     }
 }
