@@ -30,7 +30,7 @@ namespace QviKDLib
         /// <summary>
         /// List of display monitor information including "szDevice" device name and its "rcMonitor" RECT position.
         /// </summary>
-        private readonly List<MONITORINFOEXW> _MONITORINFOEXWs = new();
+        private readonly List<MONITORINFOEXA> _MONITORINFOEXAs = new();
 
         /// <summary>
         /// List of display device information including "DeviceName" device name and its "DeviceID" device registry key.
@@ -61,13 +61,13 @@ namespace QviKDLib
             EnumPhysicals();
             EnumDevices();
 
-            for (int nDisplay = 0; nDisplay < _MONITORINFOEXWs.Count; nDisplay++)
+            for (int nDisplay = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
                 for (int nMonitor = 0; nMonitor < _HPHYSICALs[nDisplay].Length; nMonitor++)
                 {
                     Collections.Displays.Add(new Display(
                         _HMONITORs[nDisplay],
                         _HPHYSICALs[nDisplay][nMonitor],
-                        _MONITORINFOEXWs[nDisplay],
+                        _MONITORINFOEXAs[nDisplay],
                         _DISPLAY_DEVICEAs[nDisplay][nMonitor]
                         ));
                 }
@@ -85,9 +85,9 @@ namespace QviKDLib
         {
             DebugMessage("Begin HANDLE enumeration...");
 
-            MONITORINFOEXW MonitorInfoExW = new()
+            MONITORINFOEXA MonitorInfoExA = new()
             {
-                cbSize = 104,
+                cbSize = 72,
                 rcMonitor = new RECT(),
                 rcWork = new RECT(),
                 dwFlags = 0,
@@ -108,7 +108,7 @@ namespace QviKDLib
                 }
                 else
                 {
-                    if (!User32.GetMonitorInfoW(hMon, ref MonitorInfoExW))
+                    if (!User32.GetMonitorInfoA(hMon, ref MonitorInfoExA))
                         Console.Error.WriteLine("Failed to retrieve monitor information.");
 
                     PHYSICAL_MONITOR[] ArrayOfPhysicalMonitors = new PHYSICAL_MONITOR[NumberOfPhysicalMonitors];
@@ -123,7 +123,7 @@ namespace QviKDLib
                     {
                         _HPHYSICALs.Add(ArrayOfPhysicalMonitors);
                         _DISPLAY_DEVICEAs.Add(ArrayOfDisplayDeviceA);
-                        _MONITORINFOEXWs.Add(MonitorInfoExW.Clone());
+                        _MONITORINFOEXAs.Add(MonitorInfoExA.Clone());
                     }
                 }
             }
@@ -152,9 +152,9 @@ namespace QviKDLib
                 {
                     for (DWORD idx = 0; User32.EnumDisplayDevicesA(DisplayDeviceA.DeviceName, idx, ref DisplayDeviceA, 1); idx++)
                     {
-                        for (int nDisplay = 0; nDisplay < _MONITORINFOEXWs.Count; nDisplay++)
+                        for (int nDisplay = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
                             for (int nMonitor = 0; nMonitor < _HPHYSICALs[nDisplay].Length; nMonitor++)
-                                if (DisplayDeviceA.DeviceName == $"{_MONITORINFOEXWs[nDisplay].szDevice}\\Monitor{nMonitor}")
+                                if (DisplayDeviceA.DeviceName == $"{_MONITORINFOEXAs[nDisplay].szDevice}\\Monitor{nMonitor}")
                                 {
                                     _DISPLAY_DEVICEAs[nDisplay][nMonitor] = DisplayDeviceA;
                                     break;
@@ -220,15 +220,15 @@ namespace QviKDLib
         /// </summary>
         public bool IsPrimary { get; }
 
-        public Display(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXW MonitorInfoW, DISPLAY_DEVICEA DisplayDeviceA)
+        public Display(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXA MonitorInfoA, DISPLAY_DEVICEA DisplayDeviceA)
         {
             this.hMonitor = hMonitor;
 
             hPhysical = PhysicalMonitor.hPhysicalMonitor;
             Description = PhysicalMonitor.szPhysicalMonitorDescription;
 
-            Rect = MonitorInfoW.rcMonitor;
-            IsPrimary = MonitorInfoW.dwFlags == (int)MONITORINFOF.PRIMARY;
+            Rect = MonitorInfoA.rcMonitor;
+            IsPrimary = MonitorInfoA.dwFlags == (int)MONITORINFOF.PRIMARY;
 
             DeviceName = DisplayDeviceA.DeviceName;
             DeviceID = DisplayDeviceA.DeviceID;

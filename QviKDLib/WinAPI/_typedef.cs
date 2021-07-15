@@ -60,13 +60,25 @@ namespace QviKDLib.WinAPI
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct MONITORINFOEXW
     {
-        public DWORD cbSize;
+        public DWORD cbSize; //=104
         public RECT rcMonitor;
         public RECT rcWork;
         public DWORD dwFlags;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]  public string szDevice;
 
         public MONITORINFOEXW Clone() => (MONITORINFOEXW)MemberwiseClone();
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    public struct MONITORINFOEXA
+    {
+        public DWORD cbSize; //=72
+        public RECT rcMonitor;
+        public RECT rcWork;
+        public DWORD dwFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)] public string szDevice;
+
+        public MONITORINFOEXA Clone() => (MONITORINFOEXA)MemberwiseClone();
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

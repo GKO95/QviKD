@@ -24,6 +24,9 @@ namespace QviKDLib.WinAPI
         [DllImport("User32.dll", CharSet = CharSet.Unicode, EntryPoint = "GetMonitorInfoW")]
         internal static extern bool GetMonitorInfoW(HMONITOR hMonitor, ref MONITORINFOEXW lpmi);
 
+        [DllImport("User32.dll", CharSet = CharSet.Ansi, EntryPoint = "GetMonitorInfoA")]
+        internal static extern bool GetMonitorInfoA(HMONITOR hMonitor, ref MONITORINFOEXA lpmi);
+
         public delegate bool MONITORENUMPROC(HMONITOR unnamedParam1, HDC unnamedParam2, ref RECT unnamedParam3, LPARAM unnamedParam4);
     }
 }
