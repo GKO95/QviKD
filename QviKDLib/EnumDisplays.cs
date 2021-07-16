@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using Microsoft.Win32;
 using QviKDLib.WinAPI;
 
 using HMONITOR = System.IntPtr;
@@ -175,110 +174,6 @@ namespace QviKDLib
         private void DebugMessage(string msg)
         {
             Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
-        }
-    }
-
-    public record Display
-    {
-        /// <summary>
-        /// A handle to the display monitor.
-        /// </summary>
-        public HMONITOR hMonitor { get; }
-
-        /// <summary>
-        /// A handle to the physical display device.
-        /// </summary>
-        public HANDLE hPhysical { get; }
-
-        /// <summary>
-        /// A string identifying the device name. This is either the adapter device or the monitor device.
-        /// </summary>
-        public string DeviceName { get; }
-
-        /// <summary>
-        /// Unique identification of hardware device.
-        /// </summary>
-        public string DeviceID { get; }
-
-        /// <summary>
-        /// A registry key to the hardware device.
-        /// </summary>
-        public string DeviceKey { get; }
-
-        /// <summary>
-        /// A handle to the physical display device.
-        /// </summary>
-        public EDID EDID { get; }
-
-        /// <summary>
-        /// A structure that defines a rectangle by the coordinates of its upper-left and lower-right corners.
-        /// </summary>
-        public RECT Rect { get; }
-
-        /// <summary>
-        /// Text description of the physical monitor.
-        /// </summary>
-        public string Description { get; }
-
-        /// <summary>
-        /// An information that identifies primary monitor.
-        /// </summary>
-        public bool IsPrimary { get; }
-
-        public Display(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXA MonitorInfoA, DISPLAY_DEVICEA DisplayDeviceA)
-        {
-            this.hMonitor = hMonitor;
-
-            hPhysical = PhysicalMonitor.hPhysicalMonitor;
-            Description = PhysicalMonitor.szPhysicalMonitorDescription;
-
-            Rect = MonitorInfoA.rcMonitor;
-            IsPrimary = MonitorInfoA.dwFlags == (int)MONITORINFOF.PRIMARY;
-
-            DeviceName = DisplayDeviceA.DeviceName;
-            DeviceID = DisplayDeviceA.DeviceID;
-            DeviceKey = DisplayDeviceA.DeviceKey;
-
-            EDID = new EDID(
-                (byte[])Registry.GetValue(
-                    $"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Enum\\DISPLAY\\{DeviceID.Split('#')[1]}\\{DeviceID.Split('#')[2]}\\Device Parameters",
-                    "EDID", "")
-                );
-        }
-
-        ~Display()
-        {
-            if (!Dxva2.DestroyPhysicalMonitor(hPhysical))
-                Console.Error.WriteLine($"Failed to destroy a handle to the physical monitor: {Marshal.GetLastWin32Error()}");
-        }
-
-        public string Print() => string.Format(
-            "Device Name:\t{0}\n* HMONITOR:\t\t0x{1:X16}\n* PHYSICAL:\t\t0x{2:X16}\n* RESOLUTION:\t{3}x{4} ({5}, {6})\n* PRIMARY:\t\t{7}", 
-            DeviceName, hMonitor, hPhysical, Rect.right - Rect.left, Rect.bottom - Rect.top, Rect.left, Rect.top, IsPrimary);
-    }
-
-    public record EDID {
-
-        /// <summary>
-        /// EDID version specified in the aquired EDID information.
-        /// </summary>
-        public double Version { get; }
-
-        /// <summary>
-        /// Array of EDID information sliced to appropriate length based on the EDID version.
-        /// </summary>
-        public byte[] Raw { get; }
-
-        public EDID(byte[] edid)
-        {
-            Raw = edid;
-            Version = Raw[(byte)FORMAT.VERSION_HBYTE] + (Raw[(byte)FORMAT.VERSION_LBYTE] / 10.0);
-        }
-
-        enum FORMAT : byte
-        { 
-            VERSION_HBYTE = 18,
-            VERSION_LBYTE = 19,
         }
     }
 }
