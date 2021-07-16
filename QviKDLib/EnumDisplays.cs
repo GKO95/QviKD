@@ -56,7 +56,7 @@ namespace QviKDLib
         /// </summary>
         public EnumDisplays()
         {
-            Collections.Displays.Clear();
+            Database.Displays.Clear();
 
             EnumPhysicals();
             EnumDevices();
@@ -64,7 +64,7 @@ namespace QviKDLib
             for (int nDisplay = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
                 for (int nMonitor = 0; nMonitor < _HPHYSICALs[nDisplay].Length; nMonitor++)
                 {
-                    Collections.Displays.Add(new Display(
+                    Database.Displays.Add(new Display(
                         _HMONITORs[nDisplay],
                         _HPHYSICALs[nDisplay][nMonitor],
                         _MONITORINFOEXAs[nDisplay],
