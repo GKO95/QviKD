@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QviKDLib
 {
-    public static class Collections
+    public static class Database
     {
         public static readonly List<Display> Displays = new();
     }
