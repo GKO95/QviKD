@@ -61,7 +61,7 @@ namespace QviKDLib
             EnumPhysicals();
             EnumDevices();
 
-            for (int nDisplay = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
+            for (int nDisplay = 0, index = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
                 for (int nMonitor = 0; nMonitor < _HPHYSICALs[nDisplay].Length; nMonitor++)
                 {
                     Database.Displays.Add(new Display(
@@ -70,6 +70,7 @@ namespace QviKDLib
                         _MONITORINFOEXAs[nDisplay],
                         _DISPLAY_DEVICEAs[nDisplay][nMonitor]
                         ));
+                    DebugMessage($"Database.Displays[{index++}]\n{Database.Displays[^1].Print()}");
                 }
         }
 
@@ -83,7 +84,7 @@ namespace QviKDLib
         /// </summary>
         private void EnumPhysicals()
         {
-            DebugMessage("Begin HANDLE enumeration...");
+            DebugMessage("Begin monitor enumeration...");
 
             MONITORINFOEXA MonitorInfoExA = new()
             {
@@ -127,6 +128,8 @@ namespace QviKDLib
                     }
                 }
             }
+
+            DebugMessage("...monitor enumeration complete!");
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace QviKDLib
         /// </summary>
         private void EnumDevices()
         {
-            DebugMessage("Begin EDID enumeration...");
+            DebugMessage("Begin device enumeration...");
 
             DISPLAY_DEVICEA DisplayDeviceA = new()
             {
@@ -165,6 +168,8 @@ namespace QviKDLib
                 }
                 break;
             }
+
+            DebugMessage("...device enumeration complete!");
         }
 
         private void DebugMessage(string msg)
@@ -237,8 +242,7 @@ namespace QviKDLib
             EDID = new EDID(
                 (byte[])Registry.GetValue(
                     $"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Enum\\DISPLAY\\{DeviceID.Split('#')[1]}\\{DeviceID.Split('#')[2]}\\Device Parameters",
-                    "EDID",
-                    "")
+                    "EDID", "")
                 );
         }
 
@@ -247,6 +251,10 @@ namespace QviKDLib
             if (!Dxva2.DestroyPhysicalMonitor(hPhysical))
                 Console.Error.WriteLine($"Failed to destroy a handle to the physical monitor: {Marshal.GetLastWin32Error()}");
         }
+
+        public string Print() => string.Format(
+            "Device Name:\t{0}\n* HMONITOR:\t\t0x{1:X16}\n* PHYSICAL:\t\t0x{2:X16}\n* RESOLUTION:\t{3}x{4} ({5}, {6})\n* PRIMARY:\t\t{7}", 
+            DeviceName, hMonitor, hPhysical, Rect.right - Rect.left, Rect.bottom - Rect.top, Rect.left, Rect.top, IsPrimary);
     }
 
     public record EDID {
