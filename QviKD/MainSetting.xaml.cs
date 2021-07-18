@@ -13,28 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using QviKDLib;
-
 namespace QviKD
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainSetting.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainSetting : UserControl
     {
-        public MainWindow()
+        public MainSetting()
         {
             InitializeComponent();
-        }
-
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-            _ = new EnumDisplays();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new MainDisplay();
         }
     }
 }
