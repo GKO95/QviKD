@@ -25,11 +25,7 @@ namespace QviKD
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-            _ = new EnumDisplays();
+            new EnumDisplays();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

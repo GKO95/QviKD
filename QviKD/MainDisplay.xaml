@@ -15,6 +15,8 @@
         <StackPanel x:Name="MainDisplayInfo" Grid.Row="0" Orientation="Vertical" Background="White" Margin="4,4,4,4">
             <TextBlock x:Name="MainDisplayInfo_Product" HorizontalAlignment="Center">(unknown)</TextBlock>
         </StackPanel>
-        <StackPanel x:Name="MainDisplayList" Grid.Row="1" Orientation="Horizontal" Background="Black" Margin="4,4,4,4" />
+        <Grid x:Name="MainDisplayList" Grid.Row="1" Background="Black" Margin="4,4,4,4" Loaded="MainDisplayList_Loaded" SizeChanged="MainDisplayList_SizeChanged">
+            <StackPanel x:Name="MainDisplayListStack" Orientation="Horizontal" HorizontalAlignment="Center"/>
+        </Grid>
     </Grid>
 </UserControl>
