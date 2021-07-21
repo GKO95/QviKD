@@ -3,7 +3,7 @@
 using HANDLE = System.IntPtr;
 using DWORD = System.UInt32;
 
-namespace QviKDLib.WinAPI
+namespace WinAPI
 {
     public static class Kernel32
     {
@@ -20,6 +20,6 @@ namespace QviKDLib.WinAPI
         internal static extern bool ReadFile(HANDLE hFile, ref byte lpBuffer, DWORD nNumberOfBytesToRead, out DWORD lpNumberOfBytesRead, [In] HANDLE nulllpOverlapped);
 
         [DllImport("Kernel32.dll", CharSet = CharSet.Ansi, EntryPoint = "CloseHandle")]
-        internal static extern bool CloseHandle(HANDLE hMonitor);
+        internal static extern bool CloseHandle(HANDLE hObject);
     }
 }

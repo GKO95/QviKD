@@ -6,7 +6,7 @@ using DWORD = System.UInt32;
 using HWND = System.IntPtr;
 using HKEY = System.IntPtr;
 
-namespace QviKDLib.WinAPI
+namespace WinAPI
 {
     internal static class SetupAPI
     {

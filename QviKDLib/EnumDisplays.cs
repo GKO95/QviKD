@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using QviKDLib.WinAPI;
+using WinAPI;
 
 using HMONITOR = System.IntPtr;
 using LPRECT = System.IntPtr;

@@ -5,7 +5,7 @@ using HANDLE = System.IntPtr;
 using DWORD = System.UInt32;
 using HWND = System.IntPtr;
 
-namespace QviKDLib.WinAPI
+namespace WinAPI
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct PHYSICAL_MONITOR

@@ -4,7 +4,7 @@ using DWORD = System.UInt32;
 using HANDLE = System.IntPtr;
 using HMONITOR = System.IntPtr;
 
-namespace QviKDLib.WinAPI
+namespace WinAPI
 {
     public static class Dxva2
     {

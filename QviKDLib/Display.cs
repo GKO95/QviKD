@@ -2,7 +2,7 @@
 using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using QviKDLib.WinAPI;
+using WinAPI;
 
 using HMONITOR = System.IntPtr;
 using HANDLE = System.IntPtr;
