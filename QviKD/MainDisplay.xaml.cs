@@ -29,23 +29,30 @@ namespace QviKD
 
         private void MainDisplayList_Loaded(object sender, RoutedEventArgs e)
         {
+            double size = MainDisplayListScroll.ActualHeight - (MainDisplayListScroll.Padding.Top + MainDisplayListScroll.Padding.Bottom);
+
             for (int index = 0; index < Database.Displays.Count; index++)
             {
-                System.Diagnostics.Debug.WriteLine(MainDisplayListStack.Height);
                 MainDisplayListStack.Children.Add(new MainDisplayItem()
-                { 
-                    Height = MainDisplayListStack.ActualHeight,
-                    Width = MainDisplayListStack.ActualHeight,
+                {
+                    Background = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40)),
+                    Margin = new Thickness(0, 0, 8, 0),
+                    Height = size,
+                    Width = size,
                 });
             }
         }
 
         private void MainDisplayList_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            foreach (MainDisplayItem element in MainDisplayListStack.Children)
+            if (MainDisplayListStack.Children.Count > 0)
             {
-                element.Height = MainDisplayListStack.ActualHeight;
-                element.Width = MainDisplayListStack.ActualHeight;
+                double size = MainDisplayListScroll.ActualHeight - (MainDisplayListScroll.Padding.Top + MainDisplayListScroll.Padding.Bottom);
+                foreach (MainDisplayItem item in MainDisplayListStack.Children)
+                {
+                    item.Height = size;
+                    item.Width = size;
+                }
             }
         }
     }
@@ -54,8 +61,7 @@ namespace QviKD
     {
         public MainDisplayItem()
         {
-            Background = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40));
-            Margin = new Thickness(4, 4, 4, 4);
+            
         }
     }
 }

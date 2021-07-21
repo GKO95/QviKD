@@ -9,14 +9,29 @@
     <Grid Margin="4,4,4,4">
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
-            <RowDefinition Height="1*" MaxHeight="144" MinHeight="40" />
+            <RowDefinition Height="1*" MaxHeight="140" MinHeight="40" />
         </Grid.RowDefinitions>
 
         <StackPanel x:Name="MainDisplayInfo" Grid.Row="0" Orientation="Vertical" Background="White" Margin="4,4,4,4">
             <TextBlock x:Name="MainDisplayInfo_Product" HorizontalAlignment="Center">(unknown)</TextBlock>
         </StackPanel>
         <Grid x:Name="MainDisplayList" Grid.Row="1" Background="Black" Margin="4,4,4,4" Loaded="MainDisplayList_Loaded" SizeChanged="MainDisplayList_SizeChanged">
-            <StackPanel x:Name="MainDisplayListStack" Orientation="Horizontal" HorizontalAlignment="Center"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="24"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Background="#FF303030" Cursor="Hand">
+                <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16">◀</TextBlock>
+            </Grid>
+            <Grid Grid.Column="2" Background="#FF303030" Cursor="Hand">
+                <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16">▶</TextBlock>
+            </Grid>
+            <ScrollViewer x:Name="MainDisplayListScroll" Grid.Column="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" Padding="8,4,8,4">
+                <StackPanel x:Name="MainDisplayListStack" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal"/>
+            </ScrollViewer>
+            
         </Grid>
     </Grid>
 </UserControl>
