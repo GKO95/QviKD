@@ -30,7 +30,7 @@ namespace QviKD
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new MainDisplay();
+            MainWindowContent.Content = new MonitorsPage();
         }
     }
 }
