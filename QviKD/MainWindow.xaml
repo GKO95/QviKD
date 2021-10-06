@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Height="480" Width="800" MinWidth="448" MinHeight="400"
+        Height="600" Width="800" MinHeight="464" MinWidth="600"
         Title="QviKD" Loaded="Window_Loaded">
     
     <Window.Resources>
@@ -12,9 +12,9 @@
     </Window.Resources>
     
     <DockPanel LastChildFill="True">
-        <Grid Name="MainWindowHeader" DockPanel.Dock="Top" Background="#FF202020" Height="48" />
+        <Grid Name="MainWindowHeader" DockPanel.Dock="Top" Background="#FF202020" Height="76" />
         <StatusBar Name="MainWindowFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowHeader}" />
-        <Frame Name="MainWindowContent" />
+        <ContentControl Name="MainWindowContent" />
     </DockPanel>
     
 </Window>

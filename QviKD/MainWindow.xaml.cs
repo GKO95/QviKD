@@ -25,12 +25,12 @@ namespace QviKD
         public MainWindow()
         {
             InitializeComponent();
-            new EnumDisplays();
+            _ = new EnumDisplays();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MainWindowContent.Content = new MonitorsPage();
+            MainWindowContent.Content = new MainMenu();
         }
     }
 }
