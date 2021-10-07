@@ -13,19 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using QviKDLib;
-
 namespace QviKD
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MonitorMenu.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MonitorMenu : UserControl
     {
-        public MainWindow()
+        public MonitorMenu()
         {
             InitializeComponent();
-            _ = new EnumDisplays();
         }
     }
 }
