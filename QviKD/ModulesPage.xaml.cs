@@ -13,16 +13,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using QviKDLib;
+
 namespace QviKD
 {
     /// <summary>
-    /// Interaction logic for MonitorMenu.xaml
+    /// Interaction logic for ModulesPage.xaml
     /// </summary>
-    public partial class MonitorMenu : UserControl
+    public partial class ModulesPage : Page
     {
-        public MonitorMenu()
+        public ModulesPage()
         {
             InitializeComponent();
+        }
+
+        private void ModulesPageHeaderBack_Click(object sender, RoutedEventArgs e)
+        {
+            (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
+            _ = NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
         }
     }
 }

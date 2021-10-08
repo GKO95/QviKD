@@ -22,10 +22,47 @@ namespace QviKD
     /// </summary>
     public partial class MainWindow : Window
     {
+        public enum PAGES : int
+        {
+            MAIN = -1,
+            MODULES = -2,
+            SETTING = -3,
+        }
+
+        private PAGES PageNavigation { get; set; } = PAGES.MAIN;
+
         public MainWindow()
         {
             InitializeComponent();
             _ = new EnumDisplays();
+        }
+
+        public void GoTo(int index)
+        {
+            PageNavigation = (PAGES)index;
+        }
+
+        public void GoTo(PAGES page)
+        {
+            PageNavigation = page;
+        }
+
+        public int Page => (int)PageNavigation;
+
+        private void MainWindowContent_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            // Allow the page to access the MainWindow object via its arbitrary data, namely "Tag" property.
+            (e.Content as Page).Tag = this;
+
+            // Disable Go Back navigation by removing recent entry history every time the frame navigates.
+            if (MainWindowContent.CanGoBack)
+            {
+                JournalEntry entry = MainWindowContent.RemoveBackEntry();
+                while (entry != null)
+                {
+                    entry = MainWindowContent.RemoveBackEntry();
+                }
+            }
         }
     }
 }

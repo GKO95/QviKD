@@ -8,14 +8,10 @@
         Height="600" Width="800" MinHeight="464" MinWidth="600"
         Title="QviKD">
     
-    <Window.Resources>
-        <local:MainMenu x:Key="rcMainMenu" />
-    </Window.Resources>
-    
     <DockPanel LastChildFill="True">
         <Grid Name="MainWindowHeader" DockPanel.Dock="Top" Background="#FF202020" Height="76" />
         <StatusBar Name="MainWindowFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowHeader}" />
-        <ContentControl Name="MainWindowContent" Content="{StaticResource rcMainMenu}" Focusable="False"/>
+        <Frame Name="MainWindowContent" Source="MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" />
     </DockPanel>
     
 </Window>
