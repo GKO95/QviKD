@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using QviKDLib;
-
 namespace QviKD
 {
     /// <summary>
@@ -22,7 +21,7 @@ namespace QviKD
     /// </summary>
     public partial class MonitorPage : Page
     {
-        private Display display;
+        private DISPLAY display;
 
         public MonitorPage()
         {
@@ -34,14 +33,31 @@ namespace QviKD
             display = Database.Displays[(Tag as MainWindow).Page];
 
             MonitorPageHeaderTitle.Content = display.EDID.DisplayName;
+
+            MonitorPageInformationIsPrimary.Content = display.IsPrimary ? "Yes" : "No";
+            MonitorPageInformationResolution.Content = $"{display.Rect.right - display.Rect.left} x {display.Rect.bottom - display.Rect.top}";
+            MonitorPageInformationPosition.Content = $"({display.Rect.left}, {display.Rect.top})";
+
+            MonitorPageInformationDescription.Content = display.Description;
+
             MonitorPageInformationDeviceName.Content = display.DeviceName;
             MonitorPageInformationDeviceID.Content = display.DeviceID;
+
         }
 
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
             _ = NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Assembly assembly = Database.Modules[0];
+            Window obj = (Window)assembly.CreateInstance("QviKD.Modules.Pattern.MainModule");
+
+
+            obj.Show();
         }
     }
 }

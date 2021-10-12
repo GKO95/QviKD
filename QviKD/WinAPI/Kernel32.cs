@@ -3,7 +3,7 @@
 using HANDLE = System.IntPtr;
 using DWORD = System.UInt32;
 
-namespace WinAPI
+namespace QviKD.WinAPI
 {
     public static class Kernel32
     {

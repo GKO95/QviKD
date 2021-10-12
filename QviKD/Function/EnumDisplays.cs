@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using WinAPI;
+using QviKD.WinAPI;
 
 using HMONITOR = System.IntPtr;
 using LPRECT = System.IntPtr;
@@ -12,7 +12,7 @@ using HDC = System.IntPtr;
 
 using DWORD = System.UInt32;
 
-namespace QviKDLib
+namespace QviKD.Functions
 {
     public class EnumDisplays
     {
@@ -61,9 +61,10 @@ namespace QviKDLib
             EnumDevices();
 
             for (int nDisplay = 0, index = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
+            {
                 for (int nMonitor = 0; nMonitor < _HPHYSICALs[nDisplay].Length; nMonitor++)
                 {
-                    Database.Displays.Add(new Display(
+                    Database.Displays.Add(new DISPLAY(
                         _HMONITORs[nDisplay],
                         _HPHYSICALs[nDisplay][nMonitor],
                         _MONITORINFOEXAs[nDisplay],
@@ -71,6 +72,7 @@ namespace QviKDLib
                         ));
                     DebugMessage($"Database.Displays[{index++}]\n{Database.Displays[^1].Print()}");
                 }
+            }
         }
 
         ~EnumDisplays()
@@ -104,12 +106,14 @@ namespace QviKDLib
                 if (!Dxva2.GetNumberOfPhysicalMonitorsFromHMONITOR(hMon, out DWORD NumberOfPhysicalMonitors))
                 {
                     Console.Error.WriteLine($"System Error Code: {Marshal.GetLastWin32Error()}");
-                    _HMONITORs.Remove(hMon);
+                    _ = _HMONITORs.Remove(hMon);
                 }
                 else
                 {
                     if (!User32.GetMonitorInfoA(hMon, ref MonitorInfoExA))
+                    {
                         Console.Error.WriteLine("Failed to retrieve monitor information.");
+                    }
 
                     PHYSICAL_MONITOR[] ArrayOfPhysicalMonitors = new PHYSICAL_MONITOR[NumberOfPhysicalMonitors];
                     DISPLAY_DEVICEA[] ArrayOfDisplayDeviceA = new DISPLAY_DEVICEA[NumberOfPhysicalMonitors];
@@ -117,7 +121,7 @@ namespace QviKDLib
                     if (!Dxva2.GetPhysicalMonitorsFromHMONITOR(_HMONITORs[index], NumberOfPhysicalMonitors, ref ArrayOfPhysicalMonitors[0]))
                     {
                         Console.Error.WriteLine($"System Error Code: {Marshal.GetLastWin32Error()}");
-                        _HMONITORs.Remove(hMon);
+                        _ = _HMONITORs.Remove(hMon);
                     }
                     else
                     {
@@ -173,7 +177,9 @@ namespace QviKDLib
 
         private void DebugMessage(string msg)
         {
+#if DEBUG
             Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
+#endif
         }
     }
 }

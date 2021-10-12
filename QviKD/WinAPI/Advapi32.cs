@@ -4,7 +4,7 @@ using LRESULT = System.Int64;
 using DWORD = System.UInt32;
 using HKEY = System.IntPtr;
 
-namespace WinAPI
+namespace QviKD.WinAPI
 {
     internal static class Advapi32
     {

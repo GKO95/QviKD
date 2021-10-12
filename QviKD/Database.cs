@@ -1,62 +1,75 @@
 ﻿using System;
 using System.Text;
+using System.Reflection;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using WinAPI;
+using QviKD.WinAPI;
 
 using HMONITOR = System.IntPtr;
 using HANDLE = System.IntPtr;
 
-namespace QviKDLib
+namespace QviKD
 {
-    public record Display
+    internal static class Database
+    {
+        public static readonly List<DISPLAY> Displays = new();
+        public static readonly List<Assembly> Modules = new();
+    }
+
+    internal record DISPLAY
     {
         /// <summary>
         /// A handle to the display monitor.
         /// </summary>
-        public HMONITOR hMonitor { get; }
+        internal HMONITOR hMonitor { get; }
 
         /// <summary>
         /// A handle to the physical display device.
         /// </summary>
-        public HANDLE hPhysical { get; }
+        internal HANDLE hPhysical { get; }
 
         /// <summary>
         /// A string identifying the device name. This is either the adapter device or the monitor device.
         /// </summary>
-        public string DeviceName { get; }
+        internal string DeviceName { get; }
 
         /// <summary>
         /// Unique identification of hardware device.
         /// </summary>
-        public string DeviceID { get; }
+        internal string DeviceID { get; }
 
         /// <summary>
         /// A registry key to the hardware device.
         /// </summary>
-        public string DeviceKey { get; }
+        internal string DeviceKey { get; }
 
         /// <summary>
-        /// A handle to the physical display device.
+        /// A class that stores EDID and its processed information via members.
         /// </summary>
-        public EDID EDID { get; }
+        internal EDID EDID { get; }
 
         /// <summary>
         /// A structure that defines a rectangle by the coordinates of its upper-left and lower-right corners.
         /// </summary>
-        public RECT Rect { get; }
+        internal RECT Rect { get; }
 
         /// <summary>
         /// Text description of the physical monitor.
         /// </summary>
-        public string Description { get; }
+        internal string Description { get; }
 
         /// <summary>
         /// An information that identifies primary monitor.
         /// </summary>
-        public bool IsPrimary { get; }
+        internal bool IsPrimary { get; }
 
-        public Display(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXA MonitorInfoA, DISPLAY_DEVICEA DisplayDeviceA)
+        /// <summary>
+        /// An information that identifies whether the monitor is available to use a module.
+        /// </summary>
+        internal bool IsAvailable { get; set; } = true;
+
+        internal DISPLAY(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXA MonitorInfoA, DISPLAY_DEVICEA DisplayDeviceA)
         {
             this.hMonitor = hMonitor;
 
@@ -73,13 +86,15 @@ namespace QviKDLib
             EDID = new EDID(DeviceID);
         }
 
-        ~Display()
+        ~DISPLAY()
         {
             if (!Dxva2.DestroyPhysicalMonitor(hPhysical))
+            {
                 Console.Error.WriteLine($"Failed to destroy a handle to the physical monitor: {Marshal.GetLastWin32Error()}");
+            }
         }
 
-        public string Print() => string.Format(
+        internal string Print() => string.Format(
             "Device Name:\t{0}\n* HMONITOR:\t\t0x{1:X16}\n* PHYSICAL:\t\t0x{2:X16}\n* RESOLUTION:\t{3}x{4} ({5}, {6})\n* PRIMARY:\t\t{7}",
             DeviceName, hMonitor, hPhysical, Rect.right - Rect.left, Rect.bottom - Rect.top, Rect.left, Rect.top, IsPrimary);
     }
@@ -138,11 +153,13 @@ namespace QviKDLib
                     switch (Raw[(byte)BYTE.VERSION_INTEGER])
                     {
                         case 1:
-                            if (Raw[(byte)BYTE.VERSION_DECIMAL] > 4) return "(invalid)";
-                            else return $"{Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0)}";
+                            return Raw[(byte)BYTE.VERSION_DECIMAL] > 4
+                                ? "(invalid)"
+                                : $"{Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0)}";
                         case 2:
-                            if (Raw[(byte)BYTE.VERSION_DECIMAL] > 0) return "(invalid)";
-                            else return $"{Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0)}";
+                            return Raw[(byte)BYTE.VERSION_DECIMAL] > 0
+                                ? "(invalid)"
+                                : $"{Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0)}";
                         default:
                             return "(invalid)";
                     }
@@ -150,12 +167,15 @@ namespace QviKDLib
                 case META.DISPLAY_NAME:
                 case META.DISPLAY_SERIALNUMBER:
                     for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
+                    {
                         if (((Metadata == META.DISPLAY_NAME) && (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_NAME)) ||
                             ((Metadata == META.DISPLAY_SERIALNUMBER) && (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_SERIALNUMBER)))
                         {
                             temp = Encoding.ASCII.GetString(Raw[(address + 5)..(address + 18)]).Trim();
                             return temp.Length == 0 ? "(empty)" : temp;
                         }
+                    }
+
                     return "(undefined)";
 
                 default:

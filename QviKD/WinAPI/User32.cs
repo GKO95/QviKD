@@ -5,7 +5,7 @@ using LPARAM = System.IntPtr;
 using LPRECT = System.IntPtr;
 using HDC = System.IntPtr;
 
-namespace WinAPI
+namespace QviKD.WinAPI
 {
     public static class User32
     {

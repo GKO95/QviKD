@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using QviKDLib;
-
 namespace QviKD
 {
     /// <summary>
@@ -29,7 +27,7 @@ namespace QviKD
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-#if !DEBUG
+#if DEBUG
             for(int index = 0; index < 30; index++)
             {
                 MainPage_AppendButton(index);

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using QviKDLib;
+using QviKD.Functions;
 
 namespace QviKD
 {
@@ -35,6 +35,7 @@ namespace QviKD
         {
             InitializeComponent();
             _ = new EnumDisplays();
+            _ = new EnumModules();
         }
 
         public void GoTo(int index)
