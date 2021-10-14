@@ -56,7 +56,7 @@
             <!--DDC/CI-->
             
             <!--MODULES-->
-            <Button Content="PATTERN" Click="Button_Click"/>
+            <StackPanel Name="MonitorPageModules" />
 
         </StackPanel>
     </ScrollViewer>

@@ -14,7 +14,7 @@ using DWORD = System.UInt32;
 
 namespace QviKD.Functions
 {
-    public class EnumDisplays
+    class EnumDisplays
     {
         /// <summary>
         /// List of handles to a display monitor; aka HMONITOR.
@@ -57,14 +57,18 @@ namespace QviKD.Functions
         {
             Database.Displays.Clear();
 
+            // Enumerate physical monitors.
             EnumPhysicals();
+
+            // Enumerate display devices.
             EnumDevices();
 
+            // Match physical monitors and display devices.
             for (int nDisplay = 0, index = 0; nDisplay < _MONITORINFOEXAs.Count; nDisplay++)
             {
                 for (int nMonitor = 0; nMonitor < _HPHYSICALs[nDisplay].Length; nMonitor++)
                 {
-                    Database.Displays.Add(new DISPLAY(
+                    Database.Displays.Add(new Display(
                         _HMONITORs[nDisplay],
                         _HPHYSICALs[nDisplay][nMonitor],
                         _MONITORINFOEXAs[nDisplay],
@@ -87,6 +91,7 @@ namespace QviKD.Functions
         {
             DebugMessage("Begin monitor enumeration...");
 
+            // Create an instance that can store display monitor screen information.
             MONITORINFOEXA MonitorInfoExA = new()
             {
                 cbSize = 72,
@@ -96,13 +101,17 @@ namespace QviKD.Functions
                 szDevice = null
             };
 
+            // Identify display monitor screens via EnumMonitors callback function.
             if (!User32.EnumDisplayMonitors(HDC.Zero, LPRECT.Zero, EnumMonitors, HANDLE.Zero))
+            {
                 Console.Error.WriteLine("Unable to retreive a display monitor from the enumeration.");
+            }
 
             foreach (HMONITOR hMon in _HMONITORs.ToArray())
             {
                 int index = _HMONITORs.IndexOf(hMon);
 
+                // Find out the number of physical monitors associated to the corresponding display monitor screen.
                 if (!Dxva2.GetNumberOfPhysicalMonitorsFromHMONITOR(hMon, out DWORD NumberOfPhysicalMonitors))
                 {
                     Console.Error.WriteLine($"System Error Code: {Marshal.GetLastWin32Error()}");
@@ -118,6 +127,7 @@ namespace QviKD.Functions
                     PHYSICAL_MONITOR[] ArrayOfPhysicalMonitors = new PHYSICAL_MONITOR[NumberOfPhysicalMonitors];
                     DISPLAY_DEVICEA[] ArrayOfDisplayDeviceA = new DISPLAY_DEVICEA[NumberOfPhysicalMonitors];
 
+                    // Retrieve handles to the associated physical monitors.
                     if (!Dxva2.GetPhysicalMonitorsFromHMONITOR(_HMONITORs[index], NumberOfPhysicalMonitors, ref ArrayOfPhysicalMonitors[0]))
                     {
                         Console.Error.WriteLine($"System Error Code: {Marshal.GetLastWin32Error()}");
@@ -142,6 +152,7 @@ namespace QviKD.Functions
         {
             DebugMessage("Begin device enumeration...");
 
+            // Create an instance that can store display monitor device information.
             DISPLAY_DEVICEA DisplayDeviceA = new()
             {
                 cb = 424,
@@ -154,6 +165,7 @@ namespace QviKD.Functions
 
             for (DWORD index = 0; ;)
             {
+                // Retrieve display monitor device information.
                 if (User32.EnumDisplayDevicesA(null, index, ref DisplayDeviceA, 1))
                 {
                     for (DWORD idx = 0; User32.EnumDisplayDevicesA(DisplayDeviceA.DeviceName, idx, ref DisplayDeviceA, 1); idx++)

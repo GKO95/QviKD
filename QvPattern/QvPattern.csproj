@@ -4,7 +4,11 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <BaseOutputPath>..\QviKD\bin</BaseOutputPath>
+    <BaseOutputPath>..\QviKD\bin\</BaseOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QviKD\QviKD.csproj" />
+  </ItemGroup>
 
 </Project>

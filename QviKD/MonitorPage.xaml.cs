@@ -21,7 +21,7 @@ namespace QviKD
     /// </summary>
     public partial class MonitorPage : Page
     {
-        private DISPLAY display;
+        private Display display;
 
         public MonitorPage()
         {
@@ -43,6 +43,24 @@ namespace QviKD
             MonitorPageInformationDeviceName.Content = display.DeviceName;
             MonitorPageInformationDeviceID.Content = display.DeviceID;
 
+            foreach (Module module in Database.Modules)
+            {
+                if ((bool)module.Type.GetMethod("IsValidMonitor",
+                    BindingFlags.Public | BindingFlags.Static).Invoke(null, new string[] { display.EDID.DisplayName } ))
+                {
+                    Button button = new()
+                    {
+                        Name = $"MonitorPageModule{module.AssemblyName.Name}",
+                        Content = module.AssemblyName.Name,
+                        Tag = module.Type,
+                    };
+                    MonitorPageModules.Children.Add(button);
+                    button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
+                }
+
+            }
+
+
         }
 
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
@@ -51,13 +69,15 @@ namespace QviKD
             _ = NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
-            Assembly assembly = Database.Modules[0];
-            Window obj = (Window)assembly.CreateInstance("QviKD.Modules.Pattern.MainModule");
+            if (Activator.CreateInstance((Type)((Button)sender).Tag, new Display[] { display }) is ModuleWindow wnd)
+            {
+                wnd.Show();
+            }
 
+            //display.Run(Database.Modules[0]);
 
-            obj.Show();
         }
     }
 }

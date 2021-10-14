@@ -18,9 +18,9 @@ namespace QviKD
     /// <summary>
     /// Interaction logic for ModulesPage.xaml
     /// </summary>
-    public partial class ModulesPage : Page
+    public partial class ModulePage : Page
     {
-        public ModulesPage()
+        public ModulePage()
         {
             InitializeComponent();
         }
