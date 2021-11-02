@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QviKD", "QviKD\QviKD.csproj", "{84E086D6-9253-4ED3-A251-4005C14478DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QvPattern", "QvPattern\QvPattern.csproj", "{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84E086D6-9253-4ED3-A251-4005C14478DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E086D6-9253-4ED3-A251-4005C14478DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E086D6-9253-4ED3-A251-4005C14478DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E086D6-9253-4ED3-A251-4005C14478DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD63F688-5625-467E-9734-7BA42BB2E15C}
+	EndGlobalSection
+EndGlobal

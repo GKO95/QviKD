@@ -1,0 +1,12 @@
+﻿<Application x:Class="QviKD.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:QviKD"
+             StartupUri="MainWindow.xaml">
+    
+    <Application.Resources>
+        <ControlTemplate x:Key="rcModuleTemplate">
+            
+        </ControlTemplate>
+    </Application.Resources>
+</Application>
