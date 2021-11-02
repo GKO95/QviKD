@@ -66,7 +66,7 @@ namespace QviKD
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
-            _ = NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+            _ = NavigationService.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));
         }
 
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
@@ -75,9 +75,6 @@ namespace QviKD
             {
                 wnd.Show();
             }
-
-            //display.Run(Database.Modules[0]);
-
         }
     }
 }

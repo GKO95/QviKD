@@ -11,7 +11,7 @@
     <DockPanel LastChildFill="True">
         <Grid Name="MainWindowHeader" DockPanel.Dock="Top" Background="#FF202020" Height="76" />
         <StatusBar Name="MainWindowFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowHeader}" />
-        <Frame Name="MainWindowContent" Source="MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" />
+        <Frame Name="MainWindowContent" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" />
     </DockPanel>
     
 </Window>

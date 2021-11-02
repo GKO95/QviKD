@@ -44,19 +44,39 @@ namespace QviKD
     ///     <MyNamespace:ModuleWindow/>
     ///
     /// </summary>
-    public class ModuleWindow : Window
+    public abstract class ModuleWindow : Window
     {
         static ModuleWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ModuleWindow), new FrameworkPropertyMetadata(typeof(ModuleWindow)));
         }
 
-        public ModuleWindow(Display display)
-        {
-            Left = display.Rect.left;
-            Top = display.Rect.top;
+        public ModuleWindow()
+        { 
+        
         }
 
+        public ModuleWindow(Display display)
+        {
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = display.Rect.left;
+            Top  = display.Rect.top;
+            //Left = (display.Rect.right - display.Rect.left) / 2;
+            //Top  = (display.Rect.bottom - display.Rect.top) / 2;
+
+            WindowStyle = WindowStyle.None;
+            WindowState = WindowState.Minimized;
+            Loaded += ModuleWindow_Loaded;            
+        }
+
+        protected virtual void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        /// <summary>
+        /// Condition that defines which monitor should the module be available.
+        /// </summary>
         public static bool IsValidMonitor(string monitor)
         {
             if (monitor is null)
@@ -65,6 +85,16 @@ namespace QviKD
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Print message for debugging; DEBUG-mode exclusive.
+        /// </summary>
+        private void DebugMessage(string msg)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
+#endif
         }
     }
 }

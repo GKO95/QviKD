@@ -22,33 +22,12 @@ namespace QviKD
     /// </summary>
     public partial class MainWindow : Window
     {
-        public enum PAGES : int
-        {
-            MAIN = -1,
-            MODULES = -2,
-            SETTING = -3,
-        }
-
-        private PAGES PageNavigation { get; set; } = PAGES.MAIN;
-
         public MainWindow()
         {
             InitializeComponent();
             _ = new EnumDisplays();
             _ = new EnumModules();
         }
-
-        public void GoTo(int index)
-        {
-            PageNavigation = (PAGES)index;
-        }
-
-        public void GoTo(PAGES page)
-        {
-            PageNavigation = page;
-        }
-
-        public int Page => (int)PageNavigation;
 
         private void MainWindowContent_LoadCompleted(object sender, NavigationEventArgs e)
         {
@@ -64,6 +43,19 @@ namespace QviKD
                     entry = MainWindowContent.RemoveBackEntry();
                 }
             }
+        }
+
+        private PAGES PageNavigation { get; set; } = PAGES.MAIN;
+        public int Page => (int)PageNavigation;
+
+        public void GoTo(int index)  => GoTo((PAGES)index);
+        public void GoTo(PAGES page) => PageNavigation = page;
+
+        public enum PAGES : int
+        {
+            MAIN    = -1,
+            MODULES = -2,
+            SETTING = -3,
         }
     }
 }

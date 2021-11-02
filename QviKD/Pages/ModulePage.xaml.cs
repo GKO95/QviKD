@@ -28,7 +28,7 @@ namespace QviKD
         private void ModulesPageHeaderBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
-            _ = NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+            _ = NavigationService.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));
         }
     }
 }

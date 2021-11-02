@@ -12,23 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using QviKD;
 
-namespace QviKD.Module
+namespace QviKD.Module.QvPattern
 {
     /// <summary>
     /// Interaction logic for MainModule.xaml
     /// </summary>
     public partial class MainWindow : ModuleWindow
     {
-        public MainWindow(Display display) : base(display)
+        public MainWindow() : base()
         {
-            InitializeComponent();
+        
         }
 
-        /// <summary>
-        /// Condition that defines which monitor should the module be available.
-        /// </summary>
+        public MainWindow(Display display) : base(display)
+        {
+            
+        }
+
         public static new bool IsValidMonitor(string monitor)
         {
             if (monitor is null)
@@ -37,6 +38,11 @@ namespace QviKD.Module
             }
 
             return true;
+        }
+
+        protected override void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

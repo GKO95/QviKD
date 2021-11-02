@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.IO;
-using System.Diagnostics;
 
 namespace QviKD.Functions
 {
@@ -40,12 +39,14 @@ namespace QviKD.Functions
             }
         }
 
+        /// <summary>
+        /// Print message for debugging; DEBUG-mode exclusive.
+        /// </summary>
         private void DebugMessage(string msg)
         {
 #if DEBUG
-            Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
+            System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
 #endif
         }
-
     }
 }

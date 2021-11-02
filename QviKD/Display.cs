@@ -62,31 +62,6 @@ namespace QviKD
         /// </summary>
         internal bool IsAvailable { get; } = true;
 
-        /*
-        internal Window Module
-        {
-            get { return Module; }
-            set
-            {
-                Module = Activator.CreateInstance((Type)value) as Window;
-                if (Activator.CreateInstance((Type)value) is Window Module)
-                {
-                    obj.Show();
-                    return true;
-                }
-                else return false;
-            }
-        }
-        */
-
-        //internal Window Module;
-
-        //internal void Run(Module module)
-        //{
-        //    Module = Activator.CreateInstance(module.Type) as Window;
-        //    Module.Show();
-        //}
-
         internal Display(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXA MonitorInfoA, DISPLAY_DEVICEA DisplayDeviceA)
         {
             this.hMonitor = hMonitor;
@@ -210,22 +185,22 @@ namespace QviKD
 
         private enum DESCRIPTOR_TYPE : byte
         {
-            DISPLAY_NAME = 0xFC,
-            DISPLAY_SERIALNUMBER = 0xFF,
+            DISPLAY_NAME            = 0xFC,
+            DISPLAY_SERIALNUMBER    = 0xFF,
         }
 
         private enum BYTE : byte
         {
-            VERSION_INTEGER = 0x12,
-            VERSION_DECIMAL = 0x13,
+            VERSION_INTEGER         = 0x12,
+            VERSION_DECIMAL         = 0x13,
 
-            DESCRIPTOR1 = 0x36,
-            DESCRIPTOR2 = 0x48,
-            DESCRIPTOR3 = 0x5A,
-            DESCRIPTOR4 = 0x6C,
+            DESCRIPTOR1             = 0x36,
+            DESCRIPTOR2             = 0x48,
+            DESCRIPTOR3             = 0x5A,
+            DESCRIPTOR4             = 0x6C,
 
-            EXTENSION = 0x7E,
-            CHECKSUM = 0x7F,
+            EXTENSION               = 0x7E,
+            CHECKSUM                = 0x7F,
         }
     }
 }

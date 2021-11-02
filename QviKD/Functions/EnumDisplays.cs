@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using QviKD.WinAPI;
@@ -187,10 +186,13 @@ namespace QviKD.Functions
             DebugMessage("...device enumeration complete!");
         }
 
+        /// <summary>
+        /// Print message for debugging; DEBUG-mode exclusive.
+        /// </summary>
         private void DebugMessage(string msg)
         {
 #if DEBUG
-            Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
+            System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
 #endif
         }
     }

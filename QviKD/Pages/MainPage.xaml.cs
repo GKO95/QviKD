@@ -84,16 +84,15 @@ namespace QviKD
             // Pass the button (or its corresponding monitor index) via arbitrary data within the page element.
             int index = MainPageContent.Children.IndexOf((Button)sender);
 
-
             if (index < Database.Displays.Count)
             {
                 (Tag as MainWindow).GoTo(index);
-                _ = NavigationService.Navigate(new Uri("MonitorPage.xaml", UriKind.Relative));
+                _ = NavigationService.Navigate(new Uri("Pages/MonitorPage.xaml", UriKind.Relative));
             }
             else if (index == Database.Displays.Count)
             {
                 (Tag as MainWindow).GoTo(MainWindow.PAGES.MODULES);
-                _ = NavigationService.Navigate(new Uri("ModulesPage.xaml", UriKind.Relative));
+                _ = NavigationService.Navigate(new Uri("Pages/ModulePage.xaml", UriKind.Relative));
             }
             else
             {

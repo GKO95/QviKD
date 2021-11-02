@@ -34,9 +34,8 @@ namespace QviKD
         {
             foreach (Type type in assembly.GetTypes())
             {
-
                 if (type.BaseType.FullName == $"{typeof(ModuleWindow)}"
-                    && type.Namespace == Constant.MODULE_NAMESPACE
+                    && type.Namespace.Contains(Constant.MODULE_NAMESPACE)
                     && type.Name == Constant.MODULE_ENTRY)
                 {
                     return type;
@@ -44,7 +43,6 @@ namespace QviKD
             }
             return null;
         }
-
     }
 
     internal record Constant
@@ -55,9 +53,9 @@ namespace QviKD
 
     public enum ModuleFilter : byte
     {
-        NONE,
-        INCLUDE,
-        EXCLUDE,
-        ALL,
+        NONE        = 0x00,
+        INCLUDE     = 0x01,
+        EXCLUDE     = 0x02,
+        ALL         = 0x03,
     }
 }
