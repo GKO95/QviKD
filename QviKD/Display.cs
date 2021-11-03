@@ -8,7 +8,7 @@ using QviKD.WinAPI;
 using HMONITOR = System.IntPtr;
 using HANDLE = System.IntPtr;
 
-namespace QviKD
+namespace QviKD.Types
 {
     public record Display
     {

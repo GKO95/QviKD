@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using QviKD.Types;
 
 namespace QviKD
 {
@@ -47,8 +47,8 @@ namespace QviKD
             foreach (Module module in Database.Modules)
             {
                 // 
-                if ((bool)module.Type.GetMethod("IsMonitor",
-                    BindingFlags.Public | BindingFlags.Static).Invoke(null, new string[] { display.EDID.DisplayName } ))
+                if ((bool)module.Type.GetMethod("IsAvailable",
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { display.EDID.DisplayName , GetType() } ))
                 {
                     Button button = new()
                     {

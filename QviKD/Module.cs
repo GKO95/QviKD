@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace QviKD
+namespace QviKD.Types
 {
     public record Module
     {

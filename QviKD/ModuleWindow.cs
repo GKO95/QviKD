@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using QviKD.Types;
 
 namespace QviKD
 {
@@ -52,6 +53,8 @@ namespace QviKD
         }
 
         protected readonly Display Display;
+        protected static readonly HashSet<string> Monitors = new();
+        protected static bool ModuleAvailableAsToolkit = false;
 
         // Constructor w/o Display information
         // : for luminance measurement, calculator, et cetera.
@@ -91,6 +94,15 @@ namespace QviKD
             {
                 ;
             }
+        }
+
+        protected static bool IsAvailable(string monitor, Type type)
+        {
+            if (type == typeof(ToolkitPage))
+                return ModuleAvailableAsToolkit;
+            else
+                return ModuleAvailableAsToolkit is false
+                    && (Monitors.Count is 0 || Monitors.Contains(monitor));
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using QviKD.Types;
 
 namespace QviKD.Module.QvPattern
 {
@@ -20,32 +21,47 @@ namespace QviKD.Module.QvPattern
     /// </summary>
     public partial class MainWindow : ModuleWindow
     {
-        private readonly string[] Monitors = {
-            // Add monitors here...
-
-        };
-
+        // Constructor: instantiated modules via ToolkitPage.xaml
+        // ...independent from monitor models.
         public MainWindow() : base()
         {
             InitializeComponent();
         }
 
+        // Constructor: instantiated modules via MonitorPage.xaml
+        // ...should be available only on specific monitor models.
         public MainWindow(Display display) : base(display)
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Condition that defines which monitor should the module be available.
+        /// Static method that defines set of monitors the module should be available.
         /// </summary>
-        protected static bool IsMonitor(string monitor)
+        public static new bool IsAvailable(string monitor, Type type)
         {
-            return false;
-        }
+            // Select where the module is going to be available from:
+            // * MonitorPage.xaml : false
+            // * ToolkitPage.xaml : true
+            ModuleAvailableAsToolkit = false;
 
+            // Add name of monitors here to have modules available
+            // ...or leave empty for all monitors.
+            Monitors.UnionWith(new HashSet<string>
+            {
+                // Add monitors here...
+                
+            });
+            return ModuleWindow.IsAvailable(monitor, type);
+        }
+        
         protected override void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            // Comment "ModuleWindow_Loaded" method to prevent window from maximizing.
             base.ModuleWindow_Loaded(sender, e);
+
+            // Insert code here...
+
         }
     }
 

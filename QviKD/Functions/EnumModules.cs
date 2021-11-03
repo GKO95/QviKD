@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Assembly = System.Reflection.Assembly;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.IO;
+using QviKD.Types;
 
 namespace QviKD.Functions
 {
