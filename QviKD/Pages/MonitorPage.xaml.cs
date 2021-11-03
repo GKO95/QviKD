@@ -43,9 +43,11 @@ namespace QviKD
             MonitorPageInformationDeviceName.Content = display.DeviceName;
             MonitorPageInformationDeviceID.Content = display.DeviceID;
 
+            // For each modules detected and stored in the Database...
             foreach (Module module in Database.Modules)
             {
-                if ((bool)module.Type.GetMethod("IsValidMonitor",
+                // 
+                if ((bool)module.Type.GetMethod("IsMonitor",
                     BindingFlags.Public | BindingFlags.Static).Invoke(null, new string[] { display.EDID.DisplayName } ))
                 {
                     Button button = new()

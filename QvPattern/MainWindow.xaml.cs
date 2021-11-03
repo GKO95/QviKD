@@ -20,29 +20,32 @@ namespace QviKD.Module.QvPattern
     /// </summary>
     public partial class MainWindow : ModuleWindow
     {
+        private readonly string[] Monitors = {
+            // Add monitors here...
+
+        };
+
         public MainWindow() : base()
         {
-        
+            InitializeComponent();
         }
 
         public MainWindow(Display display) : base(display)
         {
-            
+            InitializeComponent();
         }
 
-        public static new bool IsValidMonitor(string monitor)
+        /// <summary>
+        /// Condition that defines which monitor should the module be available.
+        /// </summary>
+        protected static bool IsMonitor(string monitor)
         {
-            if (monitor is null)
-            {
-                throw new ArgumentNullException(nameof(monitor));
-            }
-
-            return true;
+            return false;
         }
 
         protected override void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+            base.ModuleWindow_Loaded(sender, e);
         }
     }
 

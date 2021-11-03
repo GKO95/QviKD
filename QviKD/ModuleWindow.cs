@@ -51,40 +51,46 @@ namespace QviKD
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ModuleWindow), new FrameworkPropertyMetadata(typeof(ModuleWindow)));
         }
 
-        public ModuleWindow()
-        { 
-        
+        protected readonly Display Display;
+
+        // Constructor w/o Display information
+        // : for luminance measurement, calculator, et cetera.
+        protected ModuleWindow()
+        {
+            WindowStyle = WindowStyle.SingleBorderWindow;
+            WindowState = WindowState.Normal;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            Display = null;
+            Loaded += ModuleWindow_Loaded;
         }
 
-        public ModuleWindow(Display display)
+        // Constructor w/ Display information
+        // : for calibration, pattern generator, et cetra.
+        protected ModuleWindow(Display display)
         {
-            WindowStartupLocation = WindowStartupLocation.Manual;
-            Left = display.Rect.left;
-            Top  = display.Rect.top;
-            //Left = (display.Rect.right - display.Rect.left) / 2;
-            //Top  = (display.Rect.bottom - display.Rect.top) / 2;
-
             WindowStyle = WindowStyle.None;
             WindowState = WindowState.Minimized;
+            WindowStartupLocation = WindowStartupLocation.Manual;
+
+            Display = display;
             Loaded += ModuleWindow_Loaded;            
         }
 
         protected virtual void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
-        }
-
-        /// <summary>
-        /// Condition that defines which monitor should the module be available.
-        /// </summary>
-        public static bool IsValidMonitor(string monitor)
-        {
-            if (monitor is null)
+            // Maximize if Display information is specified...
+            if (Display is not null)
             {
-                throw new ArgumentNullException(nameof(monitor));
+                Left = Display.Rect.left;
+                Top = Display.Rect.top;
+                WindowState = WindowState.Maximized;
             }
-
-            return false;
+            // Otherwise...
+            else
+            {
+                ;
+            }
         }
 
         /// <summary>
