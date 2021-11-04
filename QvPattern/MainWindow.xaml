@@ -8,8 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Title="QvPattern" Loaded="ModuleWindow_Loaded">
-    <StackPanel>
-        <TextBlock>Hello World!</TextBlock>
-        <Button>Click</Button>
-    </StackPanel>
+    <Grid>
+
+    </Grid>
 </Qv:ModuleWindow>

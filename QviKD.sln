@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QviKD", "QviKD\QviKD.csproj", "{84E086D6-9253-4ED3-A251-4005C14478DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QvPattern", "QvPattern\QvPattern.csproj", "{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QvPattern", "QvPattern\QvPattern.csproj", "{A5746A7E-6C72-4FB3-9F6E-CC14334102AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
