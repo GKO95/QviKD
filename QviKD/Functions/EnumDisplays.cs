@@ -190,11 +190,10 @@ namespace QviKD.Functions
         /// <summary>
         /// Print message for debugging; DEBUG-mode exclusive.
         /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
         private void DebugMessage(string msg)
         {
-#if DEBUG
             System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
-#endif
         }
     }
 }

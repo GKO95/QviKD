@@ -98,7 +98,7 @@ namespace QviKD
 
         protected static bool IsAvailable(string monitor, Type type)
         {
-            if (type == typeof(ToolkitPage))
+            if (type == typeof(WidgetPage))
                 return ModuleAvailableAsToolkit;
             else
                 return ModuleAvailableAsToolkit is false
@@ -108,11 +108,10 @@ namespace QviKD
         /// <summary>
         /// Print message for debugging; DEBUG-mode exclusive.
         /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
         private void DebugMessage(string msg)
         {
-#if DEBUG
             System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
-#endif
         }
     }
 }

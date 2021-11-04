@@ -92,7 +92,7 @@ namespace QviKD
             else if (index == Database.Displays.Count)
             {
                 (Tag as MainWindow).GoTo(MainWindow.PAGES.MODULES);
-                _ = NavigationService.Navigate(new Uri("Pages/ToolkitPage.xaml", UriKind.Relative));
+                _ = NavigationService.Navigate(new Uri("Pages/WidgetPage.xaml", UriKind.Relative));
             }
             else
             {
