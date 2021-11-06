@@ -9,10 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\X_80.contrast-black.png" />
+    <None Remove="Images\X_80.contrast-white.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\X_80.contrast-black.png" />
+    <Resource Include="Images\X_80.contrast-white.png" />
   </ItemGroup>
 
 </Project>

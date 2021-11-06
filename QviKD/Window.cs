@@ -16,14 +16,6 @@ using QviKD.Types;
 
 namespace QviKD
 {
-    public abstract class AppWindow : Window
-    {
-        static AppWindow()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(AppWindow), new FrameworkPropertyMetadata(typeof(AppWindow)));
-        }
-    }
-
     public abstract class ModuleWindow : Window
     {
         static ModuleWindow()

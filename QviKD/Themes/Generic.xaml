@@ -3,28 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:QviKD">
 
-    <!--AppWindow-->
-    <Style TargetType="{x:Type local:AppWindow}">
-        <Setter Property="WindowStyle" Value="SingleBorderWindow" />
-        <Setter Property="WindowState" Value="Normal" />
-        <Setter Property="WindowChrome.WindowChrome">
-            <Setter.Value>
-                <WindowChrome />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:AppWindow}">
-                    <Grid>
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter Content="{TemplateBinding Content}" />
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Controls/AppWindow.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <!--ModuleWindow-->
     <Style x:Key="ModuleWindowStyleCaptionButton" TargetType="{x:Type Button}">
         <Setter Property="DockPanel.Dock" Value="Right" />
@@ -63,7 +45,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--WidgetWindow-->
     <Style TargetType="{x:Type local:WidgetWindow}">
 

@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using QviKD.Functions;
 
 namespace QviKD
@@ -20,7 +19,7 @@ namespace QviKD
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : AppWindow
+    public partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -56,6 +55,21 @@ namespace QviKD
             MAIN    = -1,
             MODULES = -2,
             SETTING = -3,
+        }
+
+        private void MainWindowCaptionButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void MainWindowCaptionButtonMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void MainWindowCaptionButtonMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
