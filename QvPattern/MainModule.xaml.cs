@@ -24,5 +24,15 @@ namespace QviKD.Modules.QvPattern
         {
             InitializeComponent();
         }
+
+        private static HashSet<string> Monitors { get; set; } = new();
+        public static bool IsAvailable(Types.EDID monitor)
+        {
+            Monitors.UnionWith(new HashSet<string>
+            {
+                "C27F390"
+            });
+            return Monitors.Count is 0 || Monitors.Contains(monitor.DisplayName);
+        }
     }
 }

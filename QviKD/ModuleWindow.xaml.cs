@@ -21,7 +21,7 @@ namespace QviKD
     public partial class ModuleWindow : Window
     {
         private readonly Display Display;
-        private readonly object ContentControl = null;
+        private readonly object ContentControl;
 
         public ModuleWindow(Display display, Module module)
         {
@@ -34,7 +34,6 @@ namespace QviKD
         {
             ModuleWindowContent.Content = ContentControl;
         }
-
         private void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Left = Display.Rect.left;
@@ -46,17 +45,16 @@ namespace QviKD
         {
             Close();
         }
-
         private void ModuleWindowCaptionButtonMinimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
-
+    
+        
     }
 
     public interface IModuleWindow
     {
-        static HashSet<string> Monitors = new();
-        static bool IsAvailable(EDID monitor) => Monitors.Count is 0 || Monitors.Contains(monitor.DisplayName);
+
     }
 }

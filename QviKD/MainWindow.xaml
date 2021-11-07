@@ -15,12 +15,13 @@
     <Window.Resources>
         <local:WindowStateConverter x:Key="MainWindowStateConverter" />
         <Style x:Key="MainWindowStyleCaptionButton" TargetType="{x:Type Button}">
-            <Setter Property="DockPanel.Dock" Value="Right" />
             <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-            <Setter Property="Width" Value="48" />
-            <Setter Property="Height" Value="{Binding ElementName=MainWindowChrome, Path=CaptionHeight}" />
+            <Setter Property="DockPanel.Dock" Value="Right" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="{Binding ElementName=MainWindowChrome, Path=CaptionHeight}" />
+            <Setter Property="Focusable" Value="False" />
         </Style>
     </Window.Resources>
     <DockPanel Name="MainWindowClient" LastChildFill="True">
@@ -83,7 +84,7 @@
             </DockPanel>
         </Grid>
         <StatusBar Name="MainWindowClientFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" />
-        <Frame Name="MainWindowContent" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" />
+        <Frame Name="MainWindowContent" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" Focusable="False" />
     </DockPanel>
     
 </Window>

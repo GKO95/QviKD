@@ -48,7 +48,7 @@ namespace QviKD
             {
                 try
                 {
-                    if ((bool)module.Type.GetInterface("IModuleWindow").GetMethod("IsAvailable",
+                    if ((bool)module.Type.GetMethod("IsAvailable",
                         System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { Display.EDID }))
                     {
                         Button button = new()
