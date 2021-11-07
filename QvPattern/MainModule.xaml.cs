@@ -16,9 +16,9 @@ using System.Windows.Shapes;
 namespace QviKD.Modules.QvPattern
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for MainModule.xaml
     /// </summary>
-    public partial class MainModule : UserControl
+    public partial class MainModule : UserControl, IModuleWindow
     {
         public MainModule()
         {

@@ -21,7 +21,7 @@ namespace QviKD
     /// </summary>
     public partial class MonitorPage : Page
     {
-        private Display display;
+        private Display Display;
 
         public MonitorPage()
         {
@@ -30,35 +30,41 @@ namespace QviKD
 
         private void MonitorPage_Loaded(object sender, RoutedEventArgs e)
         {
-            display = Database.Displays[(Tag as MainWindow).Page];
+            Display = Database.Displays[(Tag as MainWindow).Page];
 
-            MonitorPageHeaderTitle.Content = display.EDID.DisplayName;
+            MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
 
-            MonitorPageInformationIsPrimary.Content = display.IsPrimary ? "Yes" : "No";
-            MonitorPageInformationResolution.Content = $"{display.Rect.right - display.Rect.left} x {display.Rect.bottom - display.Rect.top}";
-            MonitorPageInformationPosition.Content = $"({display.Rect.left}, {display.Rect.top})";
+            MonitorPageInformationIsPrimary.Content = Display.IsPrimary ? "Yes" : "No";
+            MonitorPageInformationResolution.Content = $"{Display.Rect.right - Display.Rect.left} x {Display.Rect.bottom - Display.Rect.top}";
+            MonitorPageInformationPosition.Content = $"({Display.Rect.left}, {Display.Rect.top})";
 
-            MonitorPageInformationDescription.Content = display.Description;
+            MonitorPageInformationDescription.Content = Display.Description;
 
-            MonitorPageInformationDeviceName.Content = display.DeviceName;
-            MonitorPageInformationDeviceID.Content = display.DeviceID;
+            MonitorPageInformationDeviceName.Content = Display.DeviceName;
+            MonitorPageInformationDeviceID.Content = Display.DeviceID;
 
             // For each modules detected and stored in the Database...
             foreach (Module module in Database.Modules)
             {
-                //if ((bool)module.Type.GetMethod("IsAvailable",
-                //    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { display.EDID.DisplayName , GetType() } ))
+                try
                 {
-                    Button button = new()
+                    if ((bool)module.Type.GetInterface("IModuleWindow").GetMethod("IsAvailable",
+                        System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { Display.EDID }))
                     {
-                        Name = $"MonitorPageModule{module.AssemblyName.Name}",
-                        Content = module.AssemblyName.Name,
-                        Tag = module.Type,
-                    };
-                    MonitorPageModules.Children.Add(button);
-                    button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
+                        Button button = new()
+                        {
+                            Name = $"MonitorPageModule{module.AssemblyName.Name}Button",
+                            Content = module.AssemblyName.Name,
+                            Tag = module,
+                        };
+                        MonitorPageModules.Children.Add(button);
+                        button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
+                    }
                 }
-
+                catch (NullReferenceException)
+                { 
+                    
+                }
             }
 
 
@@ -72,13 +78,8 @@ namespace QviKD
 
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
-            Controls.ModuleWindow module = new((Type)((Button)sender).Tag);
-            module.Show();
-
-            /*if (Activator.CreateInstance((Type)((Button)sender).Tag, new Display[] { display }) is ModuleWindow wnd)
-            {
-                wnd.Show();
-            }*/
+            ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
+            wnd.Show();
         }
     }
 }

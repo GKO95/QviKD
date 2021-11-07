@@ -11,24 +11,35 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using QviKD.Types;
 
-namespace QviKD.Controls
+namespace QviKD
 {
     /// <summary>
     /// Interaction logic for ModuleWindow.xaml
     /// </summary>
     public partial class ModuleWindow : Window
     {
+        private readonly Display Display;
         private readonly object ContentControl = null;
-        public ModuleWindow(Type type)
+
+        public ModuleWindow(Display display, Module module)
         {
-            ContentControl = Activator.CreateInstance(type) as UserControl;
             InitializeComponent();
+            ContentControl = Activator.CreateInstance(module.Type) as UserControl;
+            Display = display;
         }
 
-        private void Window_Initialized(object sender, EventArgs e)
+        private void ModuleWindow_Initialized(object sender, EventArgs e)
         {
             ModuleWindowContent.Content = ContentControl;
+        }
+
+        private void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Left = Display.Rect.left;
+            Top = Display.Rect.top;
+            WindowState = WindowState.Maximized;
         }
 
         private void ModuleWindowCaptionButtonClose_Click(object sender, RoutedEventArgs e)
@@ -40,5 +51,12 @@ namespace QviKD.Controls
         {
             WindowState = WindowState.Minimized;
         }
+
+    }
+
+    public interface IModuleWindow
+    {
+        static HashSet<string> Monitors = new();
+        static bool IsAvailable(EDID monitor) => Monitors.Count is 0 || Monitors.Contains(monitor.DisplayName);
     }
 }

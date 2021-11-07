@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QviKD"
         mc:Ignorable="d"
-        WindowState="Normal" WindowStyle="None" Background="Transparent"
+        WindowState="Normal" WindowStyle="None" Background="White"
         Height="600" Width="800" MinHeight="464" MinWidth="600"
         Title="QviKD">
     <WindowChrome.WindowChrome>
