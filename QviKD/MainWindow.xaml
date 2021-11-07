@@ -10,14 +10,15 @@
         Title="QviKD">
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="MainWindowChrome"
-                      GlassFrameThickness="1" />
+                      GlassFrameThickness="1" CaptionHeight="32" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
+        <local:WindowStateConverter x:Key="MainWindowStateConverter" />
         <Style x:Key="MainWindowStyleCaptionButton" TargetType="{x:Type Button}">
             <Setter Property="DockPanel.Dock" Value="Right" />
             <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
             <Setter Property="Width" Value="48" />
-            <Setter Property="Height" Value="32" />
+            <Setter Property="Height" Value="{Binding ElementName=MainWindowChrome, Path=CaptionHeight}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
@@ -32,7 +33,8 @@
                         Style="{StaticResource MainWindowStyleCaptionButton}"
                         Click="MainWindowCaptionButtonClose_Click" >
                     <Button.Background>
-                        <ImageBrush ImageSource="/Images/X_80.contrast-black.png" Stretch="Uniform">
+                        <ImageBrush x:Name="MainWindowCaptionButtonCloseIcon"
+                                    ImageSource="/Images/iconmonstr-close-thin-32.png" Stretch="Uniform">
                             <ImageBrush.RelativeTransform>
                                 <TransformGroup>
                                     <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.4" ScaleY="0.4"/>
@@ -44,18 +46,40 @@
                 </Button>
                 <Button x:Name="MainWindowCaptionButtonMaximize"
                         Style="{StaticResource MainWindowStyleCaptionButton}"
-                        Click="MainWindowCaptionButtonMaximize_Click" />
+                        Click="MainWindowCaptionButtonMaximize_Click">
+                    <Button.Background>
+                        <ImageBrush x:Name="MainWindowCaptionButtonMaximizeIcon" 
+                                    ImageSource="{Binding Path=WindowState, 
+                                                          RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window, AncestorLevel=1}, 
+                                                          Converter={StaticResource MainWindowStateConverter}}" Stretch="Uniform">
+                            <ImageBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.4" ScaleY="0.4"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </ImageBrush.RelativeTransform>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
                 <Button x:Name="MainWindowCaptionButtonMinimize"
                         Style="{StaticResource MainWindowStyleCaptionButton}"
                         Click="MainWindowCaptionButtonMinimize_Click" >
                     <Button.Background>
-                        <ImageBrush/>
+                        <ImageBrush x:Name="MainWindowCaptionButtonMinimizeIcon" 
+                                    ImageSource="/Images/iconmonstr-minimize-thin-32.png" Stretch="Uniform">
+                            <ImageBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.4" ScaleY="0.4"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </ImageBrush.RelativeTransform>
+                        </ImageBrush>
                     </Button.Background>
                 </Button>
-                <TextBlock x:Name="MainWindowCaptionTitle"
-                           VerticalAlignment="Top" HorizontalAlignment="Left"
+                <TextBlock x:Name="MainWindowCaptionTitle" 
                            Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window, AncestorLevel=1}, Path=Title}"
-                           Foreground="White" />
+                           Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8, 8, 0, 0"
+                           ScrollViewer.VerticalScrollBarVisibility="Disabled" IsHitTestVisible="False" />
             </DockPanel>
         </Grid>
         <StatusBar Name="MainWindowClientFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" />

@@ -9,8 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\X_80.contrast-black.png" />
-    <None Remove="Images\X_80.contrast-white.png" />
+    <None Remove="Images\iconmonstr-close-thin-32.png" />
+    <None Remove="Images\iconmonstr-maximize-thin-32.png" />
+    <None Remove="Images\iconmonstr-minimize-thin-32.png" />
+    <None Remove="Images\iconmonstr-restore-thin-32.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,8 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\X_80.contrast-black.png" />
-    <Resource Include="Images\X_80.contrast-white.png" />
+    <Resource Include="Images\iconmonstr-close-thin-32.png" />
+    <Resource Include="Images\iconmonstr-maximize-thin-32.png" />
+    <Resource Include="Images\iconmonstr-minimize-thin-32.png" />
+    <Resource Include="Images\iconmonstr-restore-thin-32.png" />
   </ItemGroup>
 
 </Project>

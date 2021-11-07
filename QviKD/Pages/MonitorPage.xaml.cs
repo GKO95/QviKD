@@ -46,9 +46,8 @@ namespace QviKD
             // For each modules detected and stored in the Database...
             foreach (Module module in Database.Modules)
             {
-                // 
-                if ((bool)module.Type.GetMethod("IsAvailable",
-                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { display.EDID.DisplayName , GetType() } ))
+                //if ((bool)module.Type.GetMethod("IsAvailable",
+                //    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { display.EDID.DisplayName , GetType() } ))
                 {
                     Button button = new()
                     {
@@ -73,10 +72,13 @@ namespace QviKD
 
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
-            if (Activator.CreateInstance((Type)((Button)sender).Tag, new Display[] { display }) is ModuleWindow wnd)
+            Controls.ModuleWindow module = new((Type)((Button)sender).Tag);
+            module.Show();
+
+            /*if (Activator.CreateInstance((Type)((Button)sender).Tag, new Display[] { display }) is ModuleWindow wnd)
             {
                 wnd.Show();
-            }
+            }*/
         }
     }
 }

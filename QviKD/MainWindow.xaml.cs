@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,12 +65,32 @@ namespace QviKD
 
         private void MainWindowCaptionButtonMaximize_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+            }
         }
 
         private void MainWindowCaptionButtonMinimize_Click(object sender, RoutedEventArgs e)
         {
-            
+            WindowState = WindowState.Minimized;
         }
+    }
+
+    [ValueConversion(typeof(WindowState), typeof(ImageSource))]
+    public class WindowStateConverter : IValueConverter
+    {
+        // Binding source → Binding target
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => ((WindowState)value == WindowState.Maximized) 
+            ? BitmapFrame.Create(Application.GetResourceStream(new Uri("Images/iconmonstr-restore-thin-32.png", UriKind.Relative)).Stream)
+            : BitmapFrame.Create(Application.GetResourceStream(new Uri("Images/iconmonstr-maximize-thin-32.png", UriKind.Relative)).Stream);
+
+        // Binding target → Binding source
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
     }
 }

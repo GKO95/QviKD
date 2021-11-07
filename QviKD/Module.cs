@@ -34,7 +34,7 @@ namespace QviKD.Types
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.BaseType.FullName == $"{typeof(ModuleWindow)}"
+                if (type.BaseType.FullName == $"{typeof(System.Windows.Controls.UserControl)}"
                     && type.Namespace.Contains(Constant.MODULE_NAMESPACE)
                     && type.Name == Constant.MODULE_ENTRY)
                 {
@@ -47,8 +47,8 @@ namespace QviKD.Types
 
     internal record Constant
     {
-        internal static readonly string MODULE_NAMESPACE = $"{Assembly.GetExecutingAssembly().GetName().Name}.Module";
-        internal static readonly string MODULE_ENTRY = "MainWindow";
+        internal static readonly string MODULE_NAMESPACE = $"{Assembly.GetExecutingAssembly().GetName().Name}.Modules";
+        internal static readonly string MODULE_ENTRY = "MainModule";
     }
 
     public enum ModuleFilter : byte

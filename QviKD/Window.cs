@@ -103,7 +103,7 @@ namespace QviKD
         }
     }
 
-    public abstract class WidgetWindow : System.Windows.Window
+    public abstract class WidgetWindow : Window
     {
         static WidgetWindow()
         {
