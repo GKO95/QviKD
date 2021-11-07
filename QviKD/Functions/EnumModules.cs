@@ -40,6 +40,11 @@ namespace QviKD.Functions
             }
         }
 
+        ~EnumModules()
+        {
+            DebugMessage("EnumModules instance destroyed.");
+        }
+
         /// <summary>
         /// Print message for debugging; DEBUG-mode exclusive.
         /// </summary>
