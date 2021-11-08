@@ -32,7 +32,7 @@ namespace QviKD.Functions
                 Assembly assembly = Assembly.LoadFile(module[index]);
 
                 // Add valid module assembly to the List.
-                if (Module.IsValidModule(assembly))
+                if (Module.IsValid(assembly))
                 {
                     Database.Modules.Add(new Module(assembly));
                     DebugMessage($"Module: {assembly.FullName}");

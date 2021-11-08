@@ -12,27 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using QviKD.Types;
 
 namespace QviKD.Modules.QvPattern
 {
     /// <summary>
     /// Interaction logic for MainModule.xaml
     /// </summary>
-    public partial class MainModule : UserControl, IModuleWindow
+    public partial class MainModule : ModuleControl
     {
-        public MainModule()
+        public MainModule() { }
+        public MainModule(Display display)
         {
             InitializeComponent();
         }
 
-        private static HashSet<string> Monitors { get; set; } = new();
-        public static bool IsAvailable(Types.EDID monitor)
+        protected override HashSet<string> Monitors => new()
         {
-            Monitors.UnionWith(new HashSet<string>
-            {
-                "C27F390"
-            });
-            return Monitors.Count is 0 || Monitors.Contains(monitor.DisplayName);
-        }
+            
+        };
     }
 }

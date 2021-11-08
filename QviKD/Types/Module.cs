@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using QviKD.Modules;
 
 namespace QviKD.Types
 {
@@ -16,40 +17,41 @@ namespace QviKD.Types
         /// </summary>
         internal AssemblyName AssemblyName { get; }
 
+        /// <summary>
+        /// Assembly itself from the .DLL module file.
+        /// </summary>
+        private Assembly Assembly { get; }
+
         internal Module(Assembly assembly)
         {
-            AssemblyName = assembly.GetName();
-            Type = InstantiateFrom(assembly);
+            Assembly = assembly;
+            AssemblyName = Assembly.GetName();
+            Type = GetModuleType(Assembly);
+        }
+
+        internal bool IsAvailable(Display display) 
+            => (Assembly.CreateInstance($"{Type.FullName}") as ModuleControl).IsAvailable(display);
+
+        /// <summary>
+        /// Get a class with valid format from the assembly to instantiate; otherwise, return null.
+        /// </summary>
+        private static Type GetModuleType(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.Namespace.Contains(typeof(ModuleControl).Namespace)
+                    && type.IsSubclassOf(typeof(ModuleControl))) 
+                    return type;
+            }
+            return null;
         }
 
         /// <summary>
         /// Determine whether the assembly is valid as a module.
         /// </summary>
-        internal static bool IsValidModule(Assembly assembly) => InstantiateFrom(assembly) != null;
-
-        /// <summary>
-        /// Get a class with valid format from the assembly to instantiate; otherwise, return null.
-        /// </summary>
-        private static Type InstantiateFrom(Assembly assembly)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (type.BaseType.FullName == $"{typeof(System.Windows.Controls.UserControl)}"
-                    && type.Namespace.Contains(Constant.MODULE_NAMESPACE)
-                    && type.Name == Constant.MODULE_ENTRY)
-                {
-                    return type;
-                }
-            }
-            return null;
-        }
+        internal static bool IsValid(Assembly assembly) => GetModuleType(assembly) != null;
     }
 
-    internal record Constant
-    {
-        internal static readonly string MODULE_NAMESPACE = $"{Assembly.GetExecutingAssembly().GetName().Name}.Modules";
-        internal static readonly string MODULE_ENTRY = "MainModule";
-    }
 
     public enum ModuleFilter : byte
     {

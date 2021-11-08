@@ -49,12 +49,20 @@ namespace QviKD
         {
             WindowState = WindowState.Minimized;
         }
-    
-        
     }
 
-    public interface IModuleWindow
+    namespace Modules
     {
-
+        /// <summary>
+        /// An interface for ModuleWindow.xaml
+        /// </summary>
+        public abstract class ModuleControl : UserControl
+        {
+            protected abstract HashSet<string> Monitors { get; }
+            public bool IsAvailable(Display display)
+            {
+                return Monitors.Count is 0 || Monitors.Contains(display.EDID.DisplayName);
+            }
+        }
     }
 }
