@@ -54,15 +54,19 @@ namespace QviKD
     namespace Modules
     {
         /// <summary>
-        /// An interface for ModuleWindow.xaml
+        /// An abstract class for MainModule.xaml use for creating a module control.
         /// </summary>
         public abstract class ModuleControl : UserControl
         {
+            /// <summary>
+            /// A set of monitors the module is available; leave empty for every monitor.
+            /// </summary>
             protected abstract HashSet<string> Monitors { get; }
-            public bool IsAvailable(Display display)
-            {
-                return Monitors.Count is 0 || Monitors.Contains(display.EDID.DisplayName);
-            }
+            
+            /// <summary>
+            /// Identifies whether the module is available for the monitor.
+            /// </summary>
+            public bool IsAvailable(Display display) => Monitors.Count is 0 || Monitors.Contains(display.EDID.DisplayName);
         }
     }
 }
