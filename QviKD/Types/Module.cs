@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Collections.Generic;
 using QviKD.Modules;
 
 namespace QviKD.Types
@@ -29,6 +28,9 @@ namespace QviKD.Types
             Type = GetModuleType(Assembly);
         }
 
+        /// <summary>
+        /// Identifies whether the module is available for the monitor.
+        /// </summary>
         internal bool IsAvailable(Display display) 
             => (Assembly.CreateInstance($"{Type.FullName}") as ModuleControl).IsAvailable(display);
 
@@ -39,6 +41,7 @@ namespace QviKD.Types
         {
             foreach (Type type in assembly.GetTypes())
             {
+                // Filters ModuleControl class defined in other assemblies.
                 if (type.Namespace.Contains(typeof(ModuleControl).Namespace)
                     && type.IsSubclassOf(typeof(ModuleControl))) 
                     return type;
@@ -49,15 +52,7 @@ namespace QviKD.Types
         /// <summary>
         /// Determine whether the assembly is valid as a module.
         /// </summary>
-        internal static bool IsValid(Assembly assembly) => GetModuleType(assembly) != null;
-    }
-
-
-    public enum ModuleFilter : byte
-    {
-        NONE        = 0x00,
-        INCLUDE     = 0x01,
-        EXCLUDE     = 0x02,
-        ALL         = 0x03,
+        internal static bool IsValid(Assembly assembly) 
+            => GetModuleType(assembly) != null;
     }
 }

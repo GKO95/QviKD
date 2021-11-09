@@ -8,7 +8,7 @@
         Height="450" Width="800"
         WindowState="Minimized" WindowStyle="None"
         Background="Transparent"
-        Initialized="ModuleWindow_Initialized" Loaded="ModuleWindow_Loaded">
+        Initialized="ModuleWindow_Initialized" Loaded="ModuleWindow_Loaded" Closed="ModuleWindow_Closed">
     <Window.Resources>
         <Style x:Key="ModuleWindowStyleCaptionButton" TargetType="{x:Type Button}">
             <Setter Property="DockPanel.Dock" Value="Right"/>

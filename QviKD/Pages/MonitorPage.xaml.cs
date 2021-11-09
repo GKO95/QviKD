@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 using QviKD.Types;
 
 namespace QviKD
@@ -44,30 +45,29 @@ namespace QviKD
             MonitorPageInformationDeviceID.Content = Display.DeviceID;
 
             // For each modules detected and stored in the Database...
+            InverseBooleanConverter converter = new();
+            Binding binding = new("InUse")
+            {
+                Source = Display,
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Converter = converter,
+            };
             foreach (Module module in Database.Modules)
             {
-                try
+                if (module.IsAvailable(Display))
                 {
-
-                    if (module.IsAvailable(Display))
+                    Button button = new()
                     {
-                        Button button = new()
-                        {
-                            Name = $"MonitorPageModule{module.AssemblyName.Name}Button",
-                            Content = module.AssemblyName.Name,
-                            Tag = module,
-                        };
-                        MonitorPageModules.Children.Add(button);
-                        button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
-                    }
-                }
-                catch (NullReferenceException)
-                { 
-                    
+                        Name = $"MonitorPageModule{module.AssemblyName.Name}Button",
+                        Content = module.AssemblyName.Name,
+                        Tag = module,
+                    };
+                    button.SetBinding(IsEnabledProperty, binding);
+                    MonitorPageModules.Children.Add(button);
+                    button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
                 }
             }
-
-
         }
 
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
@@ -80,6 +80,26 @@ namespace QviKD
         {
             ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
             wnd.Show();
+        }
+    }
+
+    // https://stackoverflow.com/questions/1039636/how-to-bind-inverse-boolean-properties-in-wpf
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class InverseBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter,
+            CultureInfo culture)
+        {
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException("The target must be a boolean");
+
+            return !(bool)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter,
+            CultureInfo culture)
+        {
+            throw new NotSupportedException();
         }
     }
 }

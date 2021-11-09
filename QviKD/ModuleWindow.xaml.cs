@@ -25,20 +25,25 @@ namespace QviKD
 
         public ModuleWindow(Display display, Module module)
         {
-            InitializeComponent();
-            ContentControl = Activator.CreateInstance(module.Type) as UserControl;
             Display = display;
+            ContentControl = Activator.CreateInstance(module.Type) as UserControl;
+            InitializeComponent();
         }
 
         private void ModuleWindow_Initialized(object sender, EventArgs e)
         {
             ModuleWindowContent.Content = ContentControl;
+            Display.InUse = true;
         }
         private void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Left = Display.Rect.left;
             Top = Display.Rect.top;
             WindowState = WindowState.Maximized;
+        }
+        private void ModuleWindow_Closed(object sender, EventArgs e)
+        {
+            Display.InUse = false;
         }
 
         private void ModuleWindowCaptionButtonClose_Click(object sender, RoutedEventArgs e)
