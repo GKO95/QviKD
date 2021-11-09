@@ -9,7 +9,6 @@ using LPRECT = System.IntPtr;
 using LPARAM = System.IntPtr;
 using HANDLE = System.IntPtr;
 using HDC = System.IntPtr;
-
 using DWORD = System.UInt32;
 
 namespace QviKD.Functions
