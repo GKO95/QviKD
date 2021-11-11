@@ -24,12 +24,6 @@ namespace QviKD
     {
         private Display Display;
         private readonly static InUsePropertyConverter Converter = new();
-        private readonly static Binding Binding = new("InUse")
-        {
-            Mode = BindingMode.OneWay,
-            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-            Converter = Converter,
-        };
 
         public MonitorPage()
         {
@@ -39,7 +33,6 @@ namespace QviKD
         private void MonitorPage_Loaded(object sender, RoutedEventArgs e)
         {
             Display = Database.Displays[(Tag as MainWindow).Page];
-            Binding.Source = Display;
 
             MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
 
@@ -63,7 +56,12 @@ namespace QviKD
                         Content = module.AssemblyName.Name,
                         Tag = module,
                     };
-                    button.SetBinding(IsEnabledProperty, Binding);
+                    button.SetBinding(IsEnabledProperty, new Binding("InUse") {
+                        Source = Display,
+                        Mode = BindingMode.OneWay,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Converter = Converter,
+                    });
                     button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
                     MonitorPageModules.Children.Add(button);
                 }
