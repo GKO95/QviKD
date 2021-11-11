@@ -5,13 +5,73 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QviKD"
         mc:Ignorable="d"
+        WindowState="Normal" WindowStyle="None" Background="White"
         Height="600" Width="800" MinHeight="464" MinWidth="600"
         Title="QviKD">
-    
-    <DockPanel LastChildFill="True">
-        <Grid Name="MainWindowHeader" DockPanel.Dock="Top" Background="#FF202020" Height="76" />
-        <StatusBar Name="MainWindowFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowHeader}" />
-        <Frame Name="MainWindowContent" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" />
+    <WindowChrome.WindowChrome>
+        <WindowChrome x:Name="MainWindowChrome"
+                      GlassFrameThickness="1" CaptionHeight="32" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <SolidColorBrush x:Key="MainWindowColorClientBackground">#FF202020</SolidColorBrush>
+        <SolidColorBrush x:Key="MainWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
+        <SolidColorBrush x:Key="MainWindowColorCaptionButtonDefault">#40FFFFFF</SolidColorBrush>
+        <Image x:Key="MainWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
+        <Image x:Key="MainWindowImageCaptionButtonMaximize" Source="/Images/iconmonstr-maximize-thin-32.png" />
+        <Image x:Key="MainWindowImageCaptionButtonMinimize" Source="/Images/iconmonstr-minimize-thin-32.png" />
+        <Style x:Key="MainWindowStyleCaptionButton" TargetType="{x:Type Button}">
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="DockPanel.Dock" Value="Right" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="{Binding ElementName=MainWindowChrome, Path=CaptionHeight}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="MainWindowBorderCaptionButton"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter Margin="10"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="MainWindowBorderCaptionButton" 
+                                        Property="Background" Value="{StaticResource MainWindowColorClientBackground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel Name="MainWindowClient" LastChildFill="True">
+        <Grid Name="MainWindowClientHeader" 
+              DockPanel.Dock="Top" 
+              Background="#FF202020" 
+              Height="76">
+            <DockPanel x:Name="MainWindowCaption" VerticalAlignment="Top" LastChildFill="True">
+                <Button x:Name="MainWindowCaptionButtonClose"
+                        Style="{StaticResource MainWindowStyleCaptionButton}"
+                        Content="{StaticResource MainWindowImageCaptionButtonClose}"
+                        Background="{StaticResource MainWindowColorCaptionButtonClose}"
+                        Click="MainWindowCaptionButtonClose_Click" />
+                <Button x:Name="MainWindowCaptionButtonMaximize"
+                        Style="{StaticResource MainWindowStyleCaptionButton}"
+                        Content="{StaticResource MainWindowImageCaptionButtonMaximize}"
+                        Background="{StaticResource MainWindowColorCaptionButtonDefault}"
+                        Click="MainWindowCaptionButtonMaximize_Click" />
+                <Button x:Name="MainWindowCaptionButtonMinimize"
+                        Style="{StaticResource MainWindowStyleCaptionButton}"
+                        Content="{StaticResource MainWindowImageCaptionButtonMinimize}"
+                        Background="{StaticResource MainWindowColorCaptionButtonDefault}"
+                        Click="MainWindowCaptionButtonMinimize_Click" />
+                <TextBlock x:Name="MainWindowCaptionTitle" 
+                           Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window, AncestorLevel=1}, Path=Title}"
+                           Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8, 8, 0, 0"
+                           ScrollViewer.VerticalScrollBarVisibility="Disabled" IsHitTestVisible="False" />
+            </DockPanel>
+        </Grid>
+        <StatusBar Name="MainWindowClientFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" />
+        <Frame Name="MainWindowContent" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" Focusable="False" />
     </DockPanel>
-    
 </Window>

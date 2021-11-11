@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using QviKD.Functions;
 
 namespace QviKD
@@ -29,6 +29,31 @@ namespace QviKD
             _ = new EnumModules();
         }
 
+        private PAGES PageNavigation { get; set; } = PAGES.MAIN;
+        public int Page => (int)PageNavigation;
+        public void GoTo(int index)  => GoTo((PAGES)index);
+        public void GoTo(PAGES page) => PageNavigation = page;
+        public enum PAGES : int
+        {
+            MAIN    = -1,
+            MODULES = -2,
+            SETTING = -3,
+        }
+
+        private void MainWindowCaptionButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+        private void MainWindowCaptionButtonMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized) WindowState = WindowState.Normal;
+            else WindowState = WindowState.Maximized;
+        }
+        private void MainWindowCaptionButtonMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
         private void MainWindowContent_LoadCompleted(object sender, NavigationEventArgs e)
         {
             // Allow the page to access the MainWindow object via its arbitrary data, namely "Tag" property.
@@ -43,19 +68,6 @@ namespace QviKD
                     entry = MainWindowContent.RemoveBackEntry();
                 }
             }
-        }
-
-        private PAGES PageNavigation { get; set; } = PAGES.MAIN;
-        public int Page => (int)PageNavigation;
-
-        public void GoTo(int index)  => GoTo((PAGES)index);
-        public void GoTo(PAGES page) => PageNavigation = page;
-
-        public enum PAGES : int
-        {
-            MAIN    = -1,
-            MODULES = -2,
-            SETTING = -3,
         }
     }
 }

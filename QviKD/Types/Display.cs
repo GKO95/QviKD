@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Text;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
+using System.ComponentModel;
 using Microsoft.Win32;
 using QviKD.WinAPI;
 
 using HMONITOR = System.IntPtr;
 using HANDLE = System.IntPtr;
 
-namespace QviKD
+namespace QviKD.Types
 {
-    public record Display
+    public record Display : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Handle to the display monitor.
         /// </summary>
@@ -58,9 +61,18 @@ namespace QviKD
         internal bool IsPrimary { get; }
 
         /// <summary>
-        /// Information that identifies whether the monitor is available to use a module.
+        /// Identifies whether the monitor is in use by a module.
         /// </summary>
-        internal bool IsAvailable { get; } = true;
+        public bool InUse
+        {
+            get => _InUse;
+            set
+            {
+                _InUse = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _InUse = false;
 
         internal Display(HMONITOR hMonitor, PHYSICAL_MONITOR PhysicalMonitor, MONITORINFOEXA MonitorInfoA, DISPLAY_DEVICEA DisplayDeviceA)
         {
@@ -87,6 +99,18 @@ namespace QviKD
             }
         }
 
+        /// <summary>
+        /// Triggers PropertyChanged event that is sent to the targeted binding client.
+        /// </summary>
+        private void OnPropertyChanged([CallerMemberName] string memberName = "")
+        {
+            // CallerMemberName attribute assigns the calling member as its arugment.
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
+
+        /// <summary>
+        /// Return a string of monitor information.
+        /// </summary>
         internal string Print() => string.Format(
             "Device Name:\t{0}\n* HMONITOR:\t\t0x{1:X16}\n* PHYSICAL:\t\t0x{2:X16}\n* RESOLUTION:\t{3}x{4} ({5}, {6})\n* PRIMARY:\t\t{7}",
             DeviceName, hMonitor, hPhysical, Rect.right - Rect.left, Rect.bottom - Rect.top, Rect.left, Rect.top, IsPrimary);
@@ -168,7 +192,6 @@ namespace QviKD
                             return temp.Length == 0 ? "(empty)" : temp;
                         }
                     }
-
                     return "(undefined)";
 
                 default:
@@ -182,13 +205,11 @@ namespace QviKD
             DISPLAY_NAME,
             DISPLAY_SERIALNUMBER,
         }
-
         private enum DESCRIPTOR_TYPE : byte
         {
             DISPLAY_NAME            = 0xFC,
             DISPLAY_SERIALNUMBER    = 0xFF,
         }
-
         private enum BYTE : byte
         {
             VERSION_INTEGER         = 0x12,

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using QviKD.Types;
 
 namespace QviKD
 {
@@ -6,5 +7,6 @@ namespace QviKD
     {
         internal static readonly List<Display> Displays = new();
         internal static readonly List<Module> Modules = new();
+        internal static readonly List<Widget> Widgets = new();
     }
 }

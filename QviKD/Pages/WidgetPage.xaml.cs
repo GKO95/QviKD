@@ -18,14 +18,14 @@ namespace QviKD
     /// <summary>
     /// Interaction logic for ModulesPage.xaml
     /// </summary>
-    public partial class ModulePage : Page
+    public partial class WidgetPage : Page
     {
-        public ModulePage()
+        public WidgetPage()
         {
             InitializeComponent();
         }
 
-        private void ModulesPageHeaderBack_Click(object sender, RoutedEventArgs e)
+        private void ToolkitPageHeaderBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
             _ = NavigationService.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));

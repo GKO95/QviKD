@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Assembly = System.Reflection.Assembly;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.IO;
+using QviKD.Types;
 
 namespace QviKD.Functions
 {
@@ -31,7 +32,7 @@ namespace QviKD.Functions
                 Assembly assembly = Assembly.LoadFile(module[index]);
 
                 // Add valid module assembly to the List.
-                if (Module.IsValidModule(assembly))
+                if (Module.IsValid(assembly))
                 {
                     Database.Modules.Add(new Module(assembly));
                     DebugMessage($"Module: {assembly.FullName}");
@@ -39,14 +40,18 @@ namespace QviKD.Functions
             }
         }
 
+        ~EnumModules()
+        {
+            DebugMessage("EnumModules instance destroyed.");
+        }
+
         /// <summary>
         /// Print message for debugging; DEBUG-mode exclusive.
         /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
         private void DebugMessage(string msg)
         {
-#if DEBUG
             System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
-#endif
         }
     }
 }

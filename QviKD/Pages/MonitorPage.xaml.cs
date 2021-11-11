@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
+using QviKD.Types;
 
 namespace QviKD
 {
@@ -21,7 +22,14 @@ namespace QviKD
     /// </summary>
     public partial class MonitorPage : Page
     {
-        private Display display;
+        private Display Display;
+        private readonly static InUsePropertyConverter Converter = new();
+        private readonly static Binding Binding = new("InUse")
+        {
+            Mode = BindingMode.OneWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+            Converter = Converter,
+        };
 
         public MonitorPage()
         {
@@ -30,37 +38,36 @@ namespace QviKD
 
         private void MonitorPage_Loaded(object sender, RoutedEventArgs e)
         {
-            display = Database.Displays[(Tag as MainWindow).Page];
+            Display = Database.Displays[(Tag as MainWindow).Page];
+            Binding.Source = Display;
 
-            MonitorPageHeaderTitle.Content = display.EDID.DisplayName;
+            MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
 
-            MonitorPageInformationIsPrimary.Content = display.IsPrimary ? "Yes" : "No";
-            MonitorPageInformationResolution.Content = $"{display.Rect.right - display.Rect.left} x {display.Rect.bottom - display.Rect.top}";
-            MonitorPageInformationPosition.Content = $"({display.Rect.left}, {display.Rect.top})";
+            MonitorPageInformationIsPrimary.Content = Display.IsPrimary ? "Yes" : "No";
+            MonitorPageInformationResolution.Content = $"{Display.Rect.right - Display.Rect.left} x {Display.Rect.bottom - Display.Rect.top}";
+            MonitorPageInformationPosition.Content = $"({Display.Rect.left}, {Display.Rect.top})";
 
-            MonitorPageInformationDescription.Content = display.Description;
+            MonitorPageInformationDescription.Content = Display.Description;
 
-            MonitorPageInformationDeviceName.Content = display.DeviceName;
-            MonitorPageInformationDeviceID.Content = display.DeviceID;
+            MonitorPageInformationDeviceName.Content = Display.DeviceName;
+            MonitorPageInformationDeviceID.Content = Display.DeviceID;
 
+            // For each modules detected and stored in the Database...
             foreach (Module module in Database.Modules)
             {
-                if ((bool)module.Type.GetMethod("IsValidMonitor",
-                    BindingFlags.Public | BindingFlags.Static).Invoke(null, new string[] { display.EDID.DisplayName } ))
+                if (module.IsAvailable(Display))
                 {
                     Button button = new()
                     {
-                        Name = $"MonitorPageModule{module.AssemblyName.Name}",
+                        Name = $"MonitorPageModule{module.AssemblyName.Name}Button",
                         Content = module.AssemblyName.Name,
-                        Tag = module.Type,
+                        Tag = module,
                     };
-                    MonitorPageModules.Children.Add(button);
+                    button.SetBinding(IsEnabledProperty, Binding);
                     button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
+                    MonitorPageModules.Children.Add(button);
                 }
-
             }
-
-
         }
 
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
@@ -71,10 +78,26 @@ namespace QviKD
 
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
-            if (Activator.CreateInstance((Type)((Button)sender).Tag, new Display[] { display }) is ModuleWindow wnd)
-            {
-                wnd.Show();
-            }
+            ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
+            wnd.Show();
         }
+    }
+
+    /// <summary>
+    /// Converter for binding data between <i>Display.InUse</i> and <i>Button.IsEnable</i> property.
+    /// </summary>
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class InUsePropertyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException($"The {targetType} of the value is incompatible with Boolean data type.");
+
+            return !(bool)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotSupportedException();
     }
 }
