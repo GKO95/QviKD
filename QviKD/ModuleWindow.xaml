@@ -5,55 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QviKD"
         mc:Ignorable="d"
-        Height="450" Width="800"
-        WindowState="Minimized" WindowStyle="None"
-        Background="Transparent"
+        Title="QvPattern" Height="450" Width="800" Background="Transparent" 
+        WindowState="Minimized" WindowStyle="None" ResizeMode="NoResize"
         Initialized="ModuleWindow_Initialized" Loaded="ModuleWindow_Loaded" Closed="ModuleWindow_Closed">
     <Window.Resources>
+        <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
+        <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40FFFFFF</SolidColorBrush>
+        <Image x:Key="ModuleWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
+        <Image x:Key="ModuleWindowImageCaptionButtonMinimize" Source="/Images/iconmonstr-minimize-thin-32.png" />
         <Style x:Key="ModuleWindowStyleCaptionButton" TargetType="{x:Type Button}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="DockPanel.Dock" Value="Right"/>
+            <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Focusable" Value="False" />
             <Setter Property="Width" Value="48" />
             <Setter Property="Height" Value="32" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="ModuleWindowBorderCaptionButton"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter Name="ModuleWindowBorderCaptionButtonContent" Margin="10"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="ModuleWindowBorderCaptionButton" 
+                                        Property="Background" Value="Transparent" />
+                                <Setter TargetName="ModuleWindowBorderCaptionButtonContent"
+                                        Property="Visibility" Value="Hidden" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
     <Grid>
         <ContentControl Name="ModuleWindowContent" />
         <DockPanel VerticalAlignment="Top" LastChildFill="True">
             <Button x:Name="ModuleWindowCaptionButtonClose"
-                    Click="ModuleWindowCaptionButtonClose_Click"
-                    Style="{StaticResource ModuleWindowStyleCaptionButton}">
-                <Button.Background>
-                    <ImageBrush x:Name="ModuleWindowCaptionButtonCloseIcon" 
-                                    ImageSource="/Images/iconmonstr-close-thin-32.png" Stretch="Uniform">
-                        <ImageBrush.RelativeTransform>
-                            <TransformGroup>
-                                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.4" ScaleY="0.4"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </ImageBrush.RelativeTransform>
-                    </ImageBrush>
-                </Button.Background>
-            </Button>
+                    Style="{StaticResource ModuleWindowStyleCaptionButton}"
+                    Content="{StaticResource ModuleWindowImageCaptionButtonClose}"
+                    Background="{StaticResource ModuleWindowColorCaptionButtonClose}"
+                    Click="ModuleWindowCaptionButtonClose_Click" />
             <Button x:Name="ModuleWindowCaptionButtonMinimize"
-                    Click="ModuleWindowCaptionButtonMinimize_Click"
-                    Style="{StaticResource ModuleWindowStyleCaptionButton}">
-                <Button.Background>
-                    <ImageBrush x:Name="ModuleWindowCaptionButtonMinimizeIcon" 
-                                    ImageSource="/Images/iconmonstr-minimize-thin-32.png" Stretch="Uniform">
-                        <ImageBrush.RelativeTransform>
-                            <TransformGroup>
-                                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.4" ScaleY="0.4"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </ImageBrush.RelativeTransform>
-                    </ImageBrush>
-                </Button.Background>
-            </Button>
+                    Style="{StaticResource ModuleWindowStyleCaptionButton}"
+                    Content="{StaticResource ModuleWindowImageCaptionButtonMinimize}"
+                    Background="{StaticResource ModuleWindowColorCaptionButtonDefault}"
+                    Click="ModuleWindowCaptionButtonMinimize_Click" />
             <TextBlock x:Name="ModuleWindowCaptionTitle" VerticalAlignment="Top" HorizontalAlignment="Left"
                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"
                        Foreground="White" />

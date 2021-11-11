@@ -70,26 +70,4 @@ namespace QviKD
             }
         }
     }
-
-    /// <summary>
-    /// Converter for changing between Resize and Maximize icon on a caption button.
-    /// </summary>
-    [ValueConversion(typeof(WindowState), typeof(ImageSource))]
-    public class CaptionButtonIconConverter : IValueConverter
-    {
-        // Binding source → Binding target
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (targetType != typeof(ImageSource))
-                throw new InvalidOperationException($"The {targetType} of the value is incompatible with ImageSource type.");
-
-            return ((WindowState)value == WindowState.Maximized)
-            ? BitmapFrame.Create(Application.GetResourceStream(new Uri("Images/iconmonstr-restore-thin-32.png", UriKind.Relative)).Stream)
-            : BitmapFrame.Create(Application.GetResourceStream(new Uri("Images/iconmonstr-maximize-thin-32.png", UriKind.Relative)).Stream);
-        }
-
-        // Binding target → Binding source
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotSupportedException();
-    }
 }
