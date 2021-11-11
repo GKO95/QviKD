@@ -13,7 +13,7 @@
 
             <StackPanel Name="ToolkitPageHeader" HorizontalAlignment="Left" Orientation="Horizontal">
                 <Button Name="ToolkitPageHeaderBack" Content="◀" Click="ToolkitPageHeaderBack_Click"/>
-                <Label Name="ToolkitPageHeaderTitle" FontWeight="Bold" Content="Modules" />
+                <Label Name="ToolkitPageHeaderTitle" FontWeight="Bold" Content="Widgets" />
             </StackPanel>
 
             <Grid Name="ToolkitPageList">

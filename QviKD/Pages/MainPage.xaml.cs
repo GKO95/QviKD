@@ -40,7 +40,7 @@ namespace QviKD
             }
 
             // Append button that is for accessing modules that is not dependent to any monitor.
-            MainPage_AppendButton(Database.Displays.Count, "Modules");
+            MainPage_AppendButton(Database.Displays.Count, "Widgets");
 #endif
         }
 
