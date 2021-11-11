@@ -21,14 +21,18 @@ namespace QviKD.Modules.QvPattern
     /// </summary>
     public partial class MainModule : ModuleControl
     {
-        public MainModule() { }
-        public MainModule(Display display)
+        public MainModule() : base() { }
+        public MainModule(Display display) : base(display)
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// A set of monitors the module is available; leave empty for every monitor.
+        /// </summary>
         protected override HashSet<string> Monitors => new()
         {
+            // Insert list of EDID.DisplayName strings here...
             
         };
     }

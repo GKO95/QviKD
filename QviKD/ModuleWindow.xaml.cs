@@ -63,6 +63,11 @@ namespace QviKD
         /// </summary>
         public abstract class ModuleControl : UserControl
         {
+            protected ModuleControl() { }
+            protected ModuleControl(Display display) => Display = display;
+
+            protected Display Display { get; }
+
             /// <summary>
             /// A set of monitors the module is available; leave empty for every monitor.
             /// </summary>

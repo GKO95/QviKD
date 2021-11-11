@@ -13,7 +13,7 @@
                       GlassFrameThickness="1" CaptionHeight="32" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <local:WindowStateConverter x:Key="MainWindowStateConverter" />
+        <local:CaptionButtonIconConverter x:Key="MainWindowStateConverter" />
         <Style x:Key="MainWindowStyleCaptionButton" TargetType="{x:Type Button}">
             <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
             <Setter Property="DockPanel.Dock" Value="Right" />

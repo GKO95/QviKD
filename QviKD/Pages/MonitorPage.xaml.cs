@@ -23,6 +23,13 @@ namespace QviKD
     public partial class MonitorPage : Page
     {
         private Display Display;
+        private readonly static InUsePropertyConverter Converter = new();
+        private readonly static Binding Binding = new("InUse")
+        {
+            Mode = BindingMode.OneWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+            Converter = Converter,
+        };
 
         public MonitorPage()
         {
@@ -32,6 +39,7 @@ namespace QviKD
         private void MonitorPage_Loaded(object sender, RoutedEventArgs e)
         {
             Display = Database.Displays[(Tag as MainWindow).Page];
+            Binding.Source = Display;
 
             MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
 
@@ -45,14 +53,6 @@ namespace QviKD
             MonitorPageInformationDeviceID.Content = Display.DeviceID;
 
             // For each modules detected and stored in the Database...
-            InverseBooleanConverter converter = new();
-            Binding binding = new("InUse")
-            {
-                Source = Display,
-                Mode = BindingMode.OneWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                Converter = converter,
-            };
             foreach (Module module in Database.Modules)
             {
                 if (module.IsAvailable(Display))
@@ -63,9 +63,9 @@ namespace QviKD
                         Content = module.AssemblyName.Name,
                         Tag = module,
                     };
-                    button.SetBinding(IsEnabledProperty, binding);
-                    MonitorPageModules.Children.Add(button);
+                    button.SetBinding(IsEnabledProperty, Binding);
                     button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
+                    MonitorPageModules.Children.Add(button);
                 }
             }
         }
@@ -83,23 +83,21 @@ namespace QviKD
         }
     }
 
-    // https://stackoverflow.com/questions/1039636/how-to-bind-inverse-boolean-properties-in-wpf
+    /// <summary>
+    /// Converter for binding data between <i>Display.InUse</i> and <i>Button.IsEnable</i> property.
+    /// </summary>
     [ValueConversion(typeof(bool), typeof(bool))]
-    public class InverseBooleanConverter : IValueConverter
+    public class InUsePropertyConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter,
-            CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(bool))
-                throw new InvalidOperationException("The target must be a boolean");
+                throw new InvalidOperationException($"The {targetType} of the value is incompatible with Boolean data type.");
 
             return !(bool)value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter,
-            CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotSupportedException();
     }
 }
