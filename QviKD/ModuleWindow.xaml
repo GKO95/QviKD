@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="QvPattern" Height="450" Width="800" Background="Transparent" 
         WindowState="Minimized" WindowStyle="None" ResizeMode="NoResize"
-        Initialized="ModuleWindow_Initialized" Loaded="ModuleWindow_Loaded" Closed="ModuleWindow_Closed">
+        Initialized="ModuleWindow_Initialized" Loaded="ModuleWindow_Loaded" Closed="ModuleWindow_Closed" >
     <Window.Resources>
         <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
-        <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40FFFFFF</SolidColorBrush>
+        <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40808080</SolidColorBrush>
         <Image x:Key="ModuleWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
         <Image x:Key="ModuleWindowImageCaptionButtonMinimize" Source="/Images/iconmonstr-minimize-thin-32.png" />
         <Style x:Key="ModuleWindowStyleCaptionButton" TargetType="{x:Type Button}">
@@ -42,7 +42,7 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <ContentControl Name="ModuleWindowContent" />
+        <ContentControl Name="ModuleWindowContent" ClipToBounds="True" />
         <DockPanel VerticalAlignment="Top" LastChildFill="True">
             <Button x:Name="ModuleWindowCaptionButtonClose"
                     Style="{StaticResource ModuleWindowStyleCaptionButton}"
