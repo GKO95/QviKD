@@ -26,7 +26,8 @@ namespace QviKD
         public ModuleWindow(Display display, Module module)
         {
             Display = display;
-            ContentControl = Activator.CreateInstance(module.Type) as UserControl;
+            ContentControl = Activator.CreateInstance(module.Type, display) as UserControl;
+
             InitializeComponent();
         }
 
