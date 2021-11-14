@@ -121,17 +121,56 @@ namespace QviKD.Types
         /// <summary>
         /// EDID version specified in the aquired EDID information.
         /// </summary>
-        public double Version { get; }
+        public double Version
+        {
+            get
+            {
+                return Raw[(byte)BYTE.VERSION_INTEGER] switch
+                {
+                    1 => Raw[(byte)BYTE.VERSION_DECIMAL] > 4 ? double.NaN : Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0),
+                    2 => Raw[(byte)BYTE.VERSION_DECIMAL] > 0 ? double.NaN : Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0),
+                    _ => double.NaN,
+                };
+            }
+        }
 
         /// <summary>
         /// Name of the display device provided by manufacturer.
         /// </summary>
-        public string DisplayName { get; }
+        public string DisplayName
+        {
+            get
+            {
+                for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
+                {
+                    if (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_NAME)
+                    {
+                        string strTemp = Encoding.ASCII.GetString(Raw[(address + 5)..(address + 18)]).Trim();
+                        return strTemp.Length == 0 ? string.Empty : strTemp;
+                    }
+                }
+                return string.Empty;
+            }
+        }
 
         /// <summary>
         /// Serial number of the display device provided by manufacturer.
         /// </summary>
-        public string DisplaySerialNumber { get; }
+        public string DisplaySerialNumber
+        {
+            get
+            {
+                for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
+                {
+                    if (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_SERIALNUMBER)
+                    {
+                        string strTemp = Encoding.ASCII.GetString(Raw[(address + 5)..(address + 18)]).Trim();
+                        return strTemp.Length == 0 ? string.Empty : strTemp;
+                    }
+                }
+                return string.Empty;
+            }
+        }
 
         /// <summary>
         /// Array of EDID information sliced to appropriate length based on the EDID version.
@@ -151,67 +190,15 @@ namespace QviKD.Types
                 Console.Error.WriteLine("Incorrect DeviceID; cannot find EDID registry location.");
                 return;
             }
-
-            Version = Convert.ToDouble(Parser(META.EDID_VERSION));
-            DisplaySerialNumber = Parser(META.DISPLAY_SERIALNUMBER);
-            DisplayName = Parser(META.DISPLAY_NAME);
         }
 
-        /// <summary>
-        /// EDID parser in accordance with VESA specification document.
-        /// </summary>
-        private string Parser(META Metadata)
-        {
-            string temp;
-
-            switch (Metadata)
-            {
-                case META.EDID_VERSION:
-                    switch (Raw[(byte)BYTE.VERSION_INTEGER])
-                    {
-                        case 1:
-                            return Raw[(byte)BYTE.VERSION_DECIMAL] > 4
-                                ? "(invalid)"
-                                : $"{Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0)}";
-                        case 2:
-                            return Raw[(byte)BYTE.VERSION_DECIMAL] > 0
-                                ? "(invalid)"
-                                : $"{Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0)}";
-                        default:
-                            return "(invalid)";
-                    }
-
-                case META.DISPLAY_NAME:
-                case META.DISPLAY_SERIALNUMBER:
-                    for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
-                    {
-                        if (((Metadata == META.DISPLAY_NAME) && (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_NAME)) ||
-                            ((Metadata == META.DISPLAY_SERIALNUMBER) && (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_SERIALNUMBER)))
-                        {
-                            temp = Encoding.ASCII.GetString(Raw[(address + 5)..(address + 18)]).Trim();
-                            return temp.Length == 0 ? "(empty)" : temp;
-                        }
-                    }
-                    return "(undefined)";
-
-                default:
-                    return null;
-            }
-        }
-
-        public enum META
-        {
-            EDID_VERSION,
-            DISPLAY_NAME,
-            DISPLAY_SERIALNUMBER,
-        }
-        private enum DESCRIPTOR_TYPE : byte
-        {
-            DISPLAY_NAME            = 0xFC,
-            DISPLAY_SERIALNUMBER    = 0xFF,
-        }
         private enum BYTE : byte
         {
+            ID_MANUFACTURER         = 0x08,
+            ID_PRODUCT              = 0x0A,
+            ID_SERIAL               = 0x0C,
+            MANUFACTURE_WEEK        = 0x10,
+            MANUFACTURE_YEAR        = 0x11,
             VERSION_INTEGER         = 0x12,
             VERSION_DECIMAL         = 0x13,
 
@@ -222,6 +209,12 @@ namespace QviKD.Types
 
             EXTENSION               = 0x7E,
             CHECKSUM                = 0x7F,
+        }
+
+        private enum DESCRIPTOR_TYPE : byte
+        {
+            DISPLAY_NAME            = 0xFC,
+            DISPLAY_SERIALNUMBER    = 0xFF,
         }
     }
 }

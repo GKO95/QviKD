@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
+using QviKD.Controls;
 using QviKD.Types;
 
 namespace QviKD
@@ -25,10 +26,7 @@ namespace QviKD
         private Display Display;
         private readonly static InUsePropertyConverter Converter = new();
 
-        public MonitorPage()
-        {
-            InitializeComponent();
-        }
+        public MonitorPage() => InitializeComponent();
 
         private void MonitorPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -36,14 +34,12 @@ namespace QviKD
 
             MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
 
-            MonitorPageInformationIsPrimary.Content = Display.IsPrimary ? "Yes" : "No";
-            MonitorPageInformationResolution.Content = $"{Display.Rect.right - Display.Rect.left} x {Display.Rect.bottom - Display.Rect.top}";
-            MonitorPageInformationPosition.Content = $"({Display.Rect.left}, {Display.Rect.top})";
+            MonitorPageListInformation.Children.Add(new EdidControl(Display));
+            MonitorPageListInformation.Children.Add(new DdcciControl(Display));
 
-            MonitorPageInformationDescription.Content = Display.Description;
 
-            MonitorPageInformationDeviceName.Content = Display.DeviceName;
-            MonitorPageInformationDeviceID.Content = Display.DeviceID;
+
+
 
             // For each modules detected and stored in the Database...
             foreach (Module module in Database.Modules)
@@ -63,7 +59,7 @@ namespace QviKD
                         Converter = Converter,
                     });
                     button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
-                    MonitorPageModules.Children.Add(button);
+                    MonitorPageListModules.Children.Add(button);
                 }
             }
         }

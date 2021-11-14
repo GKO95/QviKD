@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="QviKD.Controls.EdidControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QviKD.Controls"
+             mc:Ignorable="d" Background="LightGray"
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="EdidControl_Loaded">
+
+    <StackPanel Name="EdidControlContent">
+        <Grid Name="EdidControlInformation">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0">Primary</Label>
+            <TextBlock Grid.Row="0" Grid.Column="1"
+                       Name="EdidControlInformationIsPrimary"
+                       TextWrapping="Wrap">(none)</TextBlock>
+
+            <Label Grid.Row="1" Grid.Column="0">Resolution</Label>
+            <TextBlock Grid.Row="1" Grid.Column="1"
+                       Name="EdidControlInformationResolution"
+                       TextWrapping="Wrap">(none)</TextBlock>
+
+            <Label Grid.Row="2" Grid.Column="0">Position</Label>
+            <TextBlock Grid.Row="2" Grid.Column="1" 
+                       Name="EdidControlInformationPosition"
+                       TextWrapping="Wrap">(none)</TextBlock>
+
+            <Label Grid.Row="3" Grid.Column="0">Position</Label>
+            <TextBlock Grid.Row="3" Grid.Column="1"
+                       Name="EdidControlInformationDescription"
+                       TextWrapping="Wrap">(none)</TextBlock>
+
+            <Label Grid.Row="4" Grid.Column="0">Device Name</Label>
+            <TextBlock Grid.Row="4" Grid.Column="1" 
+                       Name="EdidControlInformationDeviceName"
+                       TextWrapping="Wrap">(none)</TextBlock>
+
+            <Label Grid.Row="5" Grid.Column="0">Device ID</Label>
+            <TextBlock Grid.Row="5" Grid.Column="1" 
+                       Name="EdidControlInformationDeviceID"
+                       TextWrapping="Wrap">(none)</TextBlock>
+        </Grid>
+        <Grid Name="EdidControlInformationRawTable">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="1">0x00</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2">0x01</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="3">0x02</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="4">0x03</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="5">0x04</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="6">0x05</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="7">0x06</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="8">0x07</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="9">0x08</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="10">0x09</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="11">0x0A</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="12">0x0B</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="13">0x0C</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="14">0x0D</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="15">0x0E</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="16">0x0F</TextBlock>
+
+        </Grid>
+
+    </StackPanel>
+
+</UserControl>
