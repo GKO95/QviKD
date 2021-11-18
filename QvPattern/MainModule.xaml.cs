@@ -35,5 +35,23 @@ namespace QviKD.Modules.QvPattern
             // Insert list of EDID.DisplayName strings here...
             
         };
+
+        private void QvPatternContent_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            // Allow the page to access the MainWindow object via its arbitrary data, namely "Tag" property.
+            if (e.Content is Page page)
+                page.Tag = this;
+
+            // Disable Go Back navigation by removing recent entry history every time the frame navigates.
+            if (QvPatternContent.CanGoBack)
+            {
+                JournalEntry entry = QvPatternContent.RemoveBackEntry();
+                while (entry != null)
+                {
+                    entry = QvPatternContent.RemoveBackEntry();
+                }
+            }
+
+        }
     }
 }
