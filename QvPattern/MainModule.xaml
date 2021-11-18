@@ -7,5 +7,6 @@
              xmlns:Qv="clr-namespace:QviKD.Modules;assembly=QviKD"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Frame Name="QvPatternContent" Source="Patterns/GradientWhite256.xaml"  Focusable="False" NavigationUIVisibility="Hidden"/>
+    <Frame Name="QvPatternContent" Source="Patterns/GradientWhite256.xaml" Focusable="False" NavigationUIVisibility="Hidden" 
+           LoadCompleted="QvPatternContent_LoadCompleted" />
 </Qv:ModuleControl>

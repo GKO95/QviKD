@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace QviKD.Modules.QvPattern
+namespace QviKD.Modules.QvPattern.Patterns
 {
     /// <summary>
     /// Interaction logic for GradientWhite256.xaml
