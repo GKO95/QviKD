@@ -76,8 +76,8 @@ namespace QviKD
 
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
-            ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
-            wnd.Show();
+            //Modules.ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
+            //wnd.Show();
         }
     }
 
