@@ -23,8 +23,8 @@ namespace QviKD.Functions
             List<string> module = Directory.EnumerateFiles(
                 directory,
                 "*.dll",
-                SearchOption.TopDirectoryOnly).Where(path => path != Assembly.GetExecutingAssembly().Location
-                ).ToList();
+                SearchOption.TopDirectoryOnly
+            ).Where(path => path != Assembly.GetExecutingAssembly().Location).ToList();
 
             // Enumerate over the DLL assemblies.
             for (int index = 0; index < module.Count; index++)
