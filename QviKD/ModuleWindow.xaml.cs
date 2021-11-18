@@ -26,7 +26,7 @@ namespace QviKD
         public ModuleWindow(Display display, Module module)
         {
             Display = display;
-            ContentControl = Activator.CreateInstance(module.Type, display) as UserControl;
+            ContentControl = Activator.CreateInstance(module.Type, display) as Modules.ModuleControl;
 
             InitializeComponent();
         }
@@ -78,6 +78,11 @@ namespace QviKD
             /// Identifies whether the module is available for the monitor.
             /// </summary>
             public bool IsAvailable(Display display) => Monitors.Count is 0 || Monitors.Contains(display.EDID.DisplayName);
+
+            /// <summary>
+            /// Close the module window.
+            /// </summary>
+            protected void Close() => Window.GetWindow(this).Close();
         }
     }
 }
