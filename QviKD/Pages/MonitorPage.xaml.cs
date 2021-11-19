@@ -68,19 +68,22 @@ namespace QviKD
             }
         }
 
+        /// <summary>
+        /// Return to the main page.
+        /// </summary>
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
             _ = NavigationService.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));
         }
 
+        /// <summary>
+        /// Create an module instance from the library on run-time.
+        /// </summary>
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
             object wnd = Activator.CreateInstance(((Module)((Button)sender).Tag).Type, Display);
-
-            //ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
-            //ModuleWindow wnd = new(Display);
-            ((ModuleWindow)wnd).Show();
+            (wnd as ModuleWindow).Show();
         }
     }
 

@@ -24,9 +24,20 @@ namespace QviKD
         /// A set of monitors the module is available; leave empty for every monitor.
         /// </summary>
         protected readonly IReadOnlySet<string> Monitors;
+
+        /// <summary>
+        /// A display that the module is going to handle.
+        /// </summary>
         protected readonly Display Display;
 
+        /// <summary>
+        /// Constructor for identifying the module availability.
+        /// </summary>
         public ModuleWindow(HashSet<string> monitors) => Monitors = monitors;
+
+        /// <summary>
+        /// Constructor for processing on-display module task.
+        /// </summary>
         public ModuleWindow(Display display)
         {
             Display = display;
@@ -38,8 +49,9 @@ namespace QviKD
 
         public override void OnApplyTemplate()
         {
-            (GetTemplateChild("ModuleWindowCaptionButtonClose") as Button).Click += ModuleWindowCaptionButtonClose_Click;
-            (GetTemplateChild("ModuleWindowCaptionButtonMinimize") as Button).Click += ModuleWindowCaptionButtonMinimize_Click;
+            // The method is automatically called once the template is applied from Generic.xaml, assigning events to controls.
+            if (GetTemplateChild("ModuleWindowCaptionButtonClose") is Button btnClose) btnClose.Click += ModuleWindowCaptionButtonClose_Click;
+            if (GetTemplateChild("ModuleWindowCaptionButtonMinimize") is Button btnMinimize) btnMinimize.Click += ModuleWindowCaptionButtonMinimize_Click;
         }
 
         /// <summary>
@@ -69,6 +81,15 @@ namespace QviKD
         private void ModuleWindowCaptionButtonMinimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        /// <summary>
+        /// Print message for debugging; DEBUG-mode exclusive.
+        /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
+        protected void DebugMessage(string msg)
+        {
+            System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
     }
 }

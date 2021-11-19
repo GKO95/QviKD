@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:QviKD">
 
+    <!--Resources to ModuleWindow.cs-->
     <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
     <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40808080</SolidColorBrush>
     <Image x:Key="ModuleWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
