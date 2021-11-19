@@ -3,21 +3,63 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:QviKD">
 
+    <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
+    <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40808080</SolidColorBrush>
+    <Image x:Key="ModuleWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
+    <Image x:Key="ModuleWindowImageCaptionButtonMinimize" Source="/Images/iconmonstr-minimize-thin-32.png" />
+    <Style x:Key="ModuleWindowStyleCaptionButton" TargetType="{x:Type Button}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="DockPanel.Dock" Value="Right"/>
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Width" Value="48" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Name="ModuleWindowBorderCaptionButton"
+                                Background="{TemplateBinding Background}">
+                        <ContentPresenter Name="ModuleWindowBorderCaptionButtonContent" Margin="10"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter TargetName="ModuleWindowBorderCaptionButton" 
+                                        Property="Background" Value="Transparent" />
+                            <Setter TargetName="ModuleWindowBorderCaptionButtonContent"
+                                        Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type local:ModuleWindow}">
-        <Setter Property="Background" Value="Transparent" />
         <Setter Property="WindowState" Value="Minimized" />
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ModuleWindow}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>
+                    <Grid>
+                        <ContentPresenter Name="ModuleWindowContent" />
+                        <DockPanel VerticalAlignment="Top" LastChildFill="True">
+                            <Button x:Name="ModuleWindowCaptionButtonClose"
+                                    Style="{StaticResource ModuleWindowStyleCaptionButton}"
+                                    Content="{StaticResource ModuleWindowImageCaptionButtonClose}"
+                                    Background="{StaticResource ModuleWindowColorCaptionButtonClose}"/>
+                            <Button x:Name="ModuleWindowCaptionButtonMinimize"
+                                    Style="{StaticResource ModuleWindowStyleCaptionButton}"
+                                    Content="{StaticResource ModuleWindowImageCaptionButtonMinimize}"
+                                    Background="{StaticResource ModuleWindowColorCaptionButtonDefault}"/>
+                            <TextBlock x:Name="ModuleWindowCaptionTitle" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"
+                                       Foreground="White" />
+                        </DockPanel>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>
