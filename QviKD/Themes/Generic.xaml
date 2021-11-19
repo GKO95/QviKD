@@ -35,6 +35,25 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="ModuleWindowStyleCaptionTitle" TargetType="{x:Type Label}">
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Border Name="ModuleWindowBorderCaptionTitle" Background="Transparent">
+                        <ContentPresenter Name="ModuleWindowBorderCaptionTitleContent" Margin="10"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Foreground" Value="Transparent" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type local:ModuleWindow}">
         <Setter Property="WindowState" Value="Minimized" />
         <Setter Property="WindowStyle" Value="None" />
@@ -53,9 +72,13 @@
                                     Style="{StaticResource ModuleWindowStyleCaptionButton}"
                                     Content="{StaticResource ModuleWindowImageCaptionButtonMinimize}"
                                     Background="{StaticResource ModuleWindowColorCaptionButtonDefault}"/>
-                            <TextBlock x:Name="ModuleWindowCaptionTitle" VerticalAlignment="Top" HorizontalAlignment="Left"
-                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"
-                                       Foreground="White" />
+                            <Label x:Name="ModuleWindowCaptionTitle"
+                                   Style="{StaticResource ModuleWindowStyleCaptionTitle}"
+                                   Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}">
+                                <Label.Effect>
+                                    <DropShadowEffect ShadowDepth="1"/>
+                                </Label.Effect>
+                            </Label>
                         </DockPanel>
                     </Grid>
                 </ControlTemplate>
