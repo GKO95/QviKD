@@ -38,13 +38,5 @@ namespace QviKD.Modules.QvPattern.Patterns
         }
 
         private static uint MAX(DEPTH depth) => Convert.ToUInt32(Math.Pow(2, (double)depth));
-
-        enum DEPTH : uint
-        { 
-            BIT8    = 8,
-            BIT10   = 10,
-            BIT12   = 12,
-            BIT14   = 14,
-        }
     }
 }

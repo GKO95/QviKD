@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:QviKD.Modules.QvPattern"
              xmlns:qv="clr-namespace:QviKD;assembly=QviKD"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
-             Title="QvPattern" Background="Transparent" PreviewKeyDown="ModuleWindow_PreviewKeyDown">
-    <Frame Name="QvPatternContent" Source="Patterns/GradientWhite256.xaml" Focusable="False" NavigationUIVisibility="Hidden" 
+             Title="QvPattern" Background="Transparent" Loaded="ModuleWindow_Loaded" PreviewKeyDown="ModuleWindow_PreviewKeyDown">
+    <Frame Name="QvPatternContent" Focusable="False" NavigationUIVisibility="Hidden" 
            LoadCompleted="QvPatternContent_LoadCompleted" />
 </qv:ModuleWindow>
