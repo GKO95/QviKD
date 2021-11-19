@@ -29,11 +29,7 @@ namespace QviKD.Modules.QvPattern
         /// <summary>
         /// List of patterns available in the module.
         /// </summary>
-        private readonly List<string> PatternList = new()
-        {
-            "GradientWhite256",
-            "GradientRGBW256",
-        };
+        private readonly List<string> PatternList = new();
 
         public MainWindow() : base(new HashSet<string>()
         {
@@ -44,6 +40,15 @@ namespace QviKD.Modules.QvPattern
         public MainWindow(Display display) : base(display)
         {
             InitializeComponent();
+
+            // Enumerate pages included in the QvPattern assembly and only extract patterns that is of Page type.
+            foreach (System.Reflection.TypeInfo type in GetType().Assembly.DefinedTypes)
+            {
+                if (type.BaseType == typeof(Page))
+                {
+                    PatternList.Add(type.Name);
+                }
+            }
         }
 
         private void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
