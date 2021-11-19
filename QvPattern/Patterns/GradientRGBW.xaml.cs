@@ -16,18 +16,18 @@ using System.Windows.Shapes;
 namespace QviKD.Modules.QvPattern.Patterns
 {
     /// <summary>
-    /// Interaction logic for GradientRGBW256.xaml
+    /// Interaction logic for GradientRGBW.xaml
     /// </summary>
-    public partial class GradientRGBW256 : Page
+    public partial class GradientRGBW : Page
     {
-        public GradientRGBW256()
+        public GradientRGBW()
         {
             InitializeComponent();
 
             for (int index = 0; index < MAX(DEPTH.BIT8); index++)
             {
                 Rectangle rectangle;
-                GradientRGBW256Content.ColumnDefinitions.Add(new ColumnDefinition());
+                GradientRGBWContent.ColumnDefinitions.Add(new ColumnDefinition());
 
                 rectangle = new()
                 {
@@ -36,7 +36,7 @@ namespace QviKD.Modules.QvPattern.Patterns
                 };
                 rectangle.SetValue(Grid.ColumnProperty, index);
                 rectangle.SetValue(Grid.RowProperty, (int)ColorComponent.RED);
-                GradientRGBW256Content.Children.Add(rectangle);
+                GradientRGBWContent.Children.Add(rectangle);
 
                 rectangle = new()
                 {
@@ -45,7 +45,7 @@ namespace QviKD.Modules.QvPattern.Patterns
                 };
                 rectangle.SetValue(Grid.ColumnProperty, index);
                 rectangle.SetValue(Grid.RowProperty, (int)ColorComponent.GREEN);
-                GradientRGBW256Content.Children.Add(rectangle);
+                GradientRGBWContent.Children.Add(rectangle);
 
                 rectangle = new()
                 {
@@ -54,7 +54,7 @@ namespace QviKD.Modules.QvPattern.Patterns
                 };
                 rectangle.SetValue(Grid.ColumnProperty, index);
                 rectangle.SetValue(Grid.RowProperty, (int)ColorComponent.BLUE);
-                GradientRGBW256Content.Children.Add(rectangle);
+                GradientRGBWContent.Children.Add(rectangle);
 
                 rectangle = new()
                 {
@@ -63,7 +63,7 @@ namespace QviKD.Modules.QvPattern.Patterns
                 };
                 rectangle.SetValue(Grid.ColumnProperty, index);
                 rectangle.SetValue(Grid.RowProperty, (int)ColorComponent.WHITE);
-                GradientRGBW256Content.Children.Add(rectangle);
+                GradientRGBWContent.Children.Add(rectangle);
             }
         }
 

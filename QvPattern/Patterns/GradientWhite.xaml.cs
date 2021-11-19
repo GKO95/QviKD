@@ -16,24 +16,24 @@ using System.Windows.Shapes;
 namespace QviKD.Modules.QvPattern.Patterns
 {
     /// <summary>
-    /// Interaction logic for GradientWhite256.xaml
+    /// Interaction logic for GradientWhite.xaml
     /// </summary>
-    public partial class GradientWhite256 : Page
+    public partial class GradientWhite : Page
     {
-        public GradientWhite256()
+        public GradientWhite()
         {
             InitializeComponent();
 
             for (int index = 0; index < MAX(DEPTH.BIT8); index++)
             {
-                GradientWhite256Content.ColumnDefinitions.Add(new ColumnDefinition());
+                GradientWhiteContent.ColumnDefinitions.Add(new ColumnDefinition());
                 Rectangle rectangle = new()
                 {
                     Fill = new SolidColorBrush(Color.FromRgb((byte)index, (byte)index, (byte)index)),
                     Margin = new Thickness(0),
                 }; 
                 rectangle.SetValue(Grid.ColumnProperty, index);
-                GradientWhite256Content.Children.Add(rectangle);
+                GradientWhiteContent.Children.Add(rectangle);
             }
         }
 
