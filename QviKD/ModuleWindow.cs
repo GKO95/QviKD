@@ -68,6 +68,9 @@ namespace QviKD
             Left = Display.Rect.left;
             Top = Display.Rect.top;
             WindowState = WindowState.Maximized;
+
+            ((System.Windows.Controls.Primitives.Popup)GetTemplateChild("ModuleWindowPopup")).VerticalOffset -= 10;
+            ((System.Windows.Controls.Primitives.Popup)GetTemplateChild("ModuleWindowPopup")).HorizontalOffset -= 10;
         }
         private void ModuleWindow_Closed(object sender, EventArgs e)
         {
