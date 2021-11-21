@@ -67,10 +67,28 @@ namespace QviKD.Modules.QvPattern.Patterns
             }
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window wnd = Window.GetWindow(this);
+            wnd.KeyDown += HandleKeyPress;
+        }
+
+        private void HandleKeyPress(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+
+            }
+            else if (e.Key == Key.Down)
+            {
+
+            }
+        }
+
         private static uint MAX(DEPTH depth) => Convert.ToUInt32(Math.Pow(2, (double)depth));
 
         enum ColorComponent
-        { 
+        {
             RED,
             GREEN,
             BLUE,

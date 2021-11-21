@@ -57,17 +57,24 @@ namespace QviKD.Modules.QvPattern
         }
         private void ModuleWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
+            switch (e.Key)
             {
-                if (++PatternIndex > PatternList.Count - 1)
-                    PatternIndex = 0;
+                case Key.Right:
+                    if (PatternIndex < PatternList.Count - 1) PatternIndex++;
+                    else PatternIndex = 0;
+                    e.Handled = true;
+                    break;
+
+                case Key.Left:
+                    if (PatternIndex > 0) PatternIndex--;
+                    else PatternIndex = PatternList.Count - 1;
+                    e.Handled = true;
+                    break;
+
+                default:
+                    return;
             }
-            else if (e.Key == Key.Left)
-            {
-                if (--PatternIndex < 0)
-                    PatternIndex = PatternList.Count - 1;
-            }
-            QvPatternContent.Source = new Uri($"Patterns/{PatternList[PatternIndex]}.xaml", UriKind.Relative);
+            ModuleWindow_Loaded(sender, e);
         }
 
         private void QvPatternContent_LoadCompleted(object sender, NavigationEventArgs e)

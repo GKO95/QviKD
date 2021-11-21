@@ -26,5 +26,31 @@ namespace QviKD.Modules.QvPattern.Patterns
             InitializeComponent();
             SolidFullWhiteContent.Background = new SolidColorBrush(Color.FromRgb(ucIndex, ucIndex, ucIndex));
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window wnd = Window.GetWindow(this);
+            wnd.KeyDown += HandleKeyPress;
+        }
+
+        private void HandleKeyPress(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Up:
+                    if (ucIndex != 255) ucIndex++;
+                    else ucIndex = 255;
+                    break;
+
+                case Key.Down:
+                    if (ucIndex != 0) ucIndex--;
+                    else ucIndex = 0;
+                    break;
+
+                default:
+                    return;
+            }
+            SolidFullWhiteContent.Background = new SolidColorBrush(Color.FromRgb(ucIndex, ucIndex, ucIndex));
+        }
     }
 }
