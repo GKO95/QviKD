@@ -4,6 +4,7 @@
     xmlns:local="clr-namespace:QviKD">
 
     <!--Resources to ModuleWindow.cs-->
+    <local:IsOpenPropertyConverter x:Key="ModuleWindowConverterIsOpen" />
     <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
     <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40808080</SolidColorBrush>
     <Image x:Key="ModuleWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
@@ -81,9 +82,13 @@
                             </Label>
                         </DockPanel>
                         <Popup Name="ModuleWindowPopup" Width="240" Height="60"
+                               IsOpen="{Binding Path=Text, ElementName=ModuleWindowPopupContent, Converter={StaticResource ModuleWindowConverterIsOpen}, Mode=OneWay}"
                                PlacementTarget="{Binding ModuleWindowCaption}" Placement="Top"
                                VerticalOffset="{Binding Path=Height, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type Window}}}">
-                            <TextBlock />
+                            <Grid Background="#484848">
+                                <TextBlock Name="ModuleWindowPopupContent" Margin="2" Foreground="White"
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Tag, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type Window}}}"/>
+                            </Grid>
                         </Popup>
                     </Grid>
                 </ControlTemplate>

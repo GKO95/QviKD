@@ -96,7 +96,7 @@ namespace QviKD
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(bool))
-                throw new InvalidOperationException($"The {targetType} of the value is incompatible with Boolean data type.");
+                throw new InvalidOperationException($"The {targetType} of the binding target is incompatible with Boolean data type.");
 
             return !(bool)value;
         }

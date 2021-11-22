@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -59,6 +60,11 @@ namespace QviKD
         /// </summary>
         public bool IsAvailable(Display display) => Monitors.Count is 0 || Monitors.Contains(display.EDID.DisplayName);
 
+        /// <summary>
+        /// Alert notification through a popup.
+        /// </summary>
+        public void Notification(string message) => Tag = message;
+
         private void ModuleWindow_Initialized(object sender, EventArgs e)
         {
             Display.InUse = true;
@@ -94,5 +100,23 @@ namespace QviKD
         {
             System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
+    }
+
+    /// <summary>
+    /// Converter for binding data between <i>Display.InUse</i> and <i>Button.IsEnable</i> property.
+    /// </summary>
+    [ValueConversion(typeof(string), typeof(bool))]
+    public class IsOpenPropertyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException($"The {targetType} of the binding target is incompatible with Boolean data type.");
+
+            return (string)value != string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotSupportedException();
     }
 }
