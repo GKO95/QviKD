@@ -71,6 +71,10 @@ namespace QviKD.Modules.QvPattern
                     e.Handled = true;
                     break;
 
+                case Key.Escape:
+                    Close();
+                    break;
+
                 default:
                     return;
             }
