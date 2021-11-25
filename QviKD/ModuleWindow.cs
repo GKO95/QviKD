@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using QviKD.Types;
 
 namespace QviKD
@@ -32,6 +33,16 @@ namespace QviKD
         protected readonly Display Display;
 
         /// <summary>
+        /// 
+        /// </summary>
+        private readonly DispatcherTimer dispatcherTimer = null;
+
+        /// <summary>
+        /// Popup control from ModuleWindow.
+        /// </summary>
+        private System.Windows.Controls.Primitives.Popup ModuleWindowPopup;
+
+        /// <summary>
         /// Constructor for identifying the module availability.
         /// </summary>
         public ModuleWindow(HashSet<string> monitors) => Monitors = monitors;
@@ -43,6 +54,9 @@ namespace QviKD
         {
             Display = display;
 
+            dispatcherTimer = new();
+            dispatcherTimer.Tick += ModuleWindowPopup_Close;
+
             Initialized += ModuleWindow_Initialized;
             Loaded += ModuleWindow_Loaded;
             Closed += ModuleWindow_Closed;
@@ -53,6 +67,9 @@ namespace QviKD
             // The method is automatically called once the template is applied from Generic.xaml, assigning events to controls.
             if (GetTemplateChild("ModuleWindowCaptionButtonClose") is Button btnClose) btnClose.Click += ModuleWindowCaptionButtonClose_Click;
             if (GetTemplateChild("ModuleWindowCaptionButtonMinimize") is Button btnMinimize) btnMinimize.Click += ModuleWindowCaptionButtonMinimize_Click;
+
+            // Assign the Popup control to the field via element name within the template.
+            ModuleWindowPopup = GetTemplateChild("ModuleWindowPopup") as System.Windows.Controls.Primitives.Popup;
         }
 
         /// <summary>
@@ -61,9 +78,28 @@ namespace QviKD
         public bool IsAvailable(Display display) => Monitors.Count is 0 || Monitors.Contains(display.EDID.DisplayName);
 
         /// <summary>
+        /// Alert notification through a popup for a given TimeSpan duration.
+        /// </summary>
+        protected void Notification(string message, TimeSpan timeSpan)
+        {
+            Tag = message;
+
+            ModuleWindowPopup.PopupAnimation = System.Windows.Controls.Primitives.PopupAnimation.Slide;
+            ModuleWindowPopup.IsOpen = true;
+
+            dispatcherTimer.Interval = timeSpan;
+            dispatcherTimer.Start();
+        }
+
+        /// <summary>
+        /// Alert notification through a popup for a given seconds duration.
+        /// </summary>
+        protected void Notification(string message, int second) => Notification(message, new TimeSpan(0, 0, second));
+
+        /// <summary>
         /// Alert notification through a popup.
         /// </summary>
-        public void Notification(string message) => Tag = message;
+        public void Notification(string message) => Notification(message, 3);
 
         private void ModuleWindow_Initialized(object sender, EventArgs e)
         {
@@ -75,12 +111,16 @@ namespace QviKD
             Top = Display.Rect.top;
             WindowState = WindowState.Maximized;
 
-            ((System.Windows.Controls.Primitives.Popup)GetTemplateChild("ModuleWindowPopup")).VerticalOffset -= 10;
-            ((System.Windows.Controls.Primitives.Popup)GetTemplateChild("ModuleWindowPopup")).HorizontalOffset -= 10;
+            ModuleWindowPopup.VerticalOffset -= 10;
+            ModuleWindowPopup.HorizontalOffset -= 10;
         }
         private void ModuleWindow_Closed(object sender, EventArgs e)
         {
             Display.InUse = false;
+            if (dispatcherTimer is not null)
+            {
+                dispatcherTimer.Stop();
+            }
         }
 
         private void ModuleWindowCaptionButtonClose_Click(object sender, RoutedEventArgs e)
@@ -92,6 +132,14 @@ namespace QviKD
             WindowState = WindowState.Minimized;
         }
 
+        private void ModuleWindowPopup_Close(object sender, EventArgs e)
+        {
+            ModuleWindowPopup.PopupAnimation = System.Windows.Controls.Primitives.PopupAnimation.Fade;
+            ModuleWindowPopup.IsOpen = false;
+
+            dispatcherTimer.Stop();
+        }
+
         /// <summary>
         /// Print message for debugging; DEBUG-mode exclusive.
         /// </summary>
@@ -100,23 +148,5 @@ namespace QviKD
         {
             System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
-    }
-
-    /// <summary>
-    /// Converter for binding data between <i>Display.InUse</i> and <i>Button.IsEnable</i> property.
-    /// </summary>
-    [ValueConversion(typeof(string), typeof(bool))]
-    public class IsOpenPropertyConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (targetType != typeof(bool))
-                throw new InvalidOperationException($"The {targetType} of the binding target is incompatible with Boolean data type.");
-
-            return (string)value != string.Empty;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotSupportedException();
     }
 }

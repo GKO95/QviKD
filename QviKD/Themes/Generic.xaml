@@ -4,7 +4,6 @@
     xmlns:local="clr-namespace:QviKD">
 
     <!--Resources to ModuleWindow.cs-->
-    <local:IsOpenPropertyConverter x:Key="ModuleWindowConverterIsOpen" />
     <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonClose">#FFFF4D4D</SolidColorBrush>
     <SolidColorBrush x:Key="ModuleWindowColorCaptionButtonDefault">#40808080</SolidColorBrush>
     <Image x:Key="ModuleWindowImageCaptionButtonClose" Source="/Images/iconmonstr-close-thin-32.png" />
@@ -58,10 +57,8 @@
     <Style x:Key="ModuleWindowStylePopup" TargetType="{x:Type Popup}">
         <Setter Property="PlacementTarget" Value="{Binding ModuleWindowCaption}" />
         <Setter Property="Placement" Value="Top" />
-        <Setter Property="PopupAnimation" Value="Slide" />
         <Setter Property="AllowsTransparency" Value="True" />
         <Setter Property="VerticalOffset" Value="{Binding Path=Height, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type Window}}}" />
-        <Setter Property="IsOpen" Value="{Binding Path=Text, ElementName=ModuleWindowPopupContent, Converter={StaticResource ModuleWindowConverterIsOpen}, Mode=OneWay}" />
         <Setter Property="Height" Value="60" />
         <Setter Property="Width" Value="240" />
     </Style>
