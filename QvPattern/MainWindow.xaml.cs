@@ -62,12 +62,14 @@ namespace QviKD.Modules.QvPattern
                 case Key.Right:
                     if (PatternIndex < PatternList.Count - 1) PatternIndex++;
                     else PatternIndex = 0;
+                    Notification.Hide();
                     e.Handled = true;
                     break;
 
                 case Key.Left:
                     if (PatternIndex > 0) PatternIndex--;
                     else PatternIndex = PatternList.Count - 1;
+                    Notification.Hide();
                     e.Handled = true;
                     break;
 

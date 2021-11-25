@@ -20,7 +20,8 @@ namespace QviKD.Modules.QvPattern.Patterns
     /// </summary>
     public partial class SolidFullWhite : Page
     {
-        internal byte ucIndex = 255;
+        private byte ucIndex = 255;
+
         public SolidFullWhite()
         {
             InitializeComponent();
@@ -29,28 +30,33 @@ namespace QviKD.Modules.QvPattern.Patterns
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Window wnd = Window.GetWindow(this);
-            wnd.KeyDown += HandleKeyPress;
+            if (Window.GetWindow(this) is ModuleWindow wnd)
+                wnd.KeyDown += HandleKeyPress;
         }
 
         private void HandleKeyPress(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            if (Window.GetWindow(this) is ModuleWindow wnd)
             {
-                case Key.Up:
-                    if (ucIndex != 255) ucIndex++;
-                    else ucIndex = 255;
-                    break;
+                switch (e.Key)
+                {
+                    case Key.Up:
+                        if (ucIndex != 255) ucIndex++;
+                        else ucIndex = 255;
+                        wnd.Notification.Show($"DDL {ucIndex}");
+                        break;
 
-                case Key.Down:
-                    if (ucIndex != 0) ucIndex--;
-                    else ucIndex = 0;
-                    break;
+                    case Key.Down:
+                        if (ucIndex != 0) ucIndex--;
+                        else ucIndex = 0;
+                        wnd.Notification.Show($"DDL {ucIndex}");
+                        break;
 
-                default:
-                    return;
+                    default:
+                        return;
+                }
+                SolidFullWhiteContent.Background = new SolidColorBrush(Color.FromRgb(ucIndex, ucIndex, ucIndex));
             }
-            SolidFullWhiteContent.Background = new SolidColorBrush(Color.FromRgb(ucIndex, ucIndex, ucIndex));
         }
     }
 }
