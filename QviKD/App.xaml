@@ -6,8 +6,6 @@
              ShutdownMode="OnMainWindowClose">
     
     <Application.Resources>
-        <ControlTemplate x:Key="rcModuleTemplate">
-            
-        </ControlTemplate>
+
     </Application.Resources>
 </Application>
