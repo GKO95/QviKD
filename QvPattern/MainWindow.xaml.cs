@@ -53,7 +53,11 @@ namespace QviKD.Modules.QvPattern
 
         private void ModuleWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            QvPatternContent.Source = new Uri($"Patterns/{PatternList[PatternIndex]}.xaml", UriKind.Relative);
+            ModuleWindow_Pattern();
+
+            Notification.VerticalOffset -= 4;
+            Notification.HorizontalOffset -= 4;
+            Notification.FontSize = 16;
         }
         private void ModuleWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -63,6 +67,7 @@ namespace QviKD.Modules.QvPattern
                     if (PatternIndex < PatternList.Count - 1) PatternIndex++;
                     else PatternIndex = 0;
                     Notification.Hide();
+                    ModuleWindow_Pattern();
                     e.Handled = true;
                     break;
 
@@ -70,17 +75,17 @@ namespace QviKD.Modules.QvPattern
                     if (PatternIndex > 0) PatternIndex--;
                     else PatternIndex = PatternList.Count - 1;
                     Notification.Hide();
+                    ModuleWindow_Pattern();
                     e.Handled = true;
                     break;
 
                 case Key.Escape:
                     Close();
-                    break;
+                    return;
 
                 default:
                     return;
             }
-            ModuleWindow_Loaded(sender, e);
         }
 
         private void QvPatternContent_LoadCompleted(object sender, NavigationEventArgs e)
@@ -95,6 +100,8 @@ namespace QviKD.Modules.QvPattern
                 }
             }
         }
+
+        private void ModuleWindow_Pattern() => QvPatternContent.Source = new Uri($"Patterns/{PatternList[PatternIndex]}.xaml", UriKind.Relative);
     }
 
     internal enum DEPTH : uint

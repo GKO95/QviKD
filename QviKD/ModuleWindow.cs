@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -35,7 +36,7 @@ namespace QviKD
         /// <summary>
         /// Popup control from ModuleWindow.
         /// </summary>
-        public ModuleNotification Notification = null;
+        public Controls.Notification Notification = null;
 
         /// <summary>
         /// Constructor for identifying the module availability.
@@ -61,7 +62,7 @@ namespace QviKD
             if (GetTemplateChild("ModuleWindowCaptionButtonMinimize") is Button btnMinimize) btnMinimize.Click += ModuleWindowCaptionButtonMinimize_Click;
 
             // Assign the Popup control to the field via element name within the template.
-            Notification = new(GetTemplateChild("ModuleWindowPopup") as System.Windows.Controls.Primitives.Popup, this);
+            Notification = GetTemplateChild("ModuleWindowNotification") as Controls.Notification;
         }
 
         /// <summary>
@@ -78,9 +79,6 @@ namespace QviKD
             Left = Display.Rect.left;
             Top = Display.Rect.top;
             WindowState = WindowState.Maximized;
-
-            Notification.VerticalOffset = 10;
-            Notification.HorizontalOffset = 10;
         }
         private void ModuleWindow_Closed(object sender, EventArgs e)
         {
@@ -108,68 +106,5 @@ namespace QviKD
         {
             System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
-    }
-
-    public class ModuleNotification
-    {
-        private readonly ModuleWindow Window;
-        private readonly System.Windows.Controls.Primitives.Popup Popup;
-        private readonly DispatcherTimer dispatcherTimer;
-
-        internal ModuleNotification(System.Windows.Controls.Primitives.Popup popup, ModuleWindow wnd)
-        {
-            Window = wnd;
-            Popup = popup;
-
-            dispatcherTimer = new();
-            dispatcherTimer.Tick += ModuleNotification_Tick;
-        }
-
-        /// <summary>
-        /// Alert notification through a popup for a given TimeSpan duration.
-        /// </summary>
-        protected void Show(string message, TimeSpan timeSpan)
-        {
-            Window.Tag = message;
-
-            Popup.PopupAnimation = System.Windows.Controls.Primitives.PopupAnimation.Slide;
-            Popup.IsOpen = true;
-
-            dispatcherTimer.Interval = timeSpan;
-            dispatcherTimer.Start();
-        }
-
-        /// <summary>
-        /// Alert notification through a popup for a given seconds duration.
-        /// </summary>
-        protected void Show(string message, int second) => Show(message, new TimeSpan(0, 0, second));
-
-        /// <summary>
-        /// Alert notification through a popup.
-        /// </summary>
-        public void Show(string message) => Show(message, 2);
-
-        /// <summary>
-        /// Hide notification.
-        /// </summary>
-        public void Hide()
-        {
-            Popup.PopupAnimation = System.Windows.Controls.Primitives.PopupAnimation.Fade;
-            Popup.IsOpen = false;
-
-            dispatcherTimer.Stop();
-        }
-
-        private void ModuleNotification_Tick(object sender, EventArgs e) => Hide();
-
-        /// <summary>
-        /// Vertical offset positioning from the bottom respect to the bottom-right corner.
-        /// </summary>
-        public double VerticalOffset { get => Popup.VerticalOffset; set => Popup.VerticalOffset -= value; }
-
-        /// <summary>
-        /// Horizontal offset positioning from the right respect to the bottom-right corner.
-        /// </summary>
-        public double HorizontalOffset { get => Popup.HorizontalOffset; set => Popup.HorizontalOffset -= value; }
     }
 }
