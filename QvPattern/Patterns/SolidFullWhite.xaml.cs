@@ -31,10 +31,10 @@ namespace QviKD.Modules.QvPattern.Patterns
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (Window.GetWindow(this) is ModuleWindow wnd)
-                wnd.KeyDown += HandleKeyPress;
+                wnd.KeyDown += Page_KeyDown;
         }
 
-        private void HandleKeyPress(object sender, KeyEventArgs e)
+        private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (Window.GetWindow(this) is ModuleWindow wnd)
             {
@@ -49,6 +49,10 @@ namespace QviKD.Modules.QvPattern.Patterns
                     case Key.Down:
                         if (ucIndex != 0) ucIndex--;
                         else ucIndex = 0;
+                        wnd.Notification.Show($"DDL {ucIndex}");
+                        break;
+
+                    case Key.Enter:
                         wnd.Notification.Show($"DDL {ucIndex}");
                         break;
 

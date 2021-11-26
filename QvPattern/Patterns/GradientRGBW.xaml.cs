@@ -70,10 +70,10 @@ namespace QviKD.Modules.QvPattern.Patterns
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             Window wnd = Window.GetWindow(this);
-            wnd.KeyDown += HandleKeyPress;
+            wnd.KeyDown += Page_KeyDown;
         }
 
-        private void HandleKeyPress(object sender, KeyEventArgs e)
+        private void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Up)
             {
