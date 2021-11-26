@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using QviKD.Modules;
 
 namespace QviKD.Types
 {
@@ -32,7 +31,7 @@ namespace QviKD.Types
         /// Identifies whether the module is available for the monitor.
         /// </summary>
         internal bool IsAvailable(Display display) 
-            => (Assembly.CreateInstance($"{Type.FullName}") as ModuleControl).IsAvailable(display);
+            => (Assembly.CreateInstance($"{Type.FullName}") as ModuleWindow).IsAvailable(display);
 
         /// <summary>
         /// Get a class with valid format from the assembly to instantiate; otherwise, return null.
@@ -42,8 +41,8 @@ namespace QviKD.Types
             foreach (Type type in assembly.GetTypes())
             {
                 // Filters ModuleControl class defined in other assemblies.
-                if (type.Namespace.Contains(typeof(ModuleControl).Namespace)
-                    && type.IsSubclassOf(typeof(ModuleControl))) 
+                if (type.Namespace.Contains(typeof(ModuleWindow).Namespace)
+                    && type.IsSubclassOf(typeof(ModuleWindow))) 
                     return type;
             }
             return null;

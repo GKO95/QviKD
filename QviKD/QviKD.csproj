@@ -9,13 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\iconmonstr-close-thin-32.png" />
-    <None Remove="Images\iconmonstr-maximize-thin-32.png" />
-    <None Remove="Images\iconmonstr-minimize-thin-32.png" />
-    <None Remove="Images\iconmonstr-restore-thin-32.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -23,6 +16,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-BoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraLight.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Italic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Light.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-LightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Medium.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-MediumItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Regular.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Thin.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ThinItalic.ttf" />
     <Resource Include="Images\iconmonstr-close-thin-32.png" />
     <Resource Include="Images\iconmonstr-maximize-thin-32.png" />
     <Resource Include="Images\iconmonstr-minimize-thin-32.png" />

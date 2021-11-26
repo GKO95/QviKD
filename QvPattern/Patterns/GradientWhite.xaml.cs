@@ -16,35 +16,45 @@ using System.Windows.Shapes;
 namespace QviKD.Modules.QvPattern.Patterns
 {
     /// <summary>
-    /// Interaction logic for GradientWhite256.xaml
+    /// Interaction logic for GradientWhite.xaml
     /// </summary>
-    public partial class GradientWhite256 : Page
+    public partial class GradientWhite : Page
     {
-        public GradientWhite256()
+        public GradientWhite()
         {
             InitializeComponent();
 
             for (int index = 0; index < MAX(DEPTH.BIT8); index++)
             {
-                GradientWhite256Content.ColumnDefinitions.Add(new ColumnDefinition());
+                GradientWhiteContent.ColumnDefinitions.Add(new ColumnDefinition());
                 Rectangle rectangle = new()
                 {
                     Fill = new SolidColorBrush(Color.FromRgb((byte)index, (byte)index, (byte)index)),
                     Margin = new Thickness(0),
                 }; 
                 rectangle.SetValue(Grid.ColumnProperty, index);
-                GradientWhite256Content.Children.Add(rectangle);
+                GradientWhiteContent.Children.Add(rectangle);
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window wnd = Window.GetWindow(this);
+            wnd.KeyDown += Page_KeyDown;
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+
+            }
+            else if (e.Key == Key.Down)
+            {
+
             }
         }
 
         private static uint MAX(DEPTH depth) => Convert.ToUInt32(Math.Pow(2, (double)depth));
-
-        enum DEPTH : uint
-        { 
-            BIT8    = 8,
-            BIT10   = 10,
-            BIT12   = 12,
-            BIT14   = 14,
-        }
     }
 }

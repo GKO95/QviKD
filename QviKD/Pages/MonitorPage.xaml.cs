@@ -68,16 +68,22 @@ namespace QviKD
             }
         }
 
+        /// <summary>
+        /// Return to the main page.
+        /// </summary>
         private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
             _ = NavigationService.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));
         }
 
+        /// <summary>
+        /// Create an module instance from the library on run-time.
+        /// </summary>
         private void MonitorPageModule_ClickButton(object sender, RoutedEventArgs e)
         {
-            ModuleWindow wnd = new(Display, ((Button)sender).Tag as Module);
-            wnd.Show();
+            object wnd = Activator.CreateInstance(((Module)((Button)sender).Tag).Type, Display);
+            (wnd as ModuleWindow).Show();
         }
     }
 
@@ -90,7 +96,7 @@ namespace QviKD
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType != typeof(bool))
-                throw new InvalidOperationException($"The {targetType} of the value is incompatible with Boolean data type.");
+                throw new InvalidOperationException($"The {targetType} of the binding target is incompatible with Boolean data type.");
 
             return !(bool)value;
         }
