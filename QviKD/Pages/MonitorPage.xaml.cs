@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
+using QviKD.Functions;
 using QviKD.Types;
 
 namespace QviKD
@@ -32,18 +33,18 @@ namespace QviKD
 
         private void MonitorPage_Loaded(object sender, RoutedEventArgs e)
         {
-            Display = Database.Displays[(Tag as MainWindow).Page];
+            int PageIndex = (Tag as MainWindow).PageIndex;
+            if (PageIndex < Database.Displays.Count && PageIndex > (int)MainWindow.PAGES.MAIN)
+            {
+                Display = Database.Displays[(Tag as MainWindow).PageIndex];
+                MonitorControlEDID.Display = MonitorControlDDCCI.Display = Display;
+            }
+            else
+            {
+                return;
+            }
 
             MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
-
-            MonitorPageInformationIsPrimary.Content = Display.IsPrimary ? "Yes" : "No";
-            MonitorPageInformationResolution.Content = $"{Display.Rect.right - Display.Rect.left} x {Display.Rect.bottom - Display.Rect.top}";
-            MonitorPageInformationPosition.Content = $"({Display.Rect.left}, {Display.Rect.top})";
-
-            MonitorPageInformationDescription.Content = Display.Description;
-
-            MonitorPageInformationDeviceName.Content = Display.DeviceName;
-            MonitorPageInformationDeviceID.Content = Display.DeviceID;
 
             // For each modules detected and stored in the Database...
             foreach (Module module in Database.Modules)

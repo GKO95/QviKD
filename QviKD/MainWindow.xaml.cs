@@ -30,7 +30,7 @@ namespace QviKD
         }
 
         private PAGES PageNavigation { get; set; } = PAGES.MAIN;
-        public int Page => (int)PageNavigation;
+        public int PageIndex => (int)PageNavigation;
         public void GoTo(int index)  => GoTo((PAGES)index);
         public void GoTo(PAGES page) => PageNavigation = page;
         public enum PAGES : int
