@@ -86,22 +86,4 @@ namespace QviKD
             (wnd as ModuleWindow).Show();
         }
     }
-
-    /// <summary>
-    /// Converter for binding data between <i>Display.InUse</i> and <i>Button.IsEnable</i> property.
-    /// </summary>
-    [ValueConversion(typeof(bool), typeof(bool))]
-    public class InUsePropertyConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (targetType != typeof(bool))
-                throw new InvalidOperationException($"The {targetType} of the binding target is incompatible with Boolean data type.");
-
-            return !(bool)value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotSupportedException();
-    }
 }
