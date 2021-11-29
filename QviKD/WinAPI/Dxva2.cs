@@ -20,6 +20,12 @@ namespace QviKD.WinAPI
         [DllImport("Dxva2.dll", SetLastError = true, EntryPoint = "DestroyPhysicalMonitors")]
         internal static extern bool DestroyPhysicalMonitors(DWORD dwPhysicalMonitorArraySize, ref PHYSICAL_MONITOR pPhysicalMonitorArray);
 
+        [DllImport("Dxva2.dll", EntryPoint = "GetCapabilitiesStringLength")]
+        internal static extern bool GetCapabilitiesStringLength(HANDLE hMonitor, ref DWORD pdwCapabilitiesStringLengthInCharacters);
+
+        [DllImport("Dxva2.dll", EntryPoint = "CapabilitiesRequestAndCapabilitiesReply", CharSet = CharSet.Ansi)]
+        internal static extern bool CapabilitiesRequestAndCapabilitiesReply(HANDLE hMonitor, HANDLE pszASCIICapabilitiesString, DWORD dwCapabilitiesStringLengthInCharacters);
+
         [DllImport("Dxva2.dll", EntryPoint = "GetVCPFeatureAndVCPFeatureReply")]
         internal static extern bool GetVCPFeatureAndVCPFeatureReply(HANDLE hMonitor, byte bVCPCode, _MC_VCP_CODE_TYPE pvct, ref DWORD pdwCurrentValue, ref DWORD pdwMaximumValue);
 

@@ -8,6 +8,7 @@ using QviKD.WinAPI;
 
 using HMONITOR = System.IntPtr;
 using HANDLE = System.IntPtr;
+using DWORD = System.UInt32;
 
 namespace QviKD.Types
 {
@@ -61,6 +62,23 @@ namespace QviKD.Types
         internal bool IsPrimary { get; }
 
         /// <summary>
+        /// String of monitor capabilities.
+        /// </summary>
+        public string Capabilities
+        {
+            get => _Capabilities;
+            set
+            {
+                if (_Capabilities is null)
+                {
+                    _Capabilities = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _Capabilities;
+
+        /// <summary>
         /// Identifies whether the monitor is in use by a module.
         /// </summary>
         public bool InUse
@@ -88,7 +106,7 @@ namespace QviKD.Types
             DeviceID = DisplayDeviceA.DeviceID;
             DeviceKey = DisplayDeviceA.DeviceKey;
 
-            EDID = new EDID(DeviceID);
+            EDID = new EDID(DisplayDeviceA);
         }
 
         ~Display()
@@ -125,7 +143,7 @@ namespace QviKD.Types
         {
             get
             {
-                return Raw[(byte)BYTE.VERSION_INTEGER] switch
+                return IsEmpty ? double.NaN : Raw[(byte)BYTE.VERSION_INTEGER] switch
                 {
                     1 => Raw[(byte)BYTE.VERSION_DECIMAL] > 4 ? double.NaN : Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0),
                     2 => Raw[(byte)BYTE.VERSION_DECIMAL] > 0 ? double.NaN : Raw[(byte)BYTE.VERSION_INTEGER] + (Raw[(byte)BYTE.VERSION_DECIMAL] / 10.0),
@@ -141,6 +159,7 @@ namespace QviKD.Types
         {
             get
             {
+                if (IsEmpty) return "Wired Display";
                 for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
                 {
                     if (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_NAME)
@@ -160,6 +179,7 @@ namespace QviKD.Types
         {
             get
             {
+                if (IsEmpty) return "N/A";
                 for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
                 {
                     if (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_SERIALNUMBER)
@@ -175,21 +195,41 @@ namespace QviKD.Types
         /// <summary>
         /// Array of EDID information sliced to appropriate length based on the EDID version.
         /// </summary>
-        public byte[] Raw { get; }
+        public byte[] Raw { get; } = null;
 
-        public EDID(string DeviceID)
+        public bool IsEmpty { get; } = false;
+
+        public EDID(DISPLAY_DEVICEA DisplayDevice)
         {
             try
             {
-                Raw = (byte[])Registry.GetValue(
-                    $"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Enum\\DISPLAY\\{DeviceID.Split('#')[1]}\\{DeviceID.Split('#')[2]}\\Device Parameters",
-                    "EDID", "");
+                string DeviceID = DisplayDevice.DeviceID;
+                if (DeviceID.Split('#')[1] != "Default_Monitor")
+                {
+                    Raw = (byte[])Registry.GetValue(
+                        $"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Enum\\DISPLAY\\{DeviceID.Split('#')[1]}\\{DeviceID.Split('#')[2]}\\Device Parameters",
+                        "EDID", "");
+                }
+                else
+                {
+                    IsEmpty = true;
+                    DebugMessage($"EDID unavailable; {DisplayDevice.DeviceName.Remove(0, 4)} is either empty of EDID or connected with analog input that does not support PnP.");
+                }
             }
             catch (ArgumentOutOfRangeException)
             {
                 Console.Error.WriteLine("Incorrect DeviceID; cannot find EDID registry location.");
                 return;
             }
+        }
+
+        /// <summary>
+        /// Print message for debugging; DEBUG-mode exclusive.
+        /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void DebugMessage(string msg)
+        {
+            System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
 
         private enum BYTE : byte

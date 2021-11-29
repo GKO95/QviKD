@@ -3,33 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:QviKD.Controls"
+             xmlns:ctrl="clr-namespace:QviKD.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <Style x:Key="EDIDControlStyleText" TargetType="{x:Type TextBlock}">
+            <Setter Property="DockPanel.Dock" Value="Left"/>
+            <Setter Property="MinWidth" Value="120"/>
+        </Style>
+        <Style x:Key="EDIDControlStyleData" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Resources>
+    
     <StackPanel x:Name="EDIDControlContent">
         <DockPanel x:Name="EDIDControlContentIsPrimary">
-            <TextBlock x:Name="EDIDControlContentIsPrimaryText" DockPanel.Dock="Left">Primary</TextBlock>
-            <TextBlock x:Name="EDIDControlContentIsPrimaryData"/>
+            <TextBlock x:Name="EDIDControlContentIsPrimaryText" Style="{StaticResource EDIDControlStyleText}">Primary</TextBlock>
+            <TextBlock x:Name="EDIDControlContentIsPrimaryData" Style="{StaticResource EDIDControlStyleData}"/>
         </DockPanel>
         <DockPanel x:Name="EDIDControlContentResolution">
-            <TextBlock x:Name="EDIDControlContentResolutionText" DockPanel.Dock="Left">Resolution</TextBlock>
-            <TextBlock x:Name="EDIDControlContentResolutionData"/>
+            <TextBlock x:Name="EDIDControlContentResolutionText" Style="{StaticResource EDIDControlStyleText}">Resolution</TextBlock>
+            <TextBlock x:Name="EDIDControlContentResolutionData" Style="{StaticResource EDIDControlStyleData}"/>
         </DockPanel>
         <DockPanel x:Name="EDIDControlContentPosition">
-            <TextBlock x:Name="EDIDControlContentPositionText" DockPanel.Dock="Left">Position</TextBlock>
-            <TextBlock x:Name="EDIDControlContentPositionData"/>
+            <TextBlock x:Name="EDIDControlContentPositionText" Style="{StaticResource EDIDControlStyleText}">Position</TextBlock>
+            <TextBlock x:Name="EDIDControlContentPositionData" Style="{StaticResource EDIDControlStyleData}"/>
         </DockPanel>
         <DockPanel x:Name="EDIDControlContentDescription">
-            <TextBlock x:Name="EDIDControlContentDescriptionText" DockPanel.Dock="Left">Description</TextBlock>
-            <TextBlock x:Name="EDIDControlContentDescriptionData"/>
+            <TextBlock x:Name="EDIDControlContentDescriptionText" Style="{StaticResource EDIDControlStyleText}">Description</TextBlock>
+            <TextBlock x:Name="EDIDControlContentDescriptionData" Style="{StaticResource EDIDControlStyleData}"/>
         </DockPanel>
         <DockPanel x:Name="EDIDControlContentDeviceName">
-            <TextBlock x:Name="EDIDControlContentDeviceNameText" DockPanel.Dock="Left">Device Name</TextBlock>
-            <TextBlock x:Name="EDIDControlContentDeviceNameData"/>
+            <TextBlock x:Name="EDIDControlContentDeviceNameText" Style="{StaticResource EDIDControlStyleText}">Device Name</TextBlock>
+            <TextBlock x:Name="EDIDControlContentDeviceNameData" Style="{StaticResource EDIDControlStyleData}"/>
         </DockPanel>
-        <DockPanel x:Name="EDIDControlContentDeviceId">
-            <TextBlock x:Name="EDIDControlContentDeviceIdText" DockPanel.Dock="Left">Device ID</TextBlock>
-            <TextBlock x:Name="EDIDControlContentDeviceIdData"/>
+        <DockPanel x:Name="EDIDControlContentDeviceID">
+            <TextBlock x:Name="EDIDControlContentDeviceIDText" Style="{StaticResource EDIDControlStyleText}">Device ID</TextBlock>
+            <TextBlock x:Name="EDIDControlContentDeviceIDData" Style="{StaticResource EDIDControlStyleData}"/>
         </DockPanel>
     </StackPanel>
 </UserControl>

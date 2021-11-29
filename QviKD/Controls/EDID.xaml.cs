@@ -53,7 +53,12 @@ namespace QviKD.Controls
                 Converter = Converter,
             });
 
-   
+            EDIDControlContentIsPrimaryData.Text = Display.IsPrimary ? "Yes" : "No";
+            EDIDControlContentResolutionData.Text = $"{Display.Rect.right - Display.Rect.left} x {Display.Rect.bottom - Display.Rect.top}";
+            EDIDControlContentPositionData.Text = $"({Display.Rect.left}, {Display.Rect.top})";
+            EDIDControlContentDescriptionData.Text = Display.Description;
+            EDIDControlContentDeviceNameData.Text = Display.DeviceName;
+            EDIDControlContentDeviceIDData.Text = Display.DeviceID;
         }
 
         /// <summary>
