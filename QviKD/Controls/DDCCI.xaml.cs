@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
-using QviKD.Functions;
 using QviKD.WinAPI;
 using QviKD.Types;
 
@@ -30,26 +29,32 @@ namespace QviKD.Controls
     /// </summary>
     public partial class DDCCI : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly Thread Loading;
+
         private Display _Display = null;
         public Display Display
         {
             get => _Display;
             set
             {
-                _Display = value;
-                OnPropertyChanged();
+                if (_Display is null)
+                {
+                    _Display = value;
+                    InitializeDDCCI();
+                }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly static VisibilityPropertyConverter Converter = new();
-
-        private readonly Thread Loading;
 
         public DDCCI()
         {
             InitializeComponent();
             Loading = new Thread(new ThreadStart(ThreadCapabilitiesString));
+        }
+
+        private void InitializeDDCCI()
+        {
+
         }
 
         /// <summary>
@@ -82,30 +87,22 @@ namespace QviKD.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            SetBinding(VisibilityProperty, new Binding("Display")
-            {
-                Source = this,
-                Mode = BindingMode.OneWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                Converter = Converter,
-            });
+            //DDCCIControlContentLoadingAnimation.SetBinding(VisibilityProperty, new Binding("Capabilities")
+            //{
+            //    Source = Display,
+            //    Mode = BindingMode.OneWay,
+            //    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+            //    //Converter = Converter,
+            //});
 
-            DDCCIControlContentLoadingAnimation.SetBinding(VisibilityProperty, new Binding("Capabilities")
-            {
-                Source = Display,
-                Mode = BindingMode.OneWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                Converter = Converter,
-            });
-
-            if (Display.Capabilities is null)
-            {
-                Loading.Start();
-            }
-            else
-            {
-                DDCCIControlContentLoadingAnimation.Visibility = Visibility.Collapsed;
-            }
+            //if (Display.Capabilities is null)
+            //{
+            //    Loading.Start();
+            //}
+            //else
+            //{
+            //    DDCCIControlContentLoadingAnimation.Visibility = Visibility.Collapsed;
+            //}
         }
 
         /// <summary>
@@ -119,9 +116,7 @@ namespace QviKD.Controls
 
         private void DDCCIControlContentButtonRead_Click(object sender, RoutedEventArgs e)
         {
-            byte vcpcode = 0;
-            DWORD maxvalue = 0, currentvalue = 0;
-            //Dxva2.GetVCPFeatureAndVCPFeatureReply(Display.hPhysical, vcpcode, _MC_VCP_CODE_TYPE.MC_MOMENTARY, ref maxvalue, ref currentvalue);
+
         }
 
         private void DDCCIControlContentButtonWrite_Click(object sender, RoutedEventArgs e)

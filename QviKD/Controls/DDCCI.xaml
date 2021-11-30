@@ -4,35 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ctrl="clr-namespace:QviKD.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
-    <Border CornerRadius="8" BorderThickness="2" BorderBrush="#404040" Background="LightGray">
-        <Grid>
-            <Grid Margin="4">
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="UserControl_Loaded">
+    <Grid>
+        <ctrl:Loading x:Name="DDCCIControlLoadingAnimation" Visibility="Collapsed"/>
+        <DockPanel x:Name="DDCCIControlContent">
+            <Grid x:Name="DDCCIControlContentVCP" Background="LightGray">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-
-                <TextBlock x:Name="DDCCIControlContentVCPCodeText" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">VCP Code</TextBlock>
-                <ComboBox Grid.Column="2" Grid.Row="0" IsEditable="True"/>
-
-
-                <Button x:Name="DDCCIControlContentButtonRead" Grid.Column="0" Grid.Row="1" Content="Read" Click="DDCCIControlContentButtonRead_Click"/>
-                <Button x:Name="DDCCIControlContentButtonWrite" Grid.Column="1" Grid.Row="1" Content="Write" Click="DDCCIControlContentButtonWrite_Click"/>
-                <TextBlock x:Name="DDCCIControlContentFormatText" Grid.Column="2" Grid.Row="1"/>
-                <TextBox Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2"/>
-
+                <TextBlock x:Name="DDCCIControlContentVCPText" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">VCP</TextBlock>
+                <ComboBox x:Name="DDCCIControlContentVCPCapabilities" Grid.Column="1" Grid.Row="0" MaxDropDownHeight="Auto">
+                    <ComboBoxItem />
+                </ComboBox>
+                <DockPanel Grid.Column="1" Grid.Row="1">
+                    <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right">h</TextBlock>
+                    <TextBox x:Name="DDCCIControlContentVCPCode" HorizontalContentAlignment="Right"></TextBox>
+                </DockPanel>
             </Grid>
-            <ctrl:Loading x:Name="DDCCIControlContentLoadingAnimation" />
-        </Grid>
 
-    </Border>
+            <Grid Background="DarkGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0">
+                    <Button DockPanel.Dock="Left">Read</Button>
+                    <StackPanel></StackPanel>
+                </DockPanel>
+
+                <DockPanel Grid.Row="1">
+                    <Button DockPanel.Dock="Right">Write</Button>
+                    <StackPanel></StackPanel>
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
 </UserControl>

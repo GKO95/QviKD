@@ -53,8 +53,8 @@
             </StackPanel>
             <Grid x:Name="MonitorPageContent">
                 <StackPanel x:Name="MonitorPageContentList" Visibility="Visible">
-                    <ctrl:EDID x:Name="MonitorControlEDID"/>
-                    <ctrl:DDCCI x:Name="MonitorControlDDCCI"/>
+                    <ctrl:EDID x:Name="MonitorControlEDID" Margin="0, 4"/>
+                    <ctrl:DDCCI x:Name="MonitorControlDDCCI" Margin="0, 4"/>
                     <StackPanel Name="MonitorPageModules" />
                 </StackPanel>
                 <StackPanel x:Name="MonitorPageContentError" Visibility="Collapsed"
