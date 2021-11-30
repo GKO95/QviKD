@@ -30,7 +30,9 @@
     <Resource Include="Fonts\JetBrainsMono-Regular.ttf" />
     <Resource Include="Fonts\JetBrainsMono-Thin.ttf" />
     <Resource Include="Fonts\JetBrainsMono-ThinItalic.ttf" />
+    <Resource Include="Images\iconmonstr-back-64.png" />
     <Resource Include="Images\iconmonstr-close-thin-32.png" />
+    <Resource Include="Images\iconmonstr-error-64.png" />
     <Resource Include="Images\iconmonstr-maximize-thin-32.png" />
     <Resource Include="Images\iconmonstr-minimize-thin-32.png" />
   </ItemGroup>
