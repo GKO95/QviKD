@@ -2,27 +2,68 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:QviKD"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ctrl="clr-namespace:QviKD.Controls"
-      mc:Ignorable="d" Background="White"
-      d:DesignHeight="450" d:DesignWidth="800" Loaded="MonitorPage_Loaded">
+      mc:Ignorable="d" Background="White" d:DesignHeight="450" d:DesignWidth="800"
+      Loaded="MonitorPage_Loaded">
+    <Page.Resources>
+        <Image x:Key="MonitorPageImageBack" Source="/Images/iconmonstr-back-64.png" />
+        <Image x:Key="MonitorPageImageError" Source="/Images/iconmonstr-error-64.png" />
+        <Style x:Key="MonitorPageStyleButtonBack" TargetType="{x:Type Button}">
+            <Setter Property="Content" Value="{StaticResource MonitorPageImageBack}"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="{Binding Height, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MonitorPageStyleTitle" TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#JetBrains Mono"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="Margin" Value="12, 0, 0, 0"/>
+        </Style>
+        <Style x:Key="MonitorPageStyleErrorIcon" TargetType="{x:Type Label}">
+            <Setter Property="Content" Value="{StaticResource MonitorPageImageError}"/>
+            <Setter Property="Height" Value="64"/>
+            <Setter Property="Width" Value="{Binding Height, RelativeSource={RelativeSource Self}}"/>
+        </Style>
+        <Style x:Key="MonitorPageStyleErrorText" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#JetBrains Mono"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </Page.Resources>
 
-    <ScrollViewer Name="MonitorPageScroll" ScrollViewer.VerticalScrollBarVisibility="Auto">
-        <StackPanel Name="MonitorPageContent" MaxWidth="1200" Margin="32" >
-
-            <StackPanel Name="MonitorPageHeader" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button Name="MonitorPageHeaderBack" Content="◀" Click="MonitorPageHeaderBack_Click"/>
-                <Label Name="MonitorPageHeaderTitle" Content="(name)" FontWeight="Bold" />
+    <ScrollViewer x:Name="MonitorPageScroll" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <DockPanel x:Name="MonitorPageLayout" MaxWidth="1200" Margin="32">
+            <StackPanel x:Name="MonitorPageNavigation" DockPanel.Dock="Top"
+                        HorizontalAlignment="Left" Orientation="Horizontal" Margin="0, 0, 0, 8">
+                <Button x:Name="MonitorPageNavigationBack" Style="{StaticResource MonitorPageStyleButtonBack}" 
+                        Click="MonitorPageNavigationBack_Click"/>
+                <TextBlock x:Name="MonitorPageNavigationTitle" Style="{StaticResource MonitorPageStyleTitle}"/>
             </StackPanel>
-
-            <ctrl:EDID x:Name="MonitorControlEDID" />
-            <ctrl:DDCCI x:Name="MonitorControlDDCCI"/>
-
-            <!--MODULES-->
-            <StackPanel Name="MonitorPageModules" />
-
-        </StackPanel>
+            <Grid x:Name="MonitorPageContent">
+                <StackPanel x:Name="MonitorPageContentList" Visibility="Visible">
+                    <ctrl:EDID x:Name="MonitorControlEDID"/>
+                    <ctrl:DDCCI x:Name="MonitorControlDDCCI"/>
+                    <StackPanel Name="MonitorPageModules" />
+                </StackPanel>
+                <StackPanel x:Name="MonitorPageContentError" Visibility="Collapsed"
+                            VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Style="{StaticResource MonitorPageStyleErrorIcon}"/>
+                    <TextBlock Style="{StaticResource MonitorPageStyleErrorText}" Text="ERROR"/>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
     </ScrollViewer>
     
 </Page>

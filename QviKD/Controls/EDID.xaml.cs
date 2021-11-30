@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
-using QviKD.Functions;
 using QviKD.Types;
 
 namespace QviKD.Controls
@@ -30,44 +29,27 @@ namespace QviKD.Controls
             get => _Display;
             set
             {
-                _Display = value;
-                OnPropertyChanged();
+                if (_Display is null)
+                {
+                    _Display = value;
+                    InitializeEDID();
+                }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly static VisibilityPropertyConverter Converter = new();
 
         public EDID()
         {
             InitializeComponent();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void InitializeEDID()
         {
-            SetBinding(VisibilityProperty, new Binding("Display")
-            {
-                Source = this,
-                Mode = BindingMode.OneWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                Converter = Converter,
-            });
-
             EDIDControlContentIsPrimaryData.Text = Display.IsPrimary ? "Yes" : "No";
             EDIDControlContentResolutionData.Text = $"{Display.Rect.right - Display.Rect.left} x {Display.Rect.bottom - Display.Rect.top}";
             EDIDControlContentPositionData.Text = $"({Display.Rect.left}, {Display.Rect.top})";
             EDIDControlContentDescriptionData.Text = Display.Description;
             EDIDControlContentDeviceNameData.Text = Display.DeviceName;
             EDIDControlContentDeviceIDData.Text = Display.DeviceID;
-        }
-
-        /// <summary>
-        /// Triggers PropertyChanged event that is sent to the targeted binding client.
-        /// </summary>
-        private void OnPropertyChanged([CallerMemberName] string memberName = "")
-        {
-            // CallerMemberName attribute assigns the calling member as its arugment.
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
         }
     }
 }

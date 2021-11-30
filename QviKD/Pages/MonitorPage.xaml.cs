@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
-using QviKD.Functions;
 using QviKD.Types;
 
 namespace QviKD
@@ -24,7 +23,7 @@ namespace QviKD
     public partial class MonitorPage : Page
     {
         private Display Display;
-        private readonly static InUsePropertyConverter Converter = new();
+        private readonly static InUse2IsEnableConverter Converter = new();
 
         public MonitorPage()
         {
@@ -37,42 +36,45 @@ namespace QviKD
             if (PageIndex < Database.Displays.Count && PageIndex > (int)MainWindow.PAGES.MAIN)
             {
                 Display = Database.Displays[(Tag as MainWindow).PageIndex];
-                MonitorControlEDID.Display = MonitorControlDDCCI.Display = Display;
+                MonitorPageNavigationTitle.Text = Display.EDID.DisplayName;
+
+                MonitorControlEDID.Display = Display;
+
+                // For each modules detected and stored in the Database...
+                foreach (Module module in Database.Modules)
+                {
+                    if (module.IsAvailable(Display))
+                    {
+                        Button button = new()
+                        {
+                            Name = $"MonitorPageModule{module.AssemblyName.Name}Button",
+                            Content = module.AssemblyName.Name,
+                            Tag = module,
+                        };
+                        button.SetBinding(IsEnabledProperty, new Binding("InUse")
+                        {
+                            Source = Display,
+                            Mode = BindingMode.OneWay,
+                            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                            Converter = Converter,
+                        });
+                        button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
+                        MonitorPageModules.Children.Add(button);
+                    }
+                }
             }
             else
             {
-                return;
-            }
-
-            MonitorPageHeaderTitle.Content = Display.EDID.DisplayName;
-
-            // For each modules detected and stored in the Database...
-            foreach (Module module in Database.Modules)
-            {
-                if (module.IsAvailable(Display))
-                {
-                    Button button = new()
-                    {
-                        Name = $"MonitorPageModule{module.AssemblyName.Name}Button",
-                        Content = module.AssemblyName.Name,
-                        Tag = module,
-                    };
-                    button.SetBinding(IsEnabledProperty, new Binding("InUse") {
-                        Source = Display,
-                        Mode = BindingMode.OneWay,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                        Converter = Converter,
-                    });
-                    button.Click += new RoutedEventHandler(MonitorPageModule_ClickButton);
-                    MonitorPageModules.Children.Add(button);
-                }
+                MonitorPageNavigationTitle.Text = "RETURN";
+                MonitorPageContentList.Visibility = Visibility.Collapsed;
+                MonitorPageContentError.Visibility = Visibility.Visible;
             }
         }
 
         /// <summary>
         /// Return to the main page.
         /// </summary>
-        private void MonitorPageHeaderBack_Click(object sender, RoutedEventArgs e)
+        private void MonitorPageNavigationBack_Click(object sender, RoutedEventArgs e)
         {
             (Tag as MainWindow).GoTo(MainWindow.PAGES.MAIN);
             _ = NavigationService.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));
@@ -86,5 +88,23 @@ namespace QviKD
             object wnd = Activator.CreateInstance(((Module)((Button)sender).Tag).Type, Display);
             (wnd as ModuleWindow).Show();
         }
+    }
+
+    /// <summary>
+    /// Converter for binding data between <i>Display.InUse</i> and <i>Button.IsEnable</i> property.
+    /// </summary>
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class InUse2IsEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException($"The {targetType} of the binding target is incompatible with Boolean data type.");
+
+            return !(bool)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotSupportedException();
     }
 }

@@ -21,7 +21,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Name="ModuleWindowBorderCaptionButton"
-                                Background="{TemplateBinding Background}">
+                            Background="{TemplateBinding Background}">
                         <ContentPresenter Name="ModuleWindowBorderCaptionButtonContent" Margin="10"/>
                     </Border>
                     <ControlTemplate.Triggers>
