@@ -1,13 +1,10 @@
 ﻿<Window x:Class="QviKD.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:QviKD"
-        mc:Ignorable="d"
+        xmlns:ctrl="clr-namespace:QviKD.Controls"
         WindowState="Normal" WindowStyle="None" Background="Transparent"
-        Height="600" Width="800" MinHeight="464" MinWidth="600"
-        Title="QviKD">
+        Height="600" Width="800" MinHeight="464" MinWidth="600" Title="QviKD"
+        Loaded="Window_Loaded" Closed="Window_Closed" >
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="MainWindowChrome"
                       GlassFrameThickness="1" CaptionHeight="32" />
@@ -29,7 +26,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Name="MainWindowBorderCaptionButton"
+                        <Border x:Name="MainWindowBorderCaptionButton"
                                 Background="{TemplateBinding Background}">
                             <ContentPresenter Margin="10"/>
                         </Border>
@@ -44,8 +41,8 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <DockPanel Name="MainWindowClient" LastChildFill="True">
-        <Grid Name="MainWindowClientHeader" 
+    <DockPanel x:Name="MainWindowClient" LastChildFill="True">
+        <Grid x:Name="MainWindowClientHeader" 
               DockPanel.Dock="Top" 
               Background="#FF202020" 
               Height="76">
@@ -71,7 +68,10 @@
                            ScrollViewer.VerticalScrollBarVisibility="Disabled" IsHitTestVisible="False" />
             </DockPanel>
         </Grid>
-        <StatusBar Name="MainWindowClientFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" />
-        <Frame Name="MainWindowContent" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" Focusable="False" />
+        <StatusBar x:Name="MainWindowClientFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" />
+        <Grid x:Name="MainWindowClientContent" Background="White">
+            <Frame x:Name="MainWindowClientContentFrame" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" Focusable="False" />
+            <ctrl:Loading x:Name="MainWindowClientContentLoading" />
+        </Grid>
     </DockPanel>
 </Window>

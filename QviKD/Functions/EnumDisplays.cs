@@ -36,20 +36,6 @@ namespace QviKD.Functions
         private readonly List<DISPLAY_DEVICEA[]> _DISPLAY_DEVICEAs = new();
 
         /// <summary>
-        /// Callback function of MONITORENUMPROC parameter in "User32.EnumDisplayMonitors".
-        /// </summary>
-        private bool EnumMonitors(HMONITOR hMon, HDC hdc, ref RECT lprcMonitor, LPARAM dwData)
-        {
-            if (hMon == (HMONITOR)(-1))
-            {
-                Console.Error.WriteLine("Unable to retreive the HMONITOR of the display monitor.");
-                return false;
-            }
-            _HMONITORs.Add(hMon);
-            return true;
-        }
-
-        /// <summary>
         /// A monitor enumeration class used whenever enumeration needs to be refreshed; instance is to be discard.
         /// </summary>
         public EnumDisplays()
@@ -73,6 +59,7 @@ namespace QviKD.Functions
                         _MONITORINFOEXAs[nDisplay],
                         _DISPLAY_DEVICEAs[nDisplay][nMonitor]
                         ));
+
                     DebugMessage($"Database.Displays[{index++}]\n{Database.Displays[^1].Print()}");
                 }
             }
@@ -81,6 +68,20 @@ namespace QviKD.Functions
         ~EnumDisplays()
         {
             DebugMessage("EnumMonitor instance destroyed.");
+        }
+
+        /// <summary>
+        /// Callback function of MONITORENUMPROC parameter in "User32.EnumDisplayMonitors".
+        /// </summary>
+        private bool EnumMonitors(HMONITOR hMon, HDC hdc, ref RECT lprcMonitor, LPARAM dwData)
+        {
+            if (hMon == (HMONITOR)(-1))
+            {
+                Console.Error.WriteLine("Unable to retreive the HMONITOR of the display monitor.");
+                return false;
+            }
+            _HMONITORs.Add(hMon);
+            return true;
         }
 
         /// <summary>

@@ -30,7 +30,6 @@ namespace QviKD.Controls
     public partial class DDCCI : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly Thread Loading;
 
         private Display _Display = null;
         public Display Display
@@ -49,7 +48,6 @@ namespace QviKD.Controls
         public DDCCI()
         {
             InitializeComponent();
-            Loading = new Thread(new ThreadStart(ThreadCapabilitiesString));
         }
 
         private void InitializeDDCCI()
@@ -58,51 +56,37 @@ namespace QviKD.Controls
         }
 
         /// <summary>
-        /// A thread a string of monitor capabilities.
+        /// Thread for retrieving capalbities of the display device.
         /// </summary>
-        private void ThreadCapabilitiesString()
+        private void ThreadDisplayCapabilities(object data)
         {
             DWORD dwTemp = 0;
             string strTemp = string.Empty;
+
+            DebugMessage($"{Display.DeviceName.Remove(0, 4)} Capabilities - background threading...");
+
             if (!Dxva2.GetCapabilitiesStringLength(Display.hPhysical, ref dwTemp))
             {
                 Console.Error.WriteLine("Unable to retreive the length of monitor capabilities string from a display device.");
             }
             else
             {
+                DebugMessage($"{Display.DeviceName.Remove(0, 4)} Capabilities - collecting data ({dwTemp})...");
+
                 HANDLE ptrTemp = Marshal.AllocHGlobal((int)dwTemp);
                 if (!Dxva2.CapabilitiesRequestAndCapabilitiesReply(Display.hPhysical, ptrTemp, dwTemp))
                 {
                     Console.Error.WriteLine("Unable to retreive the monitor capabilities string from a display device.");
+                    DebugMessage($"{Display.DeviceName.Remove(0, 4)} Capabilities - error!");
                 }
                 else
                 {
                     strTemp = Marshal.PtrToStringAnsi(ptrTemp);
-                    DebugMessage($"{Display.DeviceName.Remove(0, 4)} Capabilities String: {strTemp}");
+                    DebugMessage($"{Display.DeviceName.Remove(0, 4)} Capabilities: {strTemp}");
                 }
                 Marshal.FreeHGlobal(ptrTemp);
             }
             Display.Capabilities = strTemp;
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            //DDCCIControlContentLoadingAnimation.SetBinding(VisibilityProperty, new Binding("Capabilities")
-            //{
-            //    Source = Display,
-            //    Mode = BindingMode.OneWay,
-            //    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-            //    //Converter = Converter,
-            //});
-
-            //if (Display.Capabilities is null)
-            //{
-            //    Loading.Start();
-            //}
-            //else
-            //{
-            //    DDCCIControlContentLoadingAnimation.Visibility = Visibility.Collapsed;
-            //}
         }
 
         /// <summary>
@@ -112,16 +96,6 @@ namespace QviKD.Controls
         {
             // CallerMemberName attribute assigns the calling member as its arugment.
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
-        }
-
-        private void DDCCIControlContentButtonRead_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DDCCIControlContentButtonWrite_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         /// <summary>

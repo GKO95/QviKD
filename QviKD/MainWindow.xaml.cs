@@ -25,8 +25,18 @@ namespace QviKD
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             _ = new EnumDisplays();
             _ = new EnumModules();
+            MainWindowClientContentLoading.Visibility = Visibility.Collapsed;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {            
+            Application.Current.Shutdown();
         }
 
         private PAGES PageNavigation { get; set; } = PAGES.MAIN;
@@ -42,7 +52,7 @@ namespace QviKD
 
         private void MainWindowCaptionButtonClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            Close();
         }
         private void MainWindowCaptionButtonMaximize_Click(object sender, RoutedEventArgs e)
         {
@@ -60,14 +70,23 @@ namespace QviKD
             (e.Content as Page).Tag = this;
 
             // Disable Go Back navigation by removing recent entry history every time the frame navigates.
-            if (MainWindowContent.CanGoBack)
+            if (MainWindowClientContentFrame.CanGoBack)
             {
-                JournalEntry entry = MainWindowContent.RemoveBackEntry();
+                JournalEntry entry = MainWindowClientContentFrame.RemoveBackEntry();
                 while (entry != null)
                 {
-                    entry = MainWindowContent.RemoveBackEntry();
+                    entry = MainWindowClientContentFrame.RemoveBackEntry();
                 }
             }
+        }
+
+        /// <summary>
+        /// Print message for debugging; DEBUG-mode exclusive.
+        /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void DebugMessage(string msg)
+        {
+            System.Diagnostics.Debug.WriteLine($"'{GetType().Name}.cs' {msg}");
         }
     }
 }
