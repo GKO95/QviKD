@@ -37,7 +37,8 @@ namespace QviKD
             {
                 Display = Database.Displays[(Tag as MainWindow).PageIndex];
                 MonitorPageNavigationTitle.Text = Display.EDID.DisplayName;
-
+                MonitorPageNavigationSubtitle.Text = Display.EDID.DisplaySerialNumber;
+                
                 MonitorControlEDID.Display = MonitorControlDDCCI.Display = Display;
 
                 // For each modules detected and stored in the Database...

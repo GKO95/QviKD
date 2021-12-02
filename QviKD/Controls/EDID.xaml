@@ -5,39 +5,63 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <FontFamily x:Key="FontFamilyJetBrainsMonoNL">pack://application:,,,/Fonts/#JetBrains Mono NL</FontFamily>
+        <Style x:Key="EDIDControlStyleItem" TargetType="{x:Type DockPanel}">
+            <Setter Property="Margin" Value="0, 4"/>
+        </Style>
         <Style x:Key="EDIDControlStyleText" TargetType="{x:Type TextBlock}">
             <Setter Property="DockPanel.Dock" Value="Left"/>
-            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Width" Value="160"/>
         </Style>
         <Style x:Key="EDIDControlStyleData" TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontFamilyJetBrainsMonoNL}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Height="2" Fill="#FF101010" Margin="0, 4"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
-    
-    <StackPanel x:Name="EDIDControlContent">
-        <DockPanel x:Name="EDIDControlContentIsPrimary">
-            <TextBlock x:Name="EDIDControlContentIsPrimaryText" Style="{StaticResource EDIDControlStyleText}">Primary</TextBlock>
-            <TextBlock x:Name="EDIDControlContentIsPrimaryData" Style="{StaticResource EDIDControlStyleData}"/>
-        </DockPanel>
-        <DockPanel x:Name="EDIDControlContentResolution">
-            <TextBlock x:Name="EDIDControlContentResolutionText" Style="{StaticResource EDIDControlStyleText}">Resolution</TextBlock>
-            <TextBlock x:Name="EDIDControlContentResolutionData" Style="{StaticResource EDIDControlStyleData}"/>
-        </DockPanel>
-        <DockPanel x:Name="EDIDControlContentPosition">
-            <TextBlock x:Name="EDIDControlContentPositionText" Style="{StaticResource EDIDControlStyleText}">Position</TextBlock>
-            <TextBlock x:Name="EDIDControlContentPositionData" Style="{StaticResource EDIDControlStyleData}"/>
-        </DockPanel>
-        <DockPanel x:Name="EDIDControlContentDescription">
-            <TextBlock x:Name="EDIDControlContentDescriptionText" Style="{StaticResource EDIDControlStyleText}">Description</TextBlock>
-            <TextBlock x:Name="EDIDControlContentDescriptionData" Style="{StaticResource EDIDControlStyleData}"/>
-        </DockPanel>
-        <DockPanel x:Name="EDIDControlContentDeviceName">
-            <TextBlock x:Name="EDIDControlContentDeviceNameText" Style="{StaticResource EDIDControlStyleText}">Device Name</TextBlock>
-            <TextBlock x:Name="EDIDControlContentDeviceNameData" Style="{StaticResource EDIDControlStyleData}"/>
-        </DockPanel>
-        <DockPanel x:Name="EDIDControlContentDeviceID">
-            <TextBlock x:Name="EDIDControlContentDeviceIDText" Style="{StaticResource EDIDControlStyleText}">Device ID</TextBlock>
-            <TextBlock x:Name="EDIDControlContentDeviceIDData" Style="{StaticResource EDIDControlStyleData}"/>
-        </DockPanel>
-    </StackPanel>
+    <Border x:Name="EDIDControlBorder" d:Background="White" 
+            BorderBrush="Black" BorderThickness="4" CornerRadius="8" Padding="8">
+        <StackPanel x:Name="EDIDControlContent">
+            <DockPanel x:Name="EDIDControlContentIsPrimary" Style="{StaticResource EDIDControlStyleItem}">
+                <TextBlock x:Name="EDIDControlContentIsPrimaryText" Style="{StaticResource EDIDControlStyleText}">Primary</TextBlock>
+                <TextBlock x:Name="EDIDControlContentIsPrimaryData" Style="{StaticResource EDIDControlStyleData}"/>
+            </DockPanel>
+            <DockPanel x:Name="EDIDControlContentResolution" Style="{StaticResource EDIDControlStyleItem}">
+                <TextBlock x:Name="EDIDControlContentResolutionText" Style="{StaticResource EDIDControlStyleText}">Resolution</TextBlock>
+                <TextBlock x:Name="EDIDControlContentResolutionData" Style="{StaticResource EDIDControlStyleData}"/>
+            </DockPanel>
+            <DockPanel x:Name="EDIDControlContentPosition" Style="{StaticResource EDIDControlStyleItem}">
+                <TextBlock x:Name="EDIDControlContentPositionText" Style="{StaticResource EDIDControlStyleText}">Position</TextBlock>
+                <TextBlock x:Name="EDIDControlContentPositionData" Style="{StaticResource EDIDControlStyleData}"/>
+            </DockPanel>
+            <Separator />
+            <DockPanel x:Name="EDIDControlContentDescription" Style="{StaticResource EDIDControlStyleItem}">
+                <TextBlock x:Name="EDIDControlContentDescriptionText" Style="{StaticResource EDIDControlStyleText}">Description</TextBlock>
+                <TextBlock x:Name="EDIDControlContentDescriptionData" Style="{StaticResource EDIDControlStyleData}"/>
+            </DockPanel>
+            <DockPanel x:Name="EDIDControlContentDeviceName" Style="{StaticResource EDIDControlStyleItem}">
+                <TextBlock x:Name="EDIDControlContentDeviceNameText" Style="{StaticResource EDIDControlStyleText}">Device Name</TextBlock>
+                <TextBlock x:Name="EDIDControlContentDeviceNameData" Style="{StaticResource EDIDControlStyleData}"/>
+            </DockPanel>
+            <DockPanel x:Name="EDIDControlContentDeviceID" Style="{StaticResource EDIDControlStyleItem}">
+                <TextBlock x:Name="EDIDControlContentDeviceIDText" Style="{StaticResource EDIDControlStyleText}">Device ID</TextBlock>
+                <TextBlock x:Name="EDIDControlContentDeviceIDData" Style="{StaticResource EDIDControlStyleData}"/>
+            </DockPanel>
+        </StackPanel>
+    </Border>
 </UserControl>

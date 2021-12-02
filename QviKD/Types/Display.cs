@@ -179,7 +179,7 @@ namespace QviKD.Types
         {
             get
             {
-                if (IsEmpty) return "N/A";
+                if (IsEmpty) return null;
                 for (byte address = (byte)BYTE.DESCRIPTOR1; address < (byte)BYTE.EXTENSION; address += 18)
                 {
                     if (Raw[address + 0x03] == (byte)DESCRIPTOR_TYPE.DISPLAY_SERIALNUMBER)

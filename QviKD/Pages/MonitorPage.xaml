@@ -12,6 +12,7 @@
         <Image x:Key="MonitorPageImageError" Source="/Images/iconmonstr-error-64.png" />
         <Style x:Key="MonitorPageStyleButtonBack" TargetType="{x:Type Button}">
             <Setter Property="Content" Value="{StaticResource MonitorPageImageBack}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Height" Value="32"/>
@@ -25,10 +26,17 @@
             </Setter>
         </Style>
         <Style x:Key="MonitorPageStyleTitle" TargetType="{x:Type TextBlock}">
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="FontFamily" Value="{StaticResource FontFamilyJetBrainsMonoNL}"/>
-            <Setter Property="FontWeight" Value="ExtraBold"/>
-            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="UltraBold"/>
+            <Setter Property="FontSize" Value="36"/>
+            <Setter Property="Margin" Value="12, 0, 0, 0"/>
+        </Style>
+        <Style x:Key="MonitorPageStyleSubtitle" TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontFamilyJetBrainsMonoNL}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="Margin" Value="12, 0, 0, 0"/>
         </Style>
         <Style x:Key="MonitorPageStyleErrorIcon" TargetType="{x:Type Label}">
@@ -43,7 +51,6 @@
             <Setter Property="FontSize" Value="16"/>
         </Style>
     </Page.Resources>
-
     <ScrollViewer x:Name="MonitorPageScroll" ScrollViewer.VerticalScrollBarVisibility="Auto">
         <DockPanel x:Name="MonitorPageLayout" MaxWidth="1200" Margin="32">
             <StackPanel x:Name="MonitorPageNavigation" DockPanel.Dock="Top"
@@ -51,6 +58,7 @@
                 <Button x:Name="MonitorPageNavigationBack" Style="{StaticResource MonitorPageStyleButtonBack}" 
                         Click="MonitorPageNavigationBack_Click"/>
                 <TextBlock x:Name="MonitorPageNavigationTitle" Style="{StaticResource MonitorPageStyleTitle}"/>
+                <TextBlock x:Name="MonitorPageNavigationSubtitle" Style="{StaticResource MonitorPageStyleSubtitle}"/>
             </StackPanel>
             <Grid x:Name="MonitorPageContent">
                 <StackPanel x:Name="MonitorPageContentList" Visibility="Visible">
@@ -66,5 +74,4 @@
             </Grid>
         </DockPanel>
     </ScrollViewer>
-    
 </Page>
