@@ -16,20 +16,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-BoldItalic.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-ExtraBold.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-ExtraBoldItalic.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-ExtraLight.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-ExtraLightItalic.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-Italic.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-Light.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-LightItalic.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-Medium.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-MediumItalic.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-Regular.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-Thin.ttf" />
-    <Resource Include="Fonts\JetBrainsMono-ThinItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Bold.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-BoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraLight.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Italic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Light.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-LightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Medium.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-MediumItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Regular.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-SemiBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Thin.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ThinItalic.ttf" />
     <Resource Include="Images\iconmonstr-back-64.png" />
     <Resource Include="Images\iconmonstr-close-thin-32.png" />
     <Resource Include="Images\iconmonstr-error-64.png" />

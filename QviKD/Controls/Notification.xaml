@@ -13,7 +13,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="12, 8"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#JetBrains Mono"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#JetBrains Mono NL"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="12"/>
         </Style>
