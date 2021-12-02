@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="QviKD.Controls.Loading"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Focusable="False">
     <!--WPF loading spinner - Stack Overflow: https://stackoverflow.com/a/6369137/13307271-->
     <UserControl.Resources>
         <Color x:Key="LoadingAnimationColorFilled" A="255" B="155" R="155" G="155"/>

@@ -4,8 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ctrl="clr-namespace:QviKD.Controls"
-      mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
-      Loaded="MonitorPage_Loaded">
+      mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:Background="White"
+      Focusable="False" Loaded="MonitorPage_Loaded">
     <Page.Resources>
         <FontFamily x:Key="FontFamilyJetBrainsMonoNL">pack://application:,,,/Fonts/#JetBrains Mono NL</FontFamily>
         <Image x:Key="MonitorPageImageBack" Source="/Images/iconmonstr-back-64.png" />
