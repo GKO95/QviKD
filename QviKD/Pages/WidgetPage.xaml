@@ -4,13 +4,33 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:QviKD"
-      mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-
+      mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+      Focusable="False">
+    <Page.Resources>
+        <FontFamily x:Key="FontFamilyJetBrainsMonoNL">pack://application:,,,/Fonts/#JetBrains Mono NL</FontFamily>
+        <Image x:Key="MonitorPageImageBack" Source="/Images/iconmonstr-back-64.png" />
+        <Image x:Key="MonitorPageImageError" Source="/Images/iconmonstr-error-64.png" />
+        <Style x:Key="MonitorPageStyleButtonBack" TargetType="{x:Type Button}">
+            <Setter Property="Content" Value="{StaticResource MonitorPageImageBack}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="{Binding Height, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
     <ScrollViewer Name="ToolkitPageScroll" ScrollViewer.VerticalScrollBarVisibility="Auto">
         <StackPanel Name="ToolkitPageContent" MaxWidth="1200" Margin="32">
 
             <StackPanel Name="ToolkitPageHeader" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button Name="ToolkitPageHeaderBack" Content="◀" Click="ToolkitPageHeaderBack_Click"/>
+                <Button Name="ToolkitPageHeaderBack" Style="{StaticResource MonitorPageStyleButtonBack}" Click="ToolkitPageHeaderBack_Click"/>
                 <Label Name="ToolkitPageHeaderTitle" FontWeight="Bold" Content="Widgets" />
             </StackPanel>
 
