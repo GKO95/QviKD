@@ -31,6 +31,7 @@ namespace QviKD.Controls
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private byte Opcode { get; set; }
         private Display _Display = null;
         public Display Display
         {
@@ -52,7 +53,51 @@ namespace QviKD.Controls
 
         private void InitializeDDCCI()
         {
+            
+        }
 
+        private void DDCCIControlContentCommandReadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DWORD usCurrent = 0, usMaximum = 0;
+            Dxva2.GetVCPFeatureAndVCPFeatureReply(Display.hPhysical, Opcode, _MC_VCP_CODE_TYPE.MC_MOMENTARY, ref usCurrent, ref usMaximum);
+            DDCCIControlContentCommandReadCurrent.Text = Convert.ToString(usCurrent);
+            DDCCIControlContentCommandReadMaximum.Text = Convert.ToString(usMaximum);
+        }
+
+        private void DDCCIControlContentCommandWriteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DWORD usValue = Convert.ToUInt16(DDCCIControlContentCommandWriteValue.Text);
+            Dxva2.SetVCPFeature(Display.hPhysical, Opcode, usValue);
+        }
+
+        private bool OpcodeCaretIndexAdjust = false;
+        private void DDCCIControlContentVCPCode_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (DDCCIControlContentVCPCode.Text != string.Empty)
+            {
+                if (System.Text.RegularExpressions.Regex.IsMatch(DDCCIControlContentVCPCode.Text, @"^([0-9A-Fa-f]){1,2}$"))
+                {
+                    Opcode = Convert.ToByte(DDCCIControlContentVCPCode.Text, 16);
+                    if (OpcodeCaretIndexAdjust)
+                    {
+                        DDCCIControlContentVCPCode.CaretIndex = DDCCIControlContentVCPCode.Text.Length;
+                        OpcodeCaretIndexAdjust = false;
+                    }
+                }
+                else
+                {
+                    if (DDCCIControlContentVCPCode.CaretIndex == DDCCIControlContentVCPCode.Text.Length) OpcodeCaretIndexAdjust = true;
+                    DDCCIControlContentVCPCode.Text = System.Text.RegularExpressions.Regex.Replace(DDCCIControlContentVCPCode.Text, @"([^0-9A-Fa-f])*", "");
+                }
+            }
+        }
+
+        private void DDCCIControlContentVCPCode_LostFocus(object sender, RoutedEventArgs e)
+        {
+            while (DDCCIControlContentVCPCode.Text.Length < 2)
+            {
+                DDCCIControlContentVCPCode.Text = DDCCIControlContentVCPCode.Text.Insert(0, "0");
+            }
         }
 
         /// <summary>
