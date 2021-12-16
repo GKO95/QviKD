@@ -35,8 +35,10 @@
     <Resource Include="Images\iconmonstr-back-64.png" />
     <Resource Include="Images\iconmonstr-close-thin-32.png" />
     <Resource Include="Images\iconmonstr-error-64.png" />
+    <Resource Include="Images\iconmonstr-failure-64.png" />
     <Resource Include="Images\iconmonstr-maximize-thin-32.png" />
     <Resource Include="Images\iconmonstr-minimize-thin-32.png" />
+    <Resource Include="Images\iconmonstr-success-64.png" />
   </ItemGroup>
 
 </Project>

@@ -26,10 +26,10 @@ namespace QviKD.WinAPI
         [DllImport("Dxva2.dll", EntryPoint = "CapabilitiesRequestAndCapabilitiesReply", CharSet = CharSet.Ansi)]
         internal static extern bool CapabilitiesRequestAndCapabilitiesReply(HANDLE hMonitor, HANDLE pszASCIICapabilitiesString, DWORD dwCapabilitiesStringLengthInCharacters);
 
-        [DllImport("Dxva2.dll", EntryPoint = "GetVCPFeatureAndVCPFeatureReply")]
+        [DllImport("Dxva2.dll", EntryPoint = "GetVCPFeatureAndVCPFeatureReply", SetLastError = true)]
         internal static extern bool GetVCPFeatureAndVCPFeatureReply(HANDLE hMonitor, byte bVCPCode, _MC_VCP_CODE_TYPE pvct, ref DWORD pdwCurrentValue, ref DWORD pdwMaximumValue);
 
-        [DllImport("Dxva2.dll", EntryPoint = "SetVCPFeature")]
+        [DllImport("Dxva2.dll", EntryPoint = "SetVCPFeature", SetLastError = true)]
         internal static extern bool SetVCPFeature(HANDLE hMonitor, byte bVCPCode, DWORD dwNewValue);
     }
 }

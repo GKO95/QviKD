@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,7 +32,6 @@ namespace QviKD.Controls
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private byte Opcode { get; set; }
         private Display _Display = null;
         public Display Display
         {
@@ -56,47 +56,57 @@ namespace QviKD.Controls
             
         }
 
+        // DDCCI Get(Read) Process
         private void DDCCIControlContentCommandReadButton_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow Wnd = (MainWindow)Window.GetWindow(this);
+
+            byte Opcode = Convert.ToByte(DDCCIControlContentVCPCode.Text, 16);
             DWORD usCurrent = 0, usMaximum = 0;
-            Dxva2.GetVCPFeatureAndVCPFeatureReply(Display.hPhysical, Opcode, _MC_VCP_CODE_TYPE.MC_MOMENTARY, ref usCurrent, ref usMaximum);
-            DDCCIControlContentCommandReadCurrent.Text = Convert.ToString(usCurrent);
-            DDCCIControlContentCommandReadMaximum.Text = Convert.ToString(usMaximum);
-        }
-
-        private void DDCCIControlContentCommandWriteButton_Click(object sender, RoutedEventArgs e)
-        {
-            DWORD usValue = Convert.ToUInt16(DDCCIControlContentCommandWriteValue.Text);
-            Dxva2.SetVCPFeature(Display.hPhysical, Opcode, usValue);
-        }
-
-        private bool OpcodeCaretIndexAdjust = false;
-        private void DDCCIControlContentVCPCode_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (DDCCIControlContentVCPCode.Text != string.Empty)
+            
+            if (Dxva2.GetVCPFeatureAndVCPFeatureReply(Display.hPhysical, Opcode, _MC_VCP_CODE_TYPE.MC_MOMENTARY, ref usCurrent, ref usMaximum))
             {
-                if (System.Text.RegularExpressions.Regex.IsMatch(DDCCIControlContentVCPCode.Text, @"^([0-9A-Fa-f]){1,2}$"))
-                {
-                    Opcode = Convert.ToByte(DDCCIControlContentVCPCode.Text, 16);
-                    if (OpcodeCaretIndexAdjust)
-                    {
-                        DDCCIControlContentVCPCode.CaretIndex = DDCCIControlContentVCPCode.Text.Length;
-                        OpcodeCaretIndexAdjust = false;
-                    }
-                }
-                else
-                {
-                    if (DDCCIControlContentVCPCode.CaretIndex == DDCCIControlContentVCPCode.Text.Length) OpcodeCaretIndexAdjust = true;
-                    DDCCIControlContentVCPCode.Text = System.Text.RegularExpressions.Regex.Replace(DDCCIControlContentVCPCode.Text, @"([^0-9A-Fa-f])*", "");
-                }
+                Wnd.StatusMessage($"DDC/CI Get 0x{Opcode:X2}: Success");
+
+                DDCCIControlContentCommandReadCurrentDec.Text = Convert.ToString(usCurrent);
+                DDCCIControlContentCommandReadMaximumDec.Text = Convert.ToString(usMaximum);
+
+                DDCCIControlContentCommandReadCurrentHex.Text = usCurrent.ToString("X4");
+                DDCCIControlContentCommandReadMaximumHex.Text = usMaximum.ToString("X4");
+
+                DDCCIControlContentCommandReadFailure.Visibility = Visibility.Hidden;
+                DDCCIControlContentCommandReadSuccess.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Wnd.StatusMessage($"DDC/CI Get 0x{Opcode:X2}: Error 0x{Marshal.GetLastWin32Error():X8}");
+
+                DDCCIControlContentCommandReadFailure.Visibility = Visibility.Visible;
+                DDCCIControlContentCommandReadSuccess.Visibility = Visibility.Hidden;
             }
         }
 
-        private void DDCCIControlContentVCPCode_LostFocus(object sender, RoutedEventArgs e)
+        // DDCCI Set(Write) Process
+        private void DDCCIControlContentCommandWriteButton_Click(object sender, RoutedEventArgs e)
         {
-            while (DDCCIControlContentVCPCode.Text.Length < 2)
+            MainWindow Wnd = (MainWindow)Window.GetWindow(this);
+
+            byte Opcode = Convert.ToByte(DDCCIControlContentVCPCode.Text, 16); ;
+            DWORD usValue = Convert.ToUInt16(DDCCIControlContentCommandWriteValueDec.Text);
+
+            if (Dxva2.SetVCPFeature(Display.hPhysical, Opcode, usValue))
             {
-                DDCCIControlContentVCPCode.Text = DDCCIControlContentVCPCode.Text.Insert(0, "0");
+                Wnd.StatusMessage($"DDC/CI Set 0x{Opcode:X2}: Success");
+
+                DDCCIControlContentCommandWriteFailure.Visibility = Visibility.Hidden;
+                DDCCIControlContentCommandWriteSuccess.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Wnd.StatusMessage($"DDC/CI Set 0x{Opcode:X2}: Error 0x{Marshal.GetLastWin32Error():X8}");
+
+                DDCCIControlContentCommandWriteFailure.Visibility = Visibility.Visible;
+                DDCCIControlContentCommandWriteSuccess.Visibility = Visibility.Hidden;
             }
         }
 

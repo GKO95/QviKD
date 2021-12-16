@@ -51,7 +51,7 @@
             <Setter Property="FontSize" Value="16"/>
         </Style>
     </Page.Resources>
-    <ScrollViewer x:Name="MonitorPageScroll" ScrollViewer.VerticalScrollBarVisibility="Auto">
+    <ScrollViewer x:Name="MonitorPageScroll" ScrollViewer.VerticalScrollBarVisibility="Auto" Focusable="False">
         <DockPanel x:Name="MonitorPageLayout" MaxWidth="1200" Margin="32">
             <StackPanel x:Name="MonitorPageNavigation" DockPanel.Dock="Top"
                         HorizontalAlignment="Left" Orientation="Horizontal" Margin="0, 0, 0, 8">

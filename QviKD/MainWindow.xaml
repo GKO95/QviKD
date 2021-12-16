@@ -68,10 +68,12 @@
                            ScrollViewer.VerticalScrollBarVisibility="Disabled" IsHitTestVisible="False" />
             </DockPanel>
         </Grid>
-        <StatusBar x:Name="MainWindowClientFooter" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" />
+        <StatusBar x:Name="MainWindowClientStatus" DockPanel.Dock="Bottom" Height="24" Background="{Binding Background, ElementName=MainWindowClientHeader}" FlowDirection="LeftToRight" Foreground="White">
+            <TextBlock x:Name="MainWindowClientStatusText"/>
+        </StatusBar>
         <Grid x:Name="MainWindowClientContent" Background="White">
             <Frame x:Name="MainWindowClientContentFrame" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden" LoadCompleted="MainWindowContent_LoadCompleted" Focusable="False" />
-            <ctrl:Loading x:Name="MainWindowClientContentLoading" />
+            <ctrl:Loading x:Name="MainWindowClientContentLoading" Focusable="False"/>
         </Grid>
     </DockPanel>
 </Window>

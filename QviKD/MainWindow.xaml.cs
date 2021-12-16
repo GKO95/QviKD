@@ -81,6 +81,11 @@ namespace QviKD
         }
 
         /// <summary>
+        /// Show message on the window status bar.
+        /// </summary>
+        public void StatusMessage(string message) => MainWindowClientStatusText.Text = message;
+
+        /// <summary>
         /// Print message for debugging; DEBUG-mode exclusive.
         /// </summary>
         [System.Diagnostics.Conditional("DEBUG")]

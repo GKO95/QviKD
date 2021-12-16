@@ -6,6 +6,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="800" d:Background="Transparent">
     <UserControl.Resources>
+        <Style x:Key="DDCCIControlStyleTaskIcon" TargetType="{x:Type Label}">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Visibility" Value="Hidden"/>
+        </Style>
+        <Style x:Key="DDCCIControlStyleSuccessIcon" TargetType="{x:Type Label}" BasedOn="{StaticResource DDCCIControlStyleTaskIcon}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Image Source="/Images/iconmonstr-success-64.png" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DDCCIControlStyleFailureIcon" TargetType="{x:Type Label}" BasedOn="{StaticResource DDCCIControlStyleTaskIcon}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Image Source="/Images/iconmonstr-failure-64.png" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <FontFamily x:Key="FontFamilyJetBrainsMonoNL">pack://application:,,,/Fonts/#JetBrains Mono NL</FontFamily>
         <Style x:Key="DDCCIControlStyleVCPText" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="Black"/>
@@ -16,14 +38,10 @@
         <Style x:Key="DDCCIControlStyleVCPCode" TargetType="{x:Type TextBox}">
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
-            <Setter Property="TextAlignment" Value="Right"/>
             <Setter Property="Padding" Value="2,2,14,2"/>
-            <Setter Property="MaxLines" Value="1"/>
-            <Setter Property="MinLines" Value="1"/>
             <Setter Property="MaxLength" Value="2"/>
             <Setter Property="FontSize" Value="21"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontFamily" Value="{StaticResource FontFamilyJetBrainsMonoNL}"/>
         </Style>
         <Style x:Key="DDCCIControlStyleButton" TargetType="{x:Type Button}">
             <Setter Property="FontFamily" Value="{StaticResource FontFamilyJetBrainsMonoNL}"/>
@@ -33,7 +51,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="LightGray" BorderBrush="Black">
+                        <Border Background="LightGray">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -50,7 +68,7 @@
             
             <!--VCP-->
             <Border Grid.Column="0" Background="#E0E0E0" CornerRadius="8,0,0,8">
-                <Grid x:Name="DDCCIControlContentVCP" DockPanel.Dock="Left" 
+                <Grid x:Name="DDCCIControlContentVCP" DockPanel.Dock="Left"
                       Margin="0,0,0,0" VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -59,27 +77,23 @@
                     <!--LABEL-->
                     <Grid Grid.Row="0" Margin="4,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="4*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" x:Name="DDCCICOntrolContentVCPTextV"
                                Style="{StaticResource DDCCIControlStyleVCPText}"
-                               HorizontalAlignment="Right"
-                               Text="V"/>
+                               HorizontalAlignment="Right" Text="V"/>
                         <TextBlock Grid.Column="1" x:Name="DDCCICOntrolContentVCPTextC"
                                Style="{StaticResource DDCCIControlStyleVCPText}"
-                               HorizontalAlignment="Center"
-                               Text="C"/>
+                               HorizontalAlignment="Center" Text="C"/>
                         <TextBlock Grid.Column="2" x:Name="DDCCICOntrolContentVCPTextP"
                                Style="{StaticResource DDCCIControlStyleVCPText}"
-                               HorizontalAlignment="Left"
-                               Text="P"/>
+                               HorizontalAlignment="Left" Text="P"/>
                     </Grid>
                     <!--INPUT-->
                     <Grid Grid.Row="1" Margin="8,0,8,8">
-                        <TextBox x:Name="DDCCIControlContentVCPCode" Style="{StaticResource DDCCIControlStyleVCPCode}" Text="00"
-                                 LostFocus="DDCCIControlContentVCPCode_LostFocus" TextChanged="DDCCIControlContentVCPCode_TextChanged"/>
+                        <ctrl:HexBox x:Name="DDCCIControlContentVCPCode" Style="{StaticResource DDCCIControlStyleVCPCode}" />
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,2,0" Foreground="DarkGray" Text="h"
                                    FontSize="{Binding FontSize, ElementName=DDCCIControlContentVCPCode}" FontFamily="{Binding FontFamily, ElementName=DDCCIControlContentVCPCode}"/>
                     </Grid>
@@ -95,31 +109,69 @@
                     </Grid.RowDefinitions>
                     <!--READ-->
                     <Border Grid.Row="0" BorderBrush="DarkGray" BorderThickness="2,0,0,1">
-                        <DockPanel x:Name="DDCCIControlContentCommandRead" >
-                            <Button x:Name="DDCCIControlContentCommandReadButton" DockPanel.Dock="Left" Style="{StaticResource DDCCIControlStyleButton}"
-                            Content="Read" Click="DDCCIControlContentCommandReadButton_Click"/>
-                            <StackPanel Orientation="Horizontal">
-                                
-                                <TextBlock x:Name="DDCCIControlContentCommandReadCurrent" VerticalAlignment="Center"/>
-                                
-                                <TextBlock VerticalAlignment="Center" Text="[MAX. "/>
-                                <TextBlock x:Name="DDCCIControlContentCommandReadMaximum" VerticalAlignment="Center"/>
-                                <TextBlock VerticalAlignment="Center" Text="]"/>
+                        <DockPanel x:Name="DDCCIControlContentCommandRead">
+                            <Button x:Name="DDCCIControlContentCommandReadButton" DockPanel.Dock="Left"
+                                    Content="Read" Style="{StaticResource DDCCIControlStyleButton}"
+                                    Click="DDCCIControlContentCommandReadButton_Click"/>
+                            <Grid DockPanel.Dock="Right">
+                                <Label x:Name="DDCCIControlContentCommandReadSuccess" Style="{StaticResource DDCCIControlStyleSuccessIcon}"/>
+                                <Label x:Name="DDCCIControlContentCommandReadFailure" Style="{StaticResource DDCCIControlStyleFailureIcon}"/>
+                            </Grid>
+                            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel>
+                                    <ctrl:IntBox x:Name="DDCCIControlContentCommandReadCurrentDec" Width="80" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                 FontSize="18" TextAlignment="Right" IsReadOnly="True"/>
+                                    <DockPanel>
+                                        <TextBlock DockPanel.Dock="Left" HorizontalAlignment="Right">MAX.</TextBlock>
+                                        <TextBlock x:Name="DDCCIControlContentCommandReadMaximumDec" HorizontalAlignment="Right">0</TextBlock>
+                                    </DockPanel>
+                                </StackPanel>
 
-                            </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="(Hex: " VerticalAlignment="Center" FontSize="18"/>
+                                    <StackPanel>
+                                        <Grid VerticalAlignment="Center">
+                                            <ctrl:HexBox x:Name="DDCCIControlContentCommandReadCurrentHex" Width="80" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="18" TextAlignment="Right"
+                                                 Padding="18,0,0,0" IsReadOnly="True" MaxLength="4"/>
+                                            <TextBlock Text="0x" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Left" Margin="4,0,0,0" Foreground="DarkGray"/>
+                                        </Grid>
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Left" HorizontalAlignment="Right">MAX.</TextBlock>
+                                            <TextBlock DockPanel.Dock="Right" x:Name="DDCCIControlContentCommandReadMaximumHex" TextAlignment="Right">0000</TextBlock>
+                                            <TextBlock TextAlignment="Right">0x</TextBlock>
+                                        </DockPanel>
+                                    </StackPanel>
+                                    <TextBlock Text=")" VerticalAlignment="Center" FontSize="18"/>
+                                </StackPanel>
+
+                            </WrapPanel>
                         </DockPanel>
                     </Border>
 
                     <!--WRITE-->
                     <Border Grid.Row="1" BorderBrush="DarkGray" BorderThickness="2,1,0,0">
                         <DockPanel x:Name="DDCCIControlContentCommandWrite">
-                            <Button x:Name="DDCCIControlContentCommandWriteButton" DockPanel.Dock="Left" Style="{StaticResource DDCCIControlStyleButton}"
-                                    Content="Write" Click="DDCCIControlContentCommandWriteButton_Click"/>
-                            <StackPanel Orientation="Horizontal">
+                            <Button x:Name="DDCCIControlContentCommandWriteButton" DockPanel.Dock="Left"
+                                    Content="Write" Style="{StaticResource DDCCIControlStyleButton}"
+                                    Click="DDCCIControlContentCommandWriteButton_Click"/>
+                            <Grid DockPanel.Dock="Right">
+                                <Label x:Name="DDCCIControlContentCommandWriteSuccess" Style="{StaticResource DDCCIControlStyleSuccessIcon}"/>
+                                <Label x:Name="DDCCIControlContentCommandWriteFailure" Style="{StaticResource DDCCIControlStyleFailureIcon}"/>
+                            </Grid>
+                            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                <ctrl:IntBox x:Name="DDCCIControlContentCommandWriteValueDec" Width="80" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                             FontSize="18" TextAlignment="Right" MaxValue="0xFFFF"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="(Hex: " VerticalAlignment="Center" FontSize="18"/>
+                                    <Grid VerticalAlignment="Center">
+                                        <ctrl:HexBox x:Name="DDCCIControlContentCommandWriteValueHex" Width="80" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="18" TextAlignment="Right"
+                                                 Padding="18,0,0,0" MaxLength="4"/>
+                                        <TextBlock Text="0x" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Left" Margin="4,0,0,0" Foreground="DarkGray"/>
+                                    </Grid>
+                                    <TextBlock Text=")" VerticalAlignment="Center" FontSize="18"/>
+                                </StackPanel>
 
-                                <TextBox x:Name="DDCCIControlContentCommandWriteValue" Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
-
-                            </StackPanel>
+                            </WrapPanel>
                         </DockPanel>
                     </Border>
 
